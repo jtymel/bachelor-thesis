@@ -1,5 +1,6 @@
 package gwtEntity.server;
 
+import gwtEntity.client.BuildDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
@@ -77,6 +78,14 @@ public class Build implements Serializable {
         this.job = job;
         this.name = name;
         this.url = url;
+    }
+    
+    public Build(BuildDto build) {
+        this.id = build.getId();
+//        this.parameterizedBuilds = build.getParameterizedBuilds();
+//        this.job = build.getJob();
+        this.name = build.getName();
+        this.url = build.getUrl();
     }
    
 }

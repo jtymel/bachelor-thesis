@@ -1,5 +1,6 @@
 package gwtEntity.server;
 
+import gwtEntity.client.ParameterizedBuildDto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -121,6 +122,15 @@ public class ParameterizedBuild implements Serializable {
         this.machine = machine;
         this.datetime = datetime;
         this.name = name;
+    }
+    
+    public ParameterizedBuild(ParameterizedBuildDto build) {        
+        this.id = build.getId();
+        this.datetime = build.getDatetime();
+        this.name = build.getName();
+        
+        Build aux = new Build(build.getId_build());
+        this.id_build = aux;
     }
        
 }
