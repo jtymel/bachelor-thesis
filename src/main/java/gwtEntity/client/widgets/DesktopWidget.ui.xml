@@ -1,0 +1,29 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:thesui="urn:import:gwtEntity.client.widgets"
+    >
+    <ui:style>
+
+    </ui:style>
+    <g:RootLayoutPanel>
+        <g:layer left="0px" right="0px" top="0px" bottom="0px">
+            <g:DockLayoutPanel unit="EM">
+                <g:north size="2.0">
+                    <g:MenuBar>
+                        <g:MenuItem>Menu<g:MenuBar vertical="true">
+                            <g:MenuItem ui:field="menuDownloadAll">Stahnout vsechny vysledky</g:MenuItem>
+                        </g:MenuBar></g:MenuItem>
+                    </g:MenuBar>
+                </g:north>
+
+                <g:center>
+                    <thesui:MainPanel ui:field="mainPanel" />
+                </g:center>
+            </g:DockLayoutPanel>
+        </g:layer>
+    </g:RootLayoutPanel>
+</ui:UiBinder>
