@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 import gwtEntity.client.JobDto;
+import gwtEntity.server.JenkinsDownloader;
 import java.util.List;
 
 /**
@@ -37,8 +38,10 @@ public class DesktopWidget extends Composite {
         @Override
         public void execute() {
             List<JobDto> jobList = mainPanel.getSelectedJobs();
-            mainPanel.jobList.getSelectedJobs();
-            Window.alert("Tady by se v budoucnu mely stahovat vysledky (napr. volanim staticke metody)");
+            for (JobDto job : jobList) {
+                JenkinsDownloader.downloadResults(job);
+            }                        
+//            Window.alert("Tady by se v budoucnu mely stahovat vysledky (napr. volanim staticke metody)");
         }
     }
 
