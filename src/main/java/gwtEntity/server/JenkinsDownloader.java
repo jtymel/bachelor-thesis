@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.Stateless;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -25,25 +26,24 @@ import javax.xml.stream.events.XMLEvent;
  *
  * @author jtymel
  */
+@Stateless
 public class JenkinsDownloader {
     private static final String JENKINS_SERVER = "";
     
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
-    private static final BuildServiceAsync buildService = GWT.create(BuildService.class);
 
     
-    public static void downloadResults(final JobDto jobDto) {        
+    public static List<BuildDto> downloadResults(final JobDto jobDto) {        
+        List<BuildDto> builds = null;        
         try {
-            parseDocument(jobDto);
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, null, ex);
-        } catch (XMLStreamException ex) {
+            builds = parseDocument(jobDto);
+        } catch (IOException | XMLStreamException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
-   
+        return builds;
     }
     
-    public static void parseDocument(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {
+    public static List<BuildDto> parseDocument(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {
         List<BuildDto> builds = new ArrayList<BuildDto>();
         
         URL url = new URL("http", JENKINS_SERVER, jobDto.getUrl());
@@ -61,28 +61,14 @@ public class JenkinsDownloader {
                 if (startElement.getName().getLocalPart().equals("build")) {
                     BuildDto build = getBuild(event, eventReader);
                     build.setJob(jobDto);
-                    
-                    buildService.saveBuild(build, new AsyncCallback<Long>() {
-
-                        @Override
-                        public void onFailure(Throwable caught) {
-                        }
-
-                        @Override
-                        public void onSuccess(Long result) {
-                            LOGGER.info("Build added with id " + result);
-                        }
-                    });
-                                                            
+                                                                       
                     builds.add(build);
                 }
 
             }
         }
-        
-//        for (BuildDto build : builds) {
-//            LOGGER.info("Build: " + build.getName() + " " + build.getUrl());            
-//        }
+
+        return builds;
     }
     
     private static BuildDto getBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
@@ -107,6 +93,6 @@ public class JenkinsDownloader {
     public static void main(String[] args) {
         JobDto job = new JobDto();
         job.setUrl("");
-        downloadResults(job);
+//        downloadResults(job);
     }
 }

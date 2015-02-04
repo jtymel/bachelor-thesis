@@ -10,10 +10,26 @@
     <servlet-name>jobServlet</servlet-name>
     <servlet-class>gwtEntity.server.JobServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>buildServlet</servlet-name>
+    <servlet-class>gwtEntity.server.BuildServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>jenkinsServlet</servlet-name>
+    <servlet-class>gwtEntity.server.JenkinsServiceImpl</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>jobServlet</servlet-name>
     <url-pattern>/module/jobservice</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>buildServlet</servlet-name>
+    <url-pattern>/module/buildservice</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>jenkinsServlet</servlet-name>
+    <url-pattern>/module/jenkinsservice</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->

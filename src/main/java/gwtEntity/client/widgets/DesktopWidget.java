@@ -10,10 +10,18 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
+import gwtEntity.client.BuildDto;
+import gwtEntity.client.BuildService;
+import gwtEntity.client.BuildServiceAsync;
+import gwtEntity.client.JenkinsService;
+import gwtEntity.client.JenkinsServiceAsync;
 import gwtEntity.client.JobDto;
+import gwtEntity.client.JobService;
+import gwtEntity.client.JobServiceAsync;
 import gwtEntity.server.JenkinsDownloader;
 import java.util.List;
 
@@ -24,6 +32,9 @@ import java.util.List;
 public class DesktopWidget extends Composite {
 
     private static DesktopWidgetUiBinder uiBinder = GWT.create(DesktopWidgetUiBinder.class);
+    
+    private final JenkinsServiceAsync jenkinsService = GWT.create(JenkinsService.class);
+    private final BuildServiceAsync buildService = GWT.create(BuildService.class);
 
     interface DesktopWidgetUiBinder extends UiBinder<Widget, DesktopWidget> {
     }
@@ -39,9 +50,33 @@ public class DesktopWidget extends Composite {
         public void execute() {
             List<JobDto> jobList = mainPanel.getSelectedJobs();
             for (JobDto job : jobList) {
-                JenkinsDownloader.downloadResults(job);
+                Window.alert(job.getUrl());
+                jenkinsService.downloadBuilds(job, new AsyncCallback<List<BuildDto>>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("Error during parsing builds " + caught.toString());
+                    }
+
+                    @Override
+                    public void onSuccess(List<BuildDto> result) {
+                        for (BuildDto build : result) {
+                            buildService.saveBuild(build, new AsyncCallback<Long>() {
+
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    Window.alert("Error during saving builds " + caught.toString());
+                                }
+
+                                @Override
+                                public void onSuccess(Long result) {
+                                    Window.alert("New Build: " + result);
+                                }
+                            });
+                        }
+                    }
+                });
             }                        
-//            Window.alert("Tady by se v budoucnu mely stahovat vysledky (napr. volanim staticke metody)");
         }
     }
 

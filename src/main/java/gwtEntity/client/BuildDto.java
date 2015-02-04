@@ -2,6 +2,7 @@ package gwtEntity.client;
 
 import gwtEntity.server.Job;
 import gwtEntity.server.ParameterizedBuild;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -10,7 +11,7 @@ import javax.persistence.OneToMany;
  *
  * @author jtymel
  */
-public class BuildDto {
+public class BuildDto implements Serializable{
     private Long id;        
     private List<ParameterizedBuildDto> parameterizedBuilds;            
     private JobDto job;
