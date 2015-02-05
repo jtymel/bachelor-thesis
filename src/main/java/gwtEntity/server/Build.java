@@ -82,7 +82,9 @@ public class Build implements Serializable {
     
     public Build(BuildDto build) {
         this.id = build.getId();
-//        this.parameterizedBuilds = build.getParameterizedBuilds();
+//        this.parameterizedBuilds = build.getParameterizedBuilds();        
+        Job aux = new Job(build.getJob());
+        this.job = aux;
 //        this.job = build.getJob();
         this.name = build.getName();
         this.url = build.getUrl();

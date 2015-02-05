@@ -19,30 +19,16 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.server;
+package gwtEntity.client;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.JenkinsService;
-import gwtEntity.client.JobDto;
-import gwtEntity.client.ParameterizedBuildDto;
-import java.util.List;
-import javax.ejb.EJB;
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
  *
  * @author jtymel
  */
-public class JenkinsServiceImpl  extends RemoteServiceServlet implements JenkinsService {
-    @EJB
-    JenkinsDownloader jenkinsDownloader;
-
-    @Override
-    public List<BuildDto> downloadBuilds(JobDto jobDto) {
-        return jenkinsDownloader.downloadBuilds(jobDto);
-    }
-    
-    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
-        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
-    }
+@RemoteServiceRelativePath("parambuildservice")
+public interface ParameterizedBuildService extends RemoteService {    
+    public Long saveParamBuild(ParameterizedBuildDto paramBuildDto);  
 }

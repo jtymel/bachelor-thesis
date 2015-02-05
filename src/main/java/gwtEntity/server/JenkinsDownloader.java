@@ -6,6 +6,7 @@ import gwtEntity.client.BuildDto;
 import gwtEntity.client.BuildService;
 import gwtEntity.client.BuildServiceAsync;
 import gwtEntity.client.JobDto;
+import gwtEntity.client.ParameterizedBuildDto;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,25 +34,20 @@ public class JenkinsDownloader {
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
 
     
-    public static List<BuildDto> downloadResults(final JobDto jobDto) {        
+    public static List<BuildDto> downloadBuilds(final JobDto jobDto) {        
         List<BuildDto> builds = null;        
         try {
-            builds = parseDocument(jobDto);
+            builds = findBuilds(jobDto);
         } catch (IOException | XMLStreamException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return builds;
     }
     
-    public static List<BuildDto> parseDocument(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {
+    public static List<BuildDto> findBuilds(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {        
+        XMLEventReader eventReader = getEventReader(jobDto.getUrl());
+                
         List<BuildDto> builds = new ArrayList<BuildDto>();
-        
-        URL url = new URL("http", JENKINS_SERVER, jobDto.getUrl());
-
-        BufferedReader in =  new BufferedReader(new InputStreamReader(url.openStream()));
-        XMLInputFactory inputFactory = XMLInputFactory.newFactory();
-        XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
-
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
 
@@ -69,6 +65,16 @@ public class JenkinsDownloader {
         }
 
         return builds;
+    }
+    
+    private static XMLEventReader getEventReader(String link) throws MalformedURLException, IOException, XMLStreamException {
+        URL aux = new URL(link);
+        URL url = new URL("http", aux.getHost(), aux.getPath());
+
+        BufferedReader in =  new BufferedReader(new InputStreamReader(url.openStream()));
+        XMLInputFactory inputFactory = XMLInputFactory.newFactory();
+        return inputFactory.createXMLEventReader(in);
+    
     }
     
     private static BuildDto getBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
@@ -90,9 +96,67 @@ public class JenkinsDownloader {
         }
         return build;
     }
+    
+    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
+        List<ParameterizedBuildDto> paramBuilds = null;
+        
+        try {
+            paramBuilds = findParameterizedBuilds(buildDto);
+        } catch (IOException | XMLStreamException ex) {
+            Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return paramBuilds;
+    }
+    
+    public List<ParameterizedBuildDto> findParameterizedBuilds(BuildDto buildDto) throws IOException, MalformedURLException, XMLStreamException {
+        List<ParameterizedBuildDto> paramBuilds = new ArrayList<ParameterizedBuildDto>();
+        XMLEventReader eventReader = getEventReader(buildDto.getUrl()+"api/xml");
+                
+        while (eventReader.hasNext()) {
+            XMLEvent event = eventReader.nextEvent();
+
+            if (event.isStartElement()) {
+                StartElement startElement = event.asStartElement();                
+                
+                if (startElement.getName().getLocalPart().equals("run")) {
+                    ParameterizedBuildDto paramBuild = getParamBuild(event, eventReader);
+                    paramBuild.setId_build(buildDto);
+                                                                       
+                    paramBuilds.add(paramBuild);
+                }
+
+            }
+        }
+
+        return paramBuilds;
+
+    }
+    
+    private static ParameterizedBuildDto getParamBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
+        ParameterizedBuildDto paramBuild = null;
+        
+        while (eventReader.hasNext()) {            
+            event = eventReader.nextEvent();
+            
+            if (event.asStartElement().getName().getLocalPart().equals("number")) {
+                paramBuild = new ParameterizedBuildDto();               
+                paramBuild.setName(eventReader.getElementText());                
+            }
+            
+            if (event.asStartElement().getName().getLocalPart().equals("url")) {
+                paramBuild.setUrl(eventReader.getElementText());
+                return paramBuild;
+            }
+        }
+        return paramBuild;
+    }
+    
+    
+    
     public static void main(String[] args) {
         JobDto job = new JobDto();
         job.setUrl("");
-//        downloadResults(job);
+//        downloadBuilds(job);
     }
 }

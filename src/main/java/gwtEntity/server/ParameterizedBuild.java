@@ -46,6 +46,15 @@ public class ParameterizedBuild implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date datetime;
     private String name;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public Build getId_build() {
         return id_build;
@@ -129,8 +138,8 @@ public class ParameterizedBuild implements Serializable {
         this.datetime = build.getDatetime();
         this.name = build.getName();
         
-        Build aux = new Build(build.getId_build());
-        this.id_build = aux;
+//        Build aux = new Build(build.getId_build());
+//        this.id_build = aux;
     }
        
 }

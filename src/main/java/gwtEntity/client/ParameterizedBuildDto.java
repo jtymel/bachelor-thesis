@@ -3,6 +3,7 @@ package gwtEntity.client;
 import gwtEntity.server.Build;
 import gwtEntity.server.Category;
 import gwtEntity.server.Result;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,13 +11,22 @@ import java.util.List;
  *
  * @author jtymel
  */
-public class ParameterizedBuildDto {
+public class ParameterizedBuildDto implements Serializable {
 //    private List<Result> results;
     private Long id;    
 //    private List<Category> categories;
     private BuildDto id_build;
     private java.util.Date datetime;
     private String name;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public BuildDto getId_build() {
         return id_build;

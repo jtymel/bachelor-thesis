@@ -22,6 +22,9 @@ import gwtEntity.client.JenkinsServiceAsync;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.JobService;
 import gwtEntity.client.JobServiceAsync;
+import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.ParameterizedBuildService;
+import gwtEntity.client.ParameterizedBuildServiceAsync;
 import gwtEntity.server.JenkinsDownloader;
 import java.util.List;
 
@@ -35,6 +38,7 @@ public class DesktopWidget extends Composite {
     
     private final JenkinsServiceAsync jenkinsService = GWT.create(JenkinsService.class);
     private final BuildServiceAsync buildService = GWT.create(BuildService.class);
+    private final ParameterizedBuildServiceAsync paramBuildService = GWT.create(ParameterizedBuildService.class);
 
     interface DesktopWidgetUiBinder extends UiBinder<Widget, DesktopWidget> {
     }
@@ -60,7 +64,7 @@ public class DesktopWidget extends Composite {
 
                     @Override
                     public void onSuccess(List<BuildDto> result) {
-                        for (BuildDto build : result) {
+                        for (final BuildDto build : result) {
                             buildService.saveBuild(build, new AsyncCallback<Long>() {
 
                                 @Override
@@ -71,6 +75,28 @@ public class DesktopWidget extends Composite {
                                 @Override
                                 public void onSuccess(Long result) {
                                     Window.alert("New Build: " + result);
+                                    jenkinsService.downloadParameterizedBuilds(build, new AsyncCallback<List<ParameterizedBuildDto>>() {
+
+                                        @Override
+                                        public void onFailure(Throwable caught) {
+                                        }
+
+                                        @Override
+                                        public void onSuccess(List<ParameterizedBuildDto> result) {
+                                            for (ParameterizedBuildDto paramBuild : result) {
+                                                paramBuildService.saveParamBuild(paramBuild, new AsyncCallback<Long>() {
+
+                                                    @Override
+                                                    public void onFailure(Throwable caught) {
+                                                    }
+
+                                                    @Override
+                                                    public void onSuccess(Long result) {
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
                                 }
                             });
                         }

@@ -21,28 +21,30 @@
  */
 package gwtEntity.server;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.JenkinsService;
-import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
-import java.util.List;
-import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import org.hibernate.Session;
 
 /**
  *
  * @author jtymel
  */
-public class JenkinsServiceImpl  extends RemoteServiceServlet implements JenkinsService {
-    @EJB
-    JenkinsDownloader jenkinsDownloader;
 
-    @Override
-    public List<BuildDto> downloadBuilds(JobDto jobDto) {
-        return jenkinsDownloader.downloadBuilds(jobDto);
-    }
+@Stateless
+@Transactional(Transactional.TxType.REQUIRED)
+public class ParameterizedBuildServiceBean {
+    @PersistenceContext(name = "MainPU")
+    private EntityManager em;
     
-    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
-        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
+    public Long saveParamBuild(ParameterizedBuildDto paramBuildDto) {
+        Session session = (Session) em.getDelegate();
+        ParameterizedBuild paramBuild = new ParameterizedBuild(paramBuildDto);
+
+        session.saveOrUpdate(paramBuild);
+        
+        return paramBuild.getId();    
     }
 }

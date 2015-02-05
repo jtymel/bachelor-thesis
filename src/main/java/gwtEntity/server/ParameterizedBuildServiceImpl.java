@@ -23,26 +23,24 @@ package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.BuildDto;
-import gwtEntity.client.JenkinsService;
-import gwtEntity.client.JobDto;
+import gwtEntity.client.BuildService;
 import gwtEntity.client.ParameterizedBuildDto;
-import java.util.List;
+import gwtEntity.client.ParameterizedBuildService;
 import javax.ejb.EJB;
 
 /**
  *
  * @author jtymel
  */
-public class JenkinsServiceImpl  extends RemoteServiceServlet implements JenkinsService {
+public class ParameterizedBuildServiceImpl extends RemoteServiceServlet implements ParameterizedBuildService {
+    
+    
     @EJB
-    JenkinsDownloader jenkinsDownloader;
+    ParameterizedBuildServiceBean paramBuildServiceBean;
 
     @Override
-    public List<BuildDto> downloadBuilds(JobDto jobDto) {
-        return jenkinsDownloader.downloadBuilds(jobDto);
-    }
-    
-    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
-        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
-    }
+    public Long saveParamBuild(ParameterizedBuildDto paramBuildDto) {
+        return paramBuildServiceBean.saveParamBuild(paramBuildDto);
+    }        
 }
+
