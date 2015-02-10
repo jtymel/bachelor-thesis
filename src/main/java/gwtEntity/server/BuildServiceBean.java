@@ -53,4 +53,16 @@ public class BuildServiceBean {
         return build.getId();
     }
     
+    public Long saveBuild(Build build) {
+        Session session = (Session) em.getDelegate();        
+
+        session.saveOrUpdate(build);
+//        session.persist(job);
+
+//        session.save(job);
+        System.out.println(build.getId());
+        
+        return build.getId();
+    }    
+
 }

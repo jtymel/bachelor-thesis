@@ -47,4 +47,12 @@ public class ParameterizedBuildServiceBean {
         
         return paramBuild.getId();    
     }
+    
+    public Long saveParamBuild(ParameterizedBuild paramBuild) {
+        Session session = (Session) em.getDelegate();
+
+        session.saveOrUpdate(paramBuild);
+        
+        return paramBuild.getId();    
+    }
 }

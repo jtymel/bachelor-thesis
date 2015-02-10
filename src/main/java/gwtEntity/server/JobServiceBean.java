@@ -110,19 +110,33 @@ public class JobServiceBean {
     @PostConstruct
     public void tempProcTest() {
         Session session = (Session) em.getDelegate();
-        Query query = session.createSQLQuery(
-	"SELECT add(:number1, :number2)")
-          .setParameter("number1", 15)
-          .setParameter("number2", 17);
+//        Query query = session.createSQLQuery(
+//	"SELECT add(:number1, :number2)")
+//          .setParameter("number1", 15)
+//          .setParameter("number2", 17);
+//        
+//        System.out.println(query.uniqueResult());
+
         
-        System.out.println(query.uniqueResult());
+         Query query2 = session.createSQLQuery(
+	"SELECT my_first_imported_proc()");
         
- 
-        List result = query.list();
-        for(int i=0; i<result.size(); i++){
-                Integer stock = (Integer) result.get(i);
-                System.out.println("%%%%% %%%% %%%" + stock);
-        }
+//        System.out.println("^^^^^^^ ^^^^^^ ^^^^^^^ " + query2.uniqueResult());
+        
+//        Query query = session.createSQLQuery(
+//	"SELECT addFromImport(:number1, :number2)")
+//          .setParameter("number1", 4)
+//          .setParameter("number2", 7);
+//        
+////        System.out.println(query.uniqueResult());
+//        
+//        
+////
+//        List result = query.list();
+//        for(int i=0; i<result.size(); i++){
+//                Integer stock = (Integer) result.get(i);
+//                System.out.println("%%%%% %%%% %%%" + stock);
+//        }
     }
 
 }

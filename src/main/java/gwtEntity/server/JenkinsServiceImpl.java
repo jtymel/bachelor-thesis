@@ -39,10 +39,18 @@ public class JenkinsServiceImpl  extends RemoteServiceServlet implements Jenkins
 
     @Override
     public List<BuildDto> downloadBuilds(JobDto jobDto) {
-        return jenkinsDownloader.downloadBuilds(jobDto);
+//        return jenkinsDownloader.downloadBuilds(jobDto);
+        return null;
     }
     
+    @Override
     public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
-        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
+//        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
+        return null;
+    }   
+
+    @Override
+    public void downloadBuilds(List<JobDto> jobs) {
+        jenkinsDownloader.downloadBuilds(jobs);
     }
 }

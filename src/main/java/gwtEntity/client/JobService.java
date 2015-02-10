@@ -33,5 +33,5 @@ import java.util.List;
 public interface JobService extends RemoteService {
     public List<JobDto> getJobs();
     public Long saveJob(JobDto jobDTO);
-    public void deleteJob(JobDto jobDTO);
+    public void deleteJob(JobDto jobDTO);    
 }

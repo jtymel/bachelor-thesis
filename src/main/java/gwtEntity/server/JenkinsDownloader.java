@@ -1,12 +1,6 @@
 package gwtEntity.server;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.BuildService;
-import gwtEntity.client.BuildServiceAsync;
 import gwtEntity.client.JobDto;
-import gwtEntity.client.ParameterizedBuildDto;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -28,26 +23,40 @@ import javax.xml.stream.events.XMLEvent;
  * @author jtymel
  */
 @Stateless
-public class JenkinsDownloader {
-    private static final String JENKINS_SERVER = "";
-    
+public class JenkinsDownloader {    
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
+    
+    @EJB
+    private BuildServiceBean buildServiceBean;
+    
+    @EJB
+    private ParameterizedBuildServiceBean paramBuildServiceBean;
+    
+    
+    public void downloadBuilds(final List<JobDto> jobs){
+        for (JobDto job : jobs) {
+            List<Build> builds = downloadBuilds(job);                    
+        }
+        
+        
+    }
 
     
-    public static List<BuildDto> downloadBuilds(final JobDto jobDto) {        
-        List<BuildDto> builds = null;        
+    public List<Build> downloadBuilds(final JobDto jobDto) {        
+        List<Build> builds = null;        
         try {
-            builds = findBuilds(jobDto);
+            builds = findBuilds(jobDto);    
+            List<ParameterizedBuild> paramBuilds = downloadParameterizedBuilds(builds);
         } catch (IOException | XMLStreamException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
         }
         return builds;
     }
     
-    public static List<BuildDto> findBuilds(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {        
+    public List<Build> findBuilds(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {        
         XMLEventReader eventReader = getEventReader(jobDto.getUrl());
                 
-        List<BuildDto> builds = new ArrayList<BuildDto>();
+        List<Build> builds = new ArrayList<Build>();
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
 
@@ -55,9 +64,11 @@ public class JenkinsDownloader {
                 StartElement startElement = event.asStartElement();                
                 
                 if (startElement.getName().getLocalPart().equals("build")) {
-                    BuildDto build = getBuild(event, eventReader);
-                    build.setJob(jobDto);
-                                                                       
+                    Build build = getBuild(event, eventReader);
+                    Job aux = new Job(jobDto);
+                    build.setJob(aux);
+                    LOGGER.log(Level.SEVERE, "Build: " + build.getName() + build.getUrl());
+                    buildServiceBean.saveBuild(build);
                     builds.add(build);
                 }
 
@@ -77,14 +88,14 @@ public class JenkinsDownloader {
     
     }
     
-    private static BuildDto getBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
-        BuildDto build = null;
+    private static Build getBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
+        Build build = null;
         
         while (eventReader.hasNext()) {            
             event = eventReader.nextEvent();
             
             if (event.asStartElement().getName().getLocalPart().equals("number")) {
-                build = new BuildDto();               
+                build = new Build();               
                 build.setName(eventReader.getElementText());                
             }
             
@@ -97,21 +108,23 @@ public class JenkinsDownloader {
         return build;
     }
     
-    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
-        List<ParameterizedBuildDto> paramBuilds = null;
+    public List<ParameterizedBuild> downloadParameterizedBuilds(List<Build> builds) {        
+        List<ParameterizedBuild> paramBuilds = null;
         
-        try {
-            paramBuilds = findParameterizedBuilds(buildDto);
-        } catch (IOException | XMLStreamException ex) {
-            Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
+        for (Build build : builds) {
+            try {
+                paramBuilds = findParameterizedBuilds(build);
+            } catch (IOException | XMLStreamException ex) {
+                Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
+                        
         return paramBuilds;
-    }
-    
-    public List<ParameterizedBuildDto> findParameterizedBuilds(BuildDto buildDto) throws IOException, MalformedURLException, XMLStreamException {
-        List<ParameterizedBuildDto> paramBuilds = new ArrayList<ParameterizedBuildDto>();
-        XMLEventReader eventReader = getEventReader(buildDto.getUrl()+"api/xml");
+    }               
+  
+    public List<ParameterizedBuild> findParameterizedBuilds(Build build) throws IOException, MalformedURLException, XMLStreamException {
+        List<ParameterizedBuild> paramBuilds = new ArrayList<ParameterizedBuild>();
+        XMLEventReader eventReader = getEventReader(build.getUrl()+"api/xml");
                 
         while (eventReader.hasNext()) {
             XMLEvent event = eventReader.nextEvent();
@@ -120,8 +133,10 @@ public class JenkinsDownloader {
                 StartElement startElement = event.asStartElement();                
                 
                 if (startElement.getName().getLocalPart().equals("run")) {
-                    ParameterizedBuildDto paramBuild = getParamBuild(event, eventReader);
-                    paramBuild.setId_build(buildDto);
+                    ParameterizedBuild paramBuild = getParamBuild(event, eventReader);
+                    
+                    paramBuild.setBuild(build);
+                    paramBuildServiceBean.saveParamBuild(paramBuild);
                                                                        
                     paramBuilds.add(paramBuild);
                 }
@@ -130,33 +145,26 @@ public class JenkinsDownloader {
         }
 
         return paramBuilds;
-
     }
     
-    private static ParameterizedBuildDto getParamBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
-        ParameterizedBuildDto paramBuild = null;
+    private static ParameterizedBuild getParamBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
+        ParameterizedBuild paramBuild = null;
         
         while (eventReader.hasNext()) {            
             event = eventReader.nextEvent();
             
             if (event.asStartElement().getName().getLocalPart().equals("number")) {
-                paramBuild = new ParameterizedBuildDto();               
+                paramBuild = new ParameterizedBuild();               
                 paramBuild.setName(eventReader.getElementText());                
             }
             
             if (event.asStartElement().getName().getLocalPart().equals("url")) {
                 paramBuild.setUrl(eventReader.getElementText());
+                LOGGER.log(Level.SEVERE, "URL of parameterized build " + paramBuild.getUrl());
                 return paramBuild;
             }
         }
         return paramBuild;
     }
-    
-    
-    
-    public static void main(String[] args) {
-        JobDto job = new JobDto();
-        job.setUrl("");
-//        downloadBuilds(job);
-    }
+           
 }

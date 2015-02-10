@@ -53,8 +53,25 @@ public class DesktopWidget extends Composite {
         @Override
         public void execute() {
             List<JobDto> jobList = mainPanel.getSelectedJobs();
+            jenkinsService.downloadBuilds(jobList, new AsyncCallback<Void>() {
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    Window.alert("An error occured during download");
+                }
+
+                @Override
+                public void onSuccess(Void result) {
+                    Window.alert("Results have been correctly downloaded");
+                }
+            });
+            
+            
+            
+            /*
             for (JobDto job : jobList) {
-                Window.alert(job.getUrl());
+                Window.alert(job.getUrl()); 
+                // ma brat jako parametr jobList
                 jenkinsService.downloadBuilds(job, new AsyncCallback<List<BuildDto>>() {
 
                     @Override
@@ -62,6 +79,8 @@ public class DesktopWidget extends Composite {
                         Window.alert("Error during parsing builds " + caught.toString());
                     }
 
+                    // zase reseno na serveru v implementaci DW builds
+                    // zapamatovat pro ucely bakalarky, ze to je divny
                     @Override
                     public void onSuccess(List<BuildDto> result) {
                         for (final BuildDto build : result) {
@@ -102,7 +121,7 @@ public class DesktopWidget extends Composite {
                         }
                     }
                 });
-            }                        
+            } */            
         }
     }
 

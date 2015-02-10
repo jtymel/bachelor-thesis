@@ -137,9 +137,10 @@ public class ParameterizedBuild implements Serializable {
         this.id = build.getId();
         this.datetime = build.getDatetime();
         this.name = build.getName();
-        
-//        Build aux = new Build(build.getId_build());
-//        this.id_build = aux;
+        this.url = build.getUrl();
+                
+        Build aux = new Build(build.getId_build());
+        this.id_build = aux;
     }
        
 }
