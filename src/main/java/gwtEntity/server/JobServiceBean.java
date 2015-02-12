@@ -116,18 +116,23 @@ public class JobServiceBean {
 //          .setParameter("number2", 17);
 //        
 //        System.out.println(query.uniqueResult());
-
         
          Query query2 = session.createSQLQuery(
-	"SELECT my_first_imported_proc()");
+	"SELECT my_first_imported_proc() " );
+         
+//         List result = query2.list();
+//        for(int i=0; i<result.size(); i++){
+//                Integer stock = (Integer) result.get(i);
+//                System.out.println("%%%%% %%%% %%%" + stock);
+//        }
         
         System.out.println("^^^^^^^ ^^^^^^ ^^^^^^^ " + query2.uniqueResult());
         
-        Query query = session.createSQLQuery(
-	"SELECT addFromImport(:number1, :number2)")
-          .setParameter("number1", 4)
-          .setParameter("number2", 7);
-        
+//        Query query = session.createSQLQuery(
+//	"SELECT addFromImport(:number1, :number2)")
+//          .setParameter("number1", 4)
+//          .setParameter("number2", 7);
+//        
 //        System.out.println(query.uniqueResult());
 //        
 //        

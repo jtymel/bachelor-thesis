@@ -32,13 +32,13 @@ public class JenkinsDownloader {
     @EJB
     private ParameterizedBuildServiceBean paramBuildServiceBean;
     
-    
+ 
     public void downloadBuilds(final List<JobDto> jobs){
         for (JobDto job : jobs) {
             List<Build> builds = downloadBuilds(job);                    
         }
         
-        
+   
     }
 
     
@@ -143,7 +143,7 @@ public class JenkinsDownloader {
 
             }
         }
-
+                
         return paramBuilds;
     }
     
