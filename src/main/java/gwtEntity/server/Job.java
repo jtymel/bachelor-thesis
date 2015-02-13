@@ -51,7 +51,7 @@ public class Job implements Serializable {
 //    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
     
 //    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinTable(name = "job_category", catalog = "testdb", joinColumns = { 
+//	@JoinTable(name = "job_category", joinColumns = { 
 //			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
 //			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 //					nullable = false, updatable = false) })

@@ -31,7 +31,7 @@ public class ParameterizedBuild implements Serializable {
     private Long id;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "paramBuild_category", catalog = "testdb", joinColumns = { 
+	@JoinTable(name = "paramBuild_category", joinColumns = { 
 			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 					nullable = false, updatable = false) })

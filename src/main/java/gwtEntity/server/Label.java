@@ -27,7 +27,7 @@ public class Label implements Serializable {
     private Job job;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "label_category", catalog = "testdb", joinColumns = { 
+	@JoinTable(name = "label_category", joinColumns = { 
 			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 					nullable = false, updatable = false) })
