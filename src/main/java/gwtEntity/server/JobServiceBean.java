@@ -126,7 +126,7 @@ public class JobServiceBean {
 //                System.out.println("%%%%% %%%% %%%" + stock);
 //        }
         
-        System.out.println("^^^^^^^ ^^^^^^ ^^^^^^^ " + query2.uniqueResult());
+//        System.out.println("^^^^^^^ ^^^^^^ ^^^^^^^ " + query2.uniqueResult());
         
 //        Query query = session.createSQLQuery(
 //	"SELECT addFromImport(:number1, :number2)")

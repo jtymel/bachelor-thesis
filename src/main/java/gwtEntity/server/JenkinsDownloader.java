@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,6 +115,12 @@ public class JenkinsDownloader {
         for (Build build : builds) {
             try {
                 paramBuilds = findParameterizedBuilds(build);
+
+                for (ParameterizedBuild paramBuild : paramBuilds) {
+                    List<TestResult> testResults = getTestResults(paramBuild);
+                }
+
+
             } catch (IOException | XMLStreamException ex) {
                 Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -165,6 +172,67 @@ public class JenkinsDownloader {
             }
         }
         return paramBuild;
+    }
+
+    public List<TestResult> getTestResults(ParameterizedBuild paramBuild) {
+        List<TestResult> testResults = new ArrayList<TestResult>();
+        try {
+            XMLEventReader eventReader = getEventReader(paramBuild.getUrl()+"testReport/api/xml");
+
+            while (eventReader.hasNext()) {
+                XMLEvent event = eventReader.nextEvent();
+
+                if (event.isStartElement()) {
+                    StartElement startElement = event.asStartElement();
+
+                    if (startElement.getName().getLocalPart().equals("case")) {
+                        TestResult tesResult = getTestResult(event, eventReader);
+
+                        testResults.add(tesResult);
+                    }
+
+                }
+            }
+
+            return testResults;
+
+        } catch (IOException | XMLStreamException ex) {
+            Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    private TestResult getTestResult(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
+        TestResult testResult = null;
+
+        while (eventReader.hasNext()) {
+            event = eventReader.nextEvent();
+            if (event.isStartElement()) {
+                if (event.asStartElement().getName().getLocalPart().equals("className")) {
+                    testResult = new TestResult();
+                    testResult.setTestCase(eventReader.getElementText());
+                }
+
+                if (event.asStartElement().getName().getLocalPart().equals("duration")) {
+                    testResult.setDuration(Float.parseFloat(eventReader.getElementText()));
+                }
+
+                if (event.asStartElement().getName().getLocalPart().equals("name")) {
+                    testResult.setTest(eventReader.getElementText());
+                }
+
+                if (event.asStartElement().getName().getLocalPart().equals("status")) {
+                    testResult.setResult(eventReader.getElementText());
+
+                    LOGGER.log(Level.INFO, "Test result: " + testResult.getResult() + " [" + testResult.getDuration() + "],  " + testResult.getTest() + " from " + testResult.getTestCase());
+
+                    return testResult;
+                }
+            }
+        }
+
+        return null;
     }
            
 }
