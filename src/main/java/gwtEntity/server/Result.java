@@ -10,10 +10,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 
 /**
  * Created by jtymel on 12/15/14.
  */
+
+@NamedNativeQueries({
+	@NamedNativeQuery(
+	name = "storeTestResultProcedure",
+	query = "SELECT storeTestResult(:id_paramBuild, :result, :test, :testCase, :duration)"
+	)
+})
 @Entity
 @IdClass(Result.ResultId.class)
 public class Result implements Serializable {
@@ -32,7 +41,7 @@ public class Result implements Serializable {
     @ManyToOne
     private ParameterizedBuild id_parameterizedBuild;
     
-    private double duration;
+    private float duration;
     
 
 

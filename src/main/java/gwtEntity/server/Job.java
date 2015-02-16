@@ -25,6 +25,7 @@ import gwtEntity.client.JobDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,9 +43,10 @@ import javax.persistence.ManyToMany;
  */
 @Entity
 public class Job implements Serializable {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
     private Long id;
   
 //    org.hibernate.exception.SQLGrammarException: could not extract ResultSet

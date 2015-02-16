@@ -2,6 +2,7 @@ package gwtEntity.server;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 public class TestCase implements Serializable {    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
     private Long id;
 
     @OneToMany(mappedBy = "id_testCase")
