@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +32,9 @@ public class JenkinsDownloader {
     @EJB
     private ParameterizedBuildServiceBean paramBuildServiceBean;
     
- 
+    @EJB
+    private StoreResultBean storeResultBean;
+
     public void downloadBuilds(final List<JobDto> jobs){
         for (JobDto job : jobs) {
             List<Build> builds = downloadBuilds(job);                    
@@ -111,15 +112,21 @@ public class JenkinsDownloader {
     
     public List<ParameterizedBuild> downloadParameterizedBuilds(List<Build> builds) {        
         List<ParameterizedBuild> paramBuilds = null;
-        
+
         for (Build build : builds) {
             try {
                 paramBuilds = findParameterizedBuilds(build);
 
                 for (ParameterizedBuild paramBuild : paramBuilds) {
+    
                     List<TestResult> testResults = getTestResults(paramBuild);
+                    if(testResults != null) {
+                        for (TestResult testResult : testResults) {
+                            storeResultBean.saveTestResult(testResult, paramBuild);
+                        }
+                    
+                    }
                 }
-
 
             } catch (IOException | XMLStreamException ex) {
                 Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
@@ -144,7 +151,7 @@ public class JenkinsDownloader {
                     
                     paramBuild.setBuild(build);
                     paramBuildServiceBean.saveParamBuild(paramBuild);
-                                                                       
+                    LOGGER.log(Level.SEVERE, "Kod bezprostredne za volanim beany");
                     paramBuilds.add(paramBuild);
                 }
 
