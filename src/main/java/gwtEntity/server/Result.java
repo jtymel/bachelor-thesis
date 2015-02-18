@@ -17,10 +17,12 @@ import javax.persistence.NamedNativeQuery;
  * Created by jtymel on 12/15/14.
  */
 
+
+// 2015-02-18 tiny "hack" (count (*) FROM) added, otherwise causes 'org.hibernate.MappingException: No Dialect mapping for JDBC type: 1111'
 @NamedNativeQueries({
 	@NamedNativeQuery(
 	name = "storeTestResultProcedure",
-	query = "SELECT storeTestResult(:id_paramBuild, :result, :test, :testCase, :duration)"
+	query = "SELECT count (*) FROM storeTestResult(:id_paramBuild, :result, :test, :testCase, :duration)"
 	)
 })
 @Entity

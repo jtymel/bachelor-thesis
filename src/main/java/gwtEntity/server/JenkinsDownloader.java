@@ -12,11 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import org.hibernate.Session;
 
 /**
  *
@@ -34,6 +37,9 @@ public class JenkinsDownloader {
     
     @EJB
     private StoreResultBean storeResultBean;
+
+    @PersistenceContext(name = "MainPU")
+    private EntityManager em;
 
     public void downloadBuilds(final List<JobDto> jobs){
         for (JobDto job : jobs) {
@@ -116,9 +122,11 @@ public class JenkinsDownloader {
         for (Build build : builds) {
             try {
                 paramBuilds = findParameterizedBuilds(build);
+                Session session = (Session) em.getDelegate();
+                session.flush();
 
                 for (ParameterizedBuild paramBuild : paramBuilds) {
-    
+
                     List<TestResult> testResults = getTestResults(paramBuild);
                     if(testResults != null) {
                         for (TestResult testResult : testResults) {

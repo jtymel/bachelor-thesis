@@ -29,7 +29,6 @@ public class StoreResultBean {
             .setParameter("testCase", testResult.getTestCase())
             .setParameter("duration", testResult.getDuration());
 
-        System.out.println("%%%%% %%%%%%%% %%%%%%% %%%%%%% " + paramBuild.getId() + testResult.getResult() + testResult.getTest() + testResult.getTestCase());
         List result = query.list();
     }
 }
