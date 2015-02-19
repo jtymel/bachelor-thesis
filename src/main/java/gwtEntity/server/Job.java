@@ -34,6 +34,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 
 
@@ -48,6 +49,9 @@ public class Job implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
     private Long id;
+
+    @OneToMany(mappedBy = "job")
+    private List<Build> builds;
   
 //    org.hibernate.exception.SQLGrammarException: could not extract ResultSet
 //    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
@@ -106,5 +110,13 @@ public class Job implements Serializable {
     public Job(Long id) {
         this.id = id;
     }
-    
+
+    public List<Build> getBuilds() {
+        return builds;
+    }
+
+    public void setBuilds(List<Build> builds) {
+        this.builds = builds;
+    }
+
 }
