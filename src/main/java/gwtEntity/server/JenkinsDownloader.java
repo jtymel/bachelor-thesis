@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -156,6 +157,7 @@ public class JenkinsDownloader {
                 
                 if (startElement.getName().getLocalPart().equals("run")) {
                     ParameterizedBuild paramBuild = getParamBuild(event, eventReader);
+                    paramBuild = getMachineAndDateTimeOfParamBuild(paramBuild);
                     
                     paramBuild.setBuild(build);
                     paramBuildServiceBean.saveParamBuild(paramBuild);
@@ -249,5 +251,31 @@ public class JenkinsDownloader {
 
         return null;
     }
-           
+
+    public ParameterizedBuild getMachineAndDateTimeOfParamBuild(ParameterizedBuild paramBuild) {
+        try {
+            XMLEventReader eventReader = getEventReader(paramBuild.getUrl()+"api/xml");
+
+            while (eventReader.hasNext()) {
+                XMLEvent event = eventReader.nextEvent();
+
+                if (event.isStartElement()) {
+                    StartElement startElement = event.asStartElement();
+
+                    if (startElement.getName().getLocalPart().equals("timestamp")) {
+                        paramBuild.setDatetime(new Date(Long.parseLong(eventReader.getElementText())));
+                    }
+
+                    if (startElement.getName().getLocalPart().equals("builtOn")) {
+                        paramBuild.setMachine(eventReader.getElementText());
+                    }
+                }
+            }
+
+        } catch (IOException | XMLStreamException ex) {
+            Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return paramBuild;
+    }
 }
