@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import gwtEntity.client.CategorizationDto;
+import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import java.util.List;
 import java.util.logging.Logger;
@@ -15,10 +16,10 @@ import java.util.logging.Logger;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge {
 
     private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);       
-   
+
     interface MainPanelUiBinder extends UiBinder<Widget, MainPanel> {
     }
     
@@ -46,8 +47,18 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.selectTab(categorizationList);
     }
     
-    
+    @Override
+    public void setCategoryAndDisplayDetail(CategoryDto categoryDto) {
+        categoryDetail.setCategory(categoryDto);
+        tabPanel.selectTab(categoryDetail);
+    }
 
+    @Override
+    public void displayCategoryList() {
+        categoryList.updateDataGrid();
+        tabPanel.selectTab(categoryList);
+    }
+    
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
     
@@ -64,6 +75,12 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     CategorizationDetail categorizationDetail;
     
     @UiField
+    CategoryList categoryList;
+    
+    @UiField
+    CategoryDetail categoryDetail;
+    
+    @UiField
     TabLayoutPanel tabPanel;
        
     public MainPanel() {     
@@ -72,6 +89,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         jobDetail.setJobListDetailBridge(MainPanel.this);
         categorizationList.setCategorizationListDetailBridge(MainPanel.this);
         categorizationDetail.setCategorizationListDetailBridge(MainPanel.this);
+        categoryList.setCategoryListDetailBridge(MainPanel.this);
+        categoryDetail.setCategoryListDetailBridge(MainPanel.this);
     }
     
     public List<JobDto> getSelectedJobs() {

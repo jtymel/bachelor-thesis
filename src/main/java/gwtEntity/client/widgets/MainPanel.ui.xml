@@ -37,6 +37,18 @@ Uncomment this for XHTML entities
                     </g:header>
                     <thesui:CategorizationDetail ui:field="categorizationDetail" />
                 </g:tab>
+                <g:tab>
+                    <g:header>
+                        Category list
+                    </g:header>
+                    <thesui:CategoryList ui:field="categoryList" />
+                </g:tab>
+                <g:tab>
+                    <g:header>
+                        Category detail
+                    </g:header>
+                    <thesui:CategoryDetail ui:field="categoryDetail" />
+                </g:tab>
             </g:TabLayoutPanel>
         </g:north>
     </g:DockLayoutPanel>

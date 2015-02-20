@@ -56,12 +56,12 @@ public class Job implements Serializable {
 //    org.hibernate.exception.SQLGrammarException: could not extract ResultSet
 //    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
     
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinTable(name = "job_category", joinColumns = { 
-//			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
-//			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
-//					nullable = false, updatable = false) })
-//    private List<Category> categories;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "job_category", joinColumns = { 
+			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
+			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
+					nullable = false, updatable = false) })
+    private List<Category> categories;
     
 
     private String name;

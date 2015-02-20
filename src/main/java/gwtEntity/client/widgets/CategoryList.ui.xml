@@ -1,0 +1,37 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:thesui="urn:import:gwtEntity.client.widgets"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+    <ui:style>
+
+    </ui:style>
+    
+    <g:DockLayoutPanel unit="EM">
+               
+        <g:center>
+            <c:DataGrid ui:field='dataGrid' />
+        </g:center>
+        
+        <g:south size="3.0">
+            <g:HTMLPanel>
+                <table style="width:100%">
+                  <tr>
+                    <td align="center">
+                      <c:SimplePager ui:field="pager" />
+                    </td>
+                  </tr>
+                </table>
+          </g:HTMLPanel>
+        </g:south>
+        
+        <g:south size="2.0">            
+            <g:Button ui:field="deleteButton">Delete category</g:Button>            
+        </g:south>
+        
+        <g:south size="2.0">
+            <g:Button ui:field="addButton">Add new category</g:Button>        
+        </g:south>    
+        
+        
+    </g:DockLayoutPanel>
+</ui:UiBinder>
