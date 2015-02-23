@@ -1,5 +1,6 @@
 package gwtEntity.server;
 
+import gwtEntity.client.LabelDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -12,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -22,7 +22,9 @@ public class Label implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
+    private String name;
+
     @ManyToOne
     private Job job;
     
@@ -32,4 +34,45 @@ public class Label implements Serializable {
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 					nullable = false, updatable = false) })
     private List<Category> categories;
+
+    public Label() {
+    }
+
+    public Label(LabelDto labelDto) {
+        this.id = labelDto.getId();
+        this.name = labelDto.getName();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

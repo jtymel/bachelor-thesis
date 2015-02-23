@@ -30,6 +30,10 @@
     <servlet-name>categoryServlet</servlet-name>
     <servlet-class>gwtEntity.server.CategoryServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>labelServlet</servlet-name>
+    <servlet-class>gwtEntity.server.LabelServiceImpl</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>jobServlet</servlet-name>
@@ -54,6 +58,10 @@
   <servlet-mapping>
     <servlet-name>categoryServlet</servlet-name>
     <url-pattern>/module/categoryservice</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>labelServlet</servlet-name>
+    <url-pattern>/module/labelService</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->
