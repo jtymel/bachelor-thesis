@@ -13,4 +13,5 @@ public interface LabelService extends RemoteService {
     public List<LabelDto> getLabels();
     public Long saveLabel(LabelDto label);    
     public void deleteLabel(LabelDto label);
+    public void addCategoriesToLabel(LabelDto label, List<CategoryDto> categories);
 }

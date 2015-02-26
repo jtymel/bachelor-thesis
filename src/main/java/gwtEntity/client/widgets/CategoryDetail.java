@@ -59,7 +59,7 @@ public class CategoryDetail extends Composite {
         }
         
         editedCategory = categoryDto;
-        getCategorizations();
+//        getCategorizations();
     }
 
     public CategoryDetail() {
@@ -108,7 +108,7 @@ public class CategoryDetail extends Composite {
 
     }
     
-    private void getCategorizations() {
+    public void getCategorizations() {
         categorizationService.getCategorizations(new AsyncCallback<List<CategorizationDto>>() {
 
             @Override
@@ -118,15 +118,21 @@ public class CategoryDetail extends Composite {
             @Override
             public void onSuccess(List<CategorizationDto> result) {
                 //        This needs to be reviewed and done better!
-                if (categorizations != null) categorizations.clear();
+//                if (categorizations != null) categorizations.clear();
+                
+                categorizationListField.clear();
+                
                 categorizations = result;
+                for (CategorizationDto categorization : categorizations) {
+                    categorizationListField.addItem(categorization.getName());
+                 }
             }
         });
          
-        categorizationListField.clear();
-        for (CategorizationDto categorization : categorizations) {
-            categorizationListField.addItem(categorization.getName());
-        }
+//        categorizationListField.clear();
+//        for (CategorizationDto categorization : categorizations) {
+//            categorizationListField.addItem(categorization.getName());
+//        }
  
     }
     

@@ -1,6 +1,7 @@
 package gwtEntity.server;
 
 import gwtEntity.client.CategorizationDto;
+import gwtEntity.client.CategoryDto;
 import gwtEntity.client.LabelDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -53,6 +55,24 @@ public class LabelServiceBean {
         
         Label label = new Label(labelDto);
         em.remove(em.contains(label) ? label : em.merge(label));
+    }
+
+    public void addCategoriesToLabel(LabelDto labelDto, List<CategoryDto> categoriesDto) {
+        Session session = (Session) em.getDelegate();
+// No label is in the table
+        Query query = session.createQuery("from Label WHERE id = :labelid")
+                .setParameter("labelid", labelDto.getId());
+        Label label = (Label) query.uniqueResult();
+
+        List<Category> categories = new ArrayList<Category>(categoriesDto.size());
+
+        for (CategoryDto categoryDto : categoriesDto) {
+            categories.add(new Category(categoryDto));
+        }
+
+        label.setCategories(categories);
+
+        session.saveOrUpdate(label);
     }
 
 }

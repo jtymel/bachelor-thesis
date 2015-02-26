@@ -1,8 +1,11 @@
 package gwtEntity.client.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -81,6 +84,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     CategoryDetail categoryDetail;
     
     @UiField
+    LabelDetail labelDetail;
+    
+    @UiField
     TabLayoutPanel tabPanel;
        
     public MainPanel() {     
@@ -95,6 +101,19 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     
     public List<JobDto> getSelectedJobs() {
         return jobList.getSelectedJobs();    
+    }
+
+    @UiHandler("tabPanel")
+    void onTabSelection(SelectionEvent<Integer> event) {
+        int selectedTab = event.getSelectedItem();
+
+        if(tabPanel.getWidget(selectedTab).equals(labelDetail)) {
+            labelDetail.updateDataGrid();
+        }
+        
+        if(tabPanel.getWidget(selectedTab).equals(categoryDetail)) {
+            categoryDetail.getCategorizations();            
+        }
     }
 
 }
