@@ -4,8 +4,6 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -17,14 +15,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.SelectionModel;
-import com.google.gwt.view.client.SingleSelectionModel;
-import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.CategoryService;
 import gwtEntity.client.CategoryServiceAsync;
@@ -59,6 +55,11 @@ public class LabelDetail extends Composite {
     
     @UiField
     Button addButton;
+
+    @UiField
+    TextBox labelNameField;
+
+    LabelDto editedLabel = null;
 
     private MultiSelectionModel<CategoryDto> selectionModel;
     private ListDataProvider<CategoryDto> dataProvider;
@@ -108,7 +109,11 @@ public class LabelDetail extends Composite {
         
     
 //        categorizationListDetailBridge.setLabelAndDisplayDetail(null);
-    }    
+    }
+
+    public void onTabShow() {
+        updateDataGrid();
+    }
 
     private void initDatagrid() {
         
@@ -118,7 +123,7 @@ public class LabelDetail extends Composite {
             // Get the value from the selection model.
             return selectionModel.isSelected(object);
           }
-        };        
+        };
 
         TextColumn<CategoryDto> categoryName = new TextColumn<CategoryDto>() {
             @Override
@@ -133,7 +138,7 @@ public class LabelDetail extends Composite {
                 return object.getCategorization();
             }
         };
-                
+
         dataGrid.setColumnWidth(checkColumn, 5, Style.Unit.PX);
         dataGrid.addColumn(checkColumn, "");
 

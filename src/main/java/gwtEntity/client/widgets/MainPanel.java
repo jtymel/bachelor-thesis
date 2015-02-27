@@ -108,7 +108,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         int selectedTab = event.getSelectedItem();
 
         if(tabPanel.getWidget(selectedTab).equals(labelDetail)) {
-            labelDetail.updateDataGrid();
+            labelDetail.onTabShow();
         }
         
         if(tabPanel.getWidget(selectedTab).equals(categoryDetail)) {

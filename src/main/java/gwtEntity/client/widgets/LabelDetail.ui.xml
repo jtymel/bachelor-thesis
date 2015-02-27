@@ -7,6 +7,21 @@
     </ui:style>
     
     <g:DockLayoutPanel unit="EM">
+
+        <g:north size="3.0">
+            <g:HTMLPanel>
+                <table style="width:50%" align="center">
+                  <tr>
+                    <td>
+                      <g:Label>Name of label</g:Label>
+                    </td>
+                    <td>
+                      <g:TextBox ui:field="labelNameField" />
+                    </td>
+                  </tr>
+                </table>
+            </g:HTMLPanel>
+        </g:north>
                
         <g:center>
             <c:DataGrid ui:field='dataGrid' />
