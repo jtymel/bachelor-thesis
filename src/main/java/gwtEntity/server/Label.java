@@ -25,12 +25,12 @@ public class Label implements Serializable {
 
     private String name;
 
-    @ManyToOne
-    private Job job;
+//    @ManyToOne
+//    private Job job;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "label_category", joinColumns = { 
-			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
+			@JoinColumn(name = "LABEL_ID", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 					nullable = false, updatable = false) })
     private List<Category> categories;
@@ -51,13 +51,13 @@ public class Label implements Serializable {
         this.id = id;
     }
 
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
+//    public Job getJob() {
+//        return job;
+//    }
+//
+//    public void setJob(Job job) {
+//        this.job = job;
+//    }
 
     public List<Category> getCategories() {
         return categories;

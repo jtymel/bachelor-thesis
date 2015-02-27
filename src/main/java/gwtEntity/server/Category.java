@@ -2,6 +2,7 @@ package gwtEntity.server;
 
 import gwtEntity.client.CategoryDto;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +34,7 @@ public class Category implements Serializable {
     private List<ParameterizedBuild> parameterizedBuilds;
     
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    private List<Label> labels;
+    private List<Label> labels = new ArrayList<Label>();
 
     public Category() {
     }
@@ -90,6 +91,9 @@ public class Category implements Serializable {
     public void setLabels(List<Label> labels) {
         this.labels = labels;
     }
-    
-    
+
+    public void addLabel(Label label) {
+        labels.add(label);
+    }
+
 }

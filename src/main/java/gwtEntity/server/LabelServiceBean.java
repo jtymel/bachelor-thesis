@@ -67,12 +67,23 @@ public class LabelServiceBean {
         List<Category> categories = new ArrayList<Category>(categoriesDto.size());
 
         for (CategoryDto categoryDto : categoriesDto) {
-            categories.add(new Category(categoryDto));
+            Query query2 = session.createQuery("from Category WHERE id = :categoryid")
+                .setParameter("categoryid", categoryDto.getId());
+            Category category = (Category) query2.uniqueResult();
+            addLabelToCategory(label, category);
+            categories.add(category);
         }
 
         label.setCategories(categories);
 
         session.saveOrUpdate(label);
+    }
+
+    private void addLabelToCategory(Label label, Category category){
+        Session session = (Session) em.getDelegate();
+
+        category.addLabel(label);
+        session.saveOrUpdate(category);
     }
 
 }

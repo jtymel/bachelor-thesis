@@ -76,20 +76,37 @@ public class LabelDetail extends Composite {
 
     @UiHandler("addButton")
     void onAddButtonClick(ClickEvent event) {
-        List<CategoryDto> categories = getSelectedCategories();
-        labelService.addCategoriesToLabel(new LabelDto(56L, "RHEL6,jdk1.8"), categories, new AsyncCallback<Void>() {
+        final List<CategoryDto> categories = getSelectedCategories();
+        
+        final LabelDto labelDto = new LabelDto();
+        labelDto.setName("RHEL6,jdk1.8");
+        
+        labelService.saveLabel(labelDto, new AsyncCallback<Long>() {
 
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("jeste nefunguje");
+                Window.alert("not even label is stored");
             }
 
             @Override
-            public void onSuccess(Void result) {
-                Window.alert("mozna funguje");            }
+            public void onSuccess(Long result) {
+                labelDto.setId(result);
+                labelService.addCategoriesToLabel(labelDto, categories, new AsyncCallback<Void>() {
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert("jeste nefunguje");
+                    }
+
+                    @Override
+                    public void onSuccess(Void result) {
+                        Window.alert("mozna funguje");
+                    }
+                });
+            }
         });
         
-        
+    
 //        categorizationListDetailBridge.setLabelAndDisplayDetail(null);
     }    
 
