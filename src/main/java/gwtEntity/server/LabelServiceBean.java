@@ -53,9 +53,17 @@ public class LabelServiceBean {
     public Long saveLabel(Label label) {
         Session session = (Session) em.getDelegate();
 
-        session.saveOrUpdate(label);
+        Query query = session.createQuery("from Label WHERE name = :labelName")
+                .setParameter("labelName", label.getName());
 
-        return label.getId();
+        Label storedLabel = (Label) query.uniqueResult();
+
+        if(storedLabel == null) {
+            session.saveOrUpdate(label);
+            return label.getId();
+        }
+
+        return storedLabel.getId();
     }
 
     public void deleteLabel(LabelDto labelDto) {
