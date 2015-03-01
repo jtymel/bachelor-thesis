@@ -21,6 +21,8 @@
  */
 package gwtEntity.client.widgets;
 
+import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,6 +31,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -63,6 +66,7 @@ public class JobDetail extends Composite {
     private final LabelServiceAsync labelService = GWT.create(LabelService.class);
 
     private JobListDetailBridge jobListDetailBridge;
+    private JobDetailLabelDetailBridge jobDetailLabelDetailBridge;
 
     void setJob(JobDto jobDTO) {
         if(jobDTO != null) {
@@ -166,10 +170,28 @@ public class JobDetail extends Composite {
                 return object.getName();
             }
         };
+        
+        ButtonCell buttonCell = new ButtonCell();
+        Column buttonColumn = new Column<LabelDto, String>(buttonCell) {
+            @Override
+            public String getValue(LabelDto object) {
+              // The value to display in the button.
+              return "Edit categories";
+            }
+        };
+        
+        buttonColumn.setFieldUpdater(new FieldUpdater<LabelDto, String>() {
+            public void update(int index, LabelDto object, String value) {
+                jobDetailLabelDetailBridge.setLabelAndDisplayDetail(object, editedJob);                            
+            }
+        });
+        
 
         dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(nameColumn, "Parameterization");
 
+        dataGrid.setColumnWidth(buttonColumn, 40, Style.Unit.PX);
+        dataGrid.addColumn(buttonColumn, "Edit label");
 
         selectionModel = new SingleSelectionModel<LabelDto>(keyProvider);
 
@@ -206,5 +228,9 @@ public class JobDetail extends Composite {
             }
         });
     }
-            
+
+    public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {       
+        jobDetailLabelDetailBridge = bridge;
+    }
+
 }

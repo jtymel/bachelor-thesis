@@ -23,8 +23,8 @@ public class LabelServiceImpl extends RemoteServiceServlet implements LabelServi
     }
 
     @Override
-    public Long saveLabel(LabelDto label) {
-        return labelServiceBean.saveLabel(label);
+    public Long saveLabel(LabelDto label, JobDto job) {
+        return labelServiceBean.saveLabel(label, job);
     }
 
     @Override

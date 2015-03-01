@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
+import gwtEntity.client.LabelDto;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge {
 
     private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);       
 
@@ -62,6 +63,17 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.selectTab(categoryList);
     }
     
+    @Override
+    public void setLabelAndDisplayDetail(LabelDto label, JobDto job) {
+        labelDetail.setLabel(label, job);
+        tabPanel.selectTab(labelDetail);
+    }
+
+    @Override
+    public void displayLabelList() {
+        tabPanel.selectTab(jobDetail);        
+    }
+    
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
     
@@ -97,6 +109,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         categorizationDetail.setCategorizationListDetailBridge(MainPanel.this);
         categoryList.setCategoryListDetailBridge(MainPanel.this);
         categoryDetail.setCategoryListDetailBridge(MainPanel.this);
+        jobDetail.setJobDetailLabelDetailBridge(MainPanel.this);
+        labelDetail.setJobDetailLabelDetailBridge(MainPanel.this);
     }
     
     public List<JobDto> getSelectedJobs() {

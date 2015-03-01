@@ -24,6 +24,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.CategoryService;
 import gwtEntity.client.CategoryServiceAsync;
+import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
 import gwtEntity.client.LabelService;
 import gwtEntity.client.LabelServiceAsync;
@@ -40,6 +41,8 @@ public class LabelDetail extends Composite {
 
     private final LabelServiceAsync labelService = GWT.create(LabelService.class);
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
+    
+    private JobDetailLabelDetailBridge jobDetailLabelDetailBridge;
     
 //    private LabelListDetailBridge categorizationListDetailBridge;
     
@@ -59,7 +62,8 @@ public class LabelDetail extends Composite {
     @UiField
     TextBox labelNameField;
 
-    LabelDto editedLabel = null;
+    private LabelDto editedLabel = null;
+    private JobDto job;
 
     private MultiSelectionModel<CategoryDto> selectionModel;
     private ListDataProvider<CategoryDto> dataProvider;
@@ -79,10 +83,7 @@ public class LabelDetail extends Composite {
     void onAddButtonClick(ClickEvent event) {
         final List<CategoryDto> categories = getSelectedCategories();
         
-        final LabelDto labelDto = new LabelDto();
-        labelDto.setName("RHEL6,jdk1.8");
-        
-        labelService.saveLabel(labelDto, new AsyncCallback<Long>() {
+        labelService.saveLabel(editedLabel, job, new AsyncCallback<Long>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -91,8 +92,8 @@ public class LabelDetail extends Composite {
 
             @Override
             public void onSuccess(Long result) {
-                labelDto.setId(result);
-                labelService.addCategoriesToLabel(labelDto, categories, new AsyncCallback<Void>() {
+                editedLabel.setId(result);
+                labelService.addCategoriesToLabel(editedLabel, categories, new AsyncCallback<Void>() {
 
                     @Override
                     public void onFailure(Throwable caught) {
@@ -102,6 +103,7 @@ public class LabelDetail extends Composite {
                     @Override
                     public void onSuccess(Void result) {
                         Window.alert("mozna funguje");
+                        jobDetailLabelDetailBridge.displayLabelList();
                     }
                 });
             }
@@ -202,4 +204,17 @@ public class LabelDetail extends Composite {
         return selectedCategories;
     }
     
+    public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {       
+        jobDetailLabelDetailBridge = bridge;
+    }
+
+    public void setLabel(LabelDto label, JobDto job) {
+        if(label != null) {
+            labelNameField.setText(label.getName());
+        } else {
+            labelNameField.setText("");
+        }
+
+        editedLabel = label;
+    }
 }

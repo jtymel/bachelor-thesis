@@ -55,9 +55,15 @@ public class LabelServiceBean {
         return new LabelDto(label.getId(), label.getName());
     }
     
-    public Long saveLabel(LabelDto labelDto) {
+    public Long saveLabel(LabelDto labelDto, JobDto jobDto) {
         Session session = (Session) em.getDelegate();
         Label label = new Label(labelDto);
+
+        Query query = session.createQuery("FROM Job WHERE url = :jobUrl")
+                .setParameter("jobUrl", jobDto.getUrl());
+// !!!!!!! NPE !!!!!!!!!!
+        Job job = (Job) query.uniqueResult();
+        label.setJob(job);
 
         session.saveOrUpdate(label);
 
