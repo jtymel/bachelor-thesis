@@ -2,6 +2,7 @@ package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.CategoryDto;
+import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
 import gwtEntity.client.LabelService;
 import java.util.List;
@@ -34,6 +35,11 @@ public class LabelServiceImpl extends RemoteServiceServlet implements LabelServi
     @Override
     public void addCategoriesToLabel(LabelDto label, List<CategoryDto> categories) {
         labelServiceBean.addCategoriesToLabel(label, categories);
+    }
+
+    @Override
+    public List<LabelDto> getLabels(JobDto job) {
+        return labelServiceBean.getLabels(job);
     }
     
 }

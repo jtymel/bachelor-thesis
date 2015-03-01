@@ -2,6 +2,7 @@ package gwtEntity.server;
 
 import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
+import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,19 @@ public class LabelServiceBean {
         Session session = (Session) em.getDelegate();
 
         List<Label> labels = new ArrayList<Label>(session.createQuery("from Label").list());
+        List<LabelDto> labelDtos = new ArrayList<LabelDto>(labels != null ? labels.size() : 0);
+
+        for (Label label : labels) {
+            labelDtos.add(createLabelDto(label));
+        }
+
+        return labelDtos;
+    }
+    
+    public List<LabelDto> getLabels(JobDto job) {
+        Session session = (Session) em.getDelegate();
+
+        List<Label> labels = new ArrayList<Label>(session.createQuery("FROM Label WHERE job_id = :jobID").setParameter("jobID", job.getId()).list());
         List<LabelDto> labelDtos = new ArrayList<LabelDto>(labels != null ? labels.size() : 0);
 
         for (Label label : labels) {

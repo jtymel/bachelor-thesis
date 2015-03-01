@@ -11,7 +11,7 @@ Uncomment this for XHTML entities
     </ui:style>
     
     <g:DockLayoutPanel unit="EM">
-        <g:north size="60.0">
+        <g:north size="75.0">
             <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="60">
                 <g:tab>
                     <g:header>

@@ -22,21 +22,33 @@
 package gwtEntity.client.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.JobService;
 import gwtEntity.client.JobServiceAsync;
+import gwtEntity.client.LabelDto;
+import gwtEntity.client.LabelService;
+import gwtEntity.client.LabelServiceAsync;
+import java.util.List;
 
 /**
  *
@@ -47,7 +59,9 @@ public class JobDetail extends Composite {
     private static JobDetailUiBinder uiBinder = GWT.create(JobDetailUiBinder.class);
     
     private final JobServiceAsync jobService = GWT.create(JobService.class);
-    
+
+    private final LabelServiceAsync labelService = GWT.create(LabelService.class);
+
     private JobListDetailBridge jobListDetailBridge;
 
     void setJob(JobDto jobDTO) {
@@ -66,6 +80,9 @@ public class JobDetail extends Composite {
     }
 
     public JobDetail() {
+        dataGrid = new DataGrid<LabelDto>(20);
+        initDatagrid();
+        initPager();
         initWidget(uiBinder.createAndBindUi(this));
     }
     
@@ -78,6 +95,18 @@ public class JobDetail extends Composite {
     @UiField
     Button saveButton;
     
+    @UiField
+    Button getParameterization;
+    
+    @UiField(provided = true)
+    DataGrid<LabelDto> dataGrid;
+    
+    @UiField(provided = true)
+    SimplePager pager;
+
+    private SelectionModel<LabelDto> selectionModel;
+    private ListDataProvider<LabelDto> dataProvider;
+
     JobDto editedJob = null;
     
     @UiHandler("saveButton")
@@ -90,6 +119,11 @@ public class JobDetail extends Composite {
         if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
             addJob();
         }
+    }
+    
+    @UiHandler("getParameterization")
+    void onGetParameterizationClick(ClickEvent event) {
+        getParameterizations();        
     }
     
     public void setJobListDetailBridge(JobListDetailBridge bridge) {       
@@ -124,10 +158,53 @@ public class JobDetail extends Composite {
 
     }
     
-//    public void displayJobDetail(JobDto jobDTO) {
-//        jobNameField.setText(jobDTO.getName());
-//        jobUrlField.setText(jobDTO.getUrl());
-//        Window.alert("displayJobDetail: JobDetail got: " + jobDTO.getId() + " | " + jobDTO.getName() + ", " + jobDTO.getUrl());
-//    }
+    private void initDatagrid() {
+
+        TextColumn<LabelDto> nameColumn = new TextColumn<LabelDto>() {
+            @Override
+            public String getValue(LabelDto object) {
+                return object.getName();
+            }
+        };
+
+        dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
+        dataGrid.addColumn(nameColumn, "Parameterization");
+
+
+        selectionModel = new SingleSelectionModel<LabelDto>(keyProvider);
+
+        dataGrid.setSelectionModel(selectionModel);
+    }
+
+    ProvidesKey<LabelDto> keyProvider = new ProvidesKey<LabelDto>() {
+        @Override
+        public Object getKey(LabelDto label) {
+            return (label == null) ? null : label.getId();
+        }
+    };
+
+    private void initPager() {
+        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+        pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
+        pager.setDisplay(dataGrid);
+    }
+    
+    private void getParameterizations() {
+        labelService.getLabels(editedJob, new AsyncCallback<List<LabelDto>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onSuccess(List<LabelDto> result) {
+                dataProvider = new ListDataProvider<LabelDto>();
+                dataProvider.setList(result);
+                dataProvider.addDataDisplay(dataGrid);
+                dataGrid.setRowCount(result.size());
+            }
+        });
+    }
             
 }
