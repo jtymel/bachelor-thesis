@@ -39,6 +39,9 @@ public class JenkinsDownloader {
     @EJB
     private StoreResultBean storeResultBean;
 
+    @EJB
+    private LabelServiceBean labelServiceBean;
+
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
 
@@ -158,8 +161,9 @@ public class JenkinsDownloader {
                 if (startElement.getName().getLocalPart().equals("run")) {
                     ParameterizedBuild paramBuild = getParamBuild(event, eventReader);
                     paramBuild = getMachineAndDateTimeOfParamBuild(paramBuild);
-                    
                     paramBuild.setBuild(build);
+                    saveLabel(paramBuild);
+
                     paramBuildServiceBean.saveParamBuild(paramBuild);
                     LOGGER.log(Level.SEVERE, "Kod bezprostredne za volanim beany");
                     paramBuilds.add(paramBuild);
@@ -277,5 +281,17 @@ public class JenkinsDownloader {
         }
 
         return paramBuild;
+    }
+
+    private void saveLabel(ParameterizedBuild paramBuild) {
+        String labelName = paramBuild.getUrl().substring(0, paramBuild.getUrl().lastIndexOf("/"));
+        labelName = labelName.substring(0, labelName.lastIndexOf("/"));
+        labelName = labelName.substring(labelName.lastIndexOf("/") + 1, labelName.length());
+
+        Label label = new Label();
+        label.setName(labelName);
+        label.setJob(paramBuild.getBuild().getJob());
+
+        labelServiceBean.saveLabel(label);
     }
 }

@@ -49,7 +49,15 @@ public class LabelServiceBean {
 
         return label.getId();
     }
-    
+
+    public Long saveLabel(Label label) {
+        Session session = (Session) em.getDelegate();
+
+        session.saveOrUpdate(label);
+
+        return label.getId();
+    }
+
     public void deleteLabel(LabelDto labelDto) {
         Session session = (Session) em.getDelegate();
         

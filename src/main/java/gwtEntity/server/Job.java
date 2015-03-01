@@ -52,7 +52,10 @@ public class Job implements Serializable {
 
     @OneToMany(mappedBy = "job")
     private List<Build> builds;
-  
+
+    @OneToMany(mappedBy = "job")
+    private List<Label> labels;
+
 //    org.hibernate.exception.SQLGrammarException: could not extract ResultSet
 //    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
     
