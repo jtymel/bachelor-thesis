@@ -82,35 +82,20 @@ public class LabelDetail extends Composite {
     @UiHandler("addButton")
     void onAddButtonClick(ClickEvent event) {
         final List<CategoryDto> categories = getSelectedCategories();
-        
-        labelService.saveLabel(editedLabel, job, new AsyncCallback<Long>() {
+
+        labelService.addCategoriesToLabel(editedLabel, categories, new AsyncCallback<Void>() {
 
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("not even label is stored");
+                Window.alert("jeste nefunguje");
             }
 
             @Override
-            public void onSuccess(Long result) {
-                editedLabel.setId(result);
-                labelService.addCategoriesToLabel(editedLabel, categories, new AsyncCallback<Void>() {
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        Window.alert("jeste nefunguje");
-                    }
-
-                    @Override
-                    public void onSuccess(Void result) {
-                        Window.alert("mozna funguje");
-                        jobDetailLabelDetailBridge.displayLabelList();
-                    }
-                });
+            public void onSuccess(Void result) {
+                Window.alert("mozna funguje");
+                jobDetailLabelDetailBridge.displayLabelList();
             }
         });
-        
-    
-//        categorizationListDetailBridge.setLabelAndDisplayDetail(null);
     }
 
     public void onTabShow() {
