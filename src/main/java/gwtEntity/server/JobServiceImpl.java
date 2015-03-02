@@ -24,6 +24,7 @@ package gwtEntity.server;
 
 import gwtEntity.client.JobService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import java.util.List;
 import javax.ejb.EJB;
@@ -51,4 +52,9 @@ public class JobServiceImpl extends RemoteServiceServlet implements JobService {
     public void deleteJob(JobDto jobDTO) {
         jobServiceBean.deleteJob(jobDTO);
     }        
+
+    @Override
+    public void addCategoriesToLabel(JobDto job, List<CategoryDto> categories) {
+        jobServiceBean.addCategoriesToLabel(job, categories);
+    }
 }

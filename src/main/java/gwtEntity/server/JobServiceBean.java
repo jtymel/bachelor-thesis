@@ -5,6 +5,7 @@
  */
 package gwtEntity.server;
 
+import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +143,33 @@ public class JobServiceBean {
 //                Integer stock = (Integer) result.get(i);
 //                System.out.println("%%%%% %%%% %%%" + stock);
 //        }
+    }
+
+    public void addCategoriesToLabel(JobDto jobDto, List<CategoryDto> categoriesDto) {
+        Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM Job WHERE id = :jobId")
+                .setParameter("jobId", jobDto.getId());
+        Job job = (Job) query.uniqueResult();
+
+        List<Category> categories = new ArrayList<Category>(categoriesDto.size());
+
+        for (CategoryDto categoryDto : categoriesDto) {
+            Query query2 = session.createQuery("from Category WHERE id = :categoryid")
+                .setParameter("categoryid", categoryDto.getId());
+            Category category = (Category) query2.uniqueResult();
+            addJobToCategory(job, category);
+            categories.add(category);
+        }
+
+        job.setCategories(categories);
+
+        session.saveOrUpdate(job);
+    }
+
+    private void addJobToCategory(Job job, Category category){
+        Session session = (Session) em.getDelegate();
+        category.addJob(job);
+        session.saveOrUpdate(category);
     }
 
 }

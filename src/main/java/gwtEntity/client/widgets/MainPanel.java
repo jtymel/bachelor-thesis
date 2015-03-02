@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge {
 
     private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);       
 
@@ -73,7 +73,17 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     public void displayLabelList() {
         tabPanel.selectTab(jobDetail);        
     }
-    
+
+    @Override
+    public void setJobAndDisplayCategories(JobDto job) {
+        jobCategories.setJob(job);
+        tabPanel.selectTab(jobCategories);
+    }
+
+    @Override
+    public void displayJobDetail() {
+        tabPanel.selectTab(jobDetail);
+    }
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
     
@@ -97,6 +107,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     
     @UiField
     LabelDetail labelDetail;
+
+    @UiField
+    JobCategories jobCategories;
     
     @UiField
     TabLayoutPanel tabPanel;
@@ -111,6 +124,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         categoryDetail.setCategoryListDetailBridge(MainPanel.this);
         jobDetail.setJobDetailLabelDetailBridge(MainPanel.this);
         labelDetail.setJobDetailLabelDetailBridge(MainPanel.this);
+        jobDetail.setJobDetailCategoriesBridge(MainPanel.this);
+        jobCategories.setJobDetailCategoriesBridge(MainPanel.this);
     }
     
     public List<JobDto> getSelectedJobs() {
@@ -127,6 +142,10 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         
         if(tabPanel.getWidget(selectedTab).equals(categoryDetail)) {
             categoryDetail.getCategorizations();            
+        }
+
+        if(tabPanel.getWidget(selectedTab).equals(jobCategories)) {
+            jobCategories.onTabShow();
         }
     }
 

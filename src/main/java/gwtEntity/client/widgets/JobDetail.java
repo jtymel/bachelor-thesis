@@ -67,6 +67,7 @@ public class JobDetail extends Composite {
 
     private JobListDetailBridge jobListDetailBridge;
     private JobDetailLabelDetailBridge jobDetailLabelDetailBridge;
+    private JobDetailCategoriesBridge jobDetailCategoriesBridge;
 
     void setJob(JobDto jobDTO) {
         if(jobDTO != null) {
@@ -101,7 +102,10 @@ public class JobDetail extends Composite {
     
     @UiField
     Button getParameterization;
-    
+
+    @UiField
+    Button setCategories;
+
     @UiField(provided = true)
     DataGrid<LabelDto> dataGrid;
     
@@ -116,6 +120,11 @@ public class JobDetail extends Composite {
     @UiHandler("saveButton")
     void onSaveClick(ClickEvent event) {
         addJob();        
+    }
+
+    @UiHandler("setCategories")
+    void onSetCategoriesClick(ClickEvent event) {
+        jobDetailCategoriesBridge.setJobAndDisplayCategories(editedJob);
     }
 
     @UiHandler("jobNameField")
@@ -233,4 +242,7 @@ public class JobDetail extends Composite {
         jobDetailLabelDetailBridge = bridge;
     }
 
+    public void setJobDetailCategoriesBridge(JobDetailCategoriesBridge bridge) {
+        jobDetailCategoriesBridge = bridge;
+    }
 }

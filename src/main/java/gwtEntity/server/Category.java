@@ -96,4 +96,7 @@ public class Category implements Serializable {
         labels.add(label);
     }
 
+    public void addJob(Job job) {
+        jobs.add(job);
+    }
 }

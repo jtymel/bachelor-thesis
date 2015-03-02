@@ -41,6 +41,7 @@
                       </td>
                   </tr>
                 </table>
+                <g:Button ui:field="setCategories">Set categories</g:Button>
           </g:HTMLPanel>                
         </g:north>
 

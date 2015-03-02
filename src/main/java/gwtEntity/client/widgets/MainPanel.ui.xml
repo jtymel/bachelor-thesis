@@ -55,6 +55,12 @@ Uncomment this for XHTML entities
                     </g:header>
                     <thesui:LabelDetail ui:field="labelDetail" />
                 </g:tab>
+                <g:tab>
+                    <g:header>
+                        Job categories
+                    </g:header>
+                    <thesui:JobCategories ui:field="jobCategories" />
+                </g:tab>
             </g:TabLayoutPanel>
         </g:north>
     </g:DockLayoutPanel>
