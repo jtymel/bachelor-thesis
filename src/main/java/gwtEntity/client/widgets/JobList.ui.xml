@@ -31,7 +31,10 @@
         <g:south size="2.0">
             <g:Button ui:field="addButton">Add new job</g:Button>        
         </g:south>    
-        
-        
+
+        <g:south size="2.0">
+            <g:Button ui:field="tmpCategoryParamBuildButton">TEMPORARY button to establish the reference between ParamBuild and Category</g:Button>
+        </g:south>
+
     </g:DockLayoutPanel>
 </ui:UiBinder>

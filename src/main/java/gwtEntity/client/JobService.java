@@ -35,4 +35,5 @@ public interface JobService extends RemoteService {
     public Long saveJob(JobDto jobDTO);
     public void deleteJob(JobDto jobDTO);
     public void addCategoriesToLabel(JobDto job, List<CategoryDto> categories);
+    public void addCategoriesToParamBuild(JobDto job);
 }

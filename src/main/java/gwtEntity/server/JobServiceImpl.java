@@ -57,4 +57,9 @@ public class JobServiceImpl extends RemoteServiceServlet implements JobService {
     public void addCategoriesToLabel(JobDto job, List<CategoryDto> categories) {
         jobServiceBean.addCategoriesToLabel(job, categories);
     }
+
+    @Override
+    public void addCategoriesToParamBuild(JobDto job) {
+        jobServiceBean.addCategoriesToParamBuild(job);
+    }
 }

@@ -84,6 +84,9 @@ public class JobList extends Composite {
     @UiField
     Button addButton;
 
+    @UiField
+    Button tmpCategoryParamBuildButton;
+
     private SelectionModel<JobDto> selectionModel;
     private ListDataProvider<JobDto> dataProvider;
 
@@ -128,6 +131,27 @@ public class JobList extends Composite {
             }
         });
     }
+    
+    @UiHandler("tmpCategoryParamBuildButton")
+    void onTmpButtonClick(ClickEvent event) {
+        List<JobDto> jobs = getSelectedJobs();
+        
+        for (JobDto jobDto : jobs) {
+            jobService.addCategoriesToParamBuild(jobDto, new AsyncCallback<Void>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("An error occured during addition categories to param build");
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                Window.alert("Categories were correctly added");
+            }
+        });
+        }
+        
+    }   
 
     private void initDatagrid() {
         Column<JobDto, String> urlColumn = new Column<JobDto, String>(new TextCell()) {
@@ -201,7 +225,7 @@ public class JobList extends Composite {
         jobService.getJobs(new AsyncCallback<List<JobDto>>() {
 
             @Override
-            public void onFailure(Throwable caught) {
+            public void onFailure(Throwable caught) {                
             }
 
             @Override

@@ -8,6 +8,7 @@ package gwtEntity.server;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -170,6 +171,84 @@ public class JobServiceBean {
         Session session = (Session) em.getDelegate();
         category.addJob(job);
         session.saveOrUpdate(category);
+    }
+    
+    public void addCategoriesToParamBuild(JobDto jobDto) {
+        Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM Job WHERE id = :jobId")
+                .setParameter("jobId", jobDto.getId());
+        Job job = (Job) query.uniqueResult();
+        
+        List<Build> builds = job.getBuilds();
+        List<ParameterizedBuild> paramBuilds = new ArrayList<ParameterizedBuild>();
+        
+        for (Build build : builds) {
+            paramBuilds.addAll(build.getParameterizedBuilds());
+        }
+
+        for (ParameterizedBuild paramBuild : paramBuilds) {
+            String labelName = paramBuild.getUrl().substring(0, paramBuild.getUrl().lastIndexOf("/"));
+            labelName = labelName.substring(0, labelName.lastIndexOf("/"));
+            labelName = labelName.substring(labelName.lastIndexOf("/") + 1, labelName.length());
+            
+            Query ctgQuery = session.createQuery("SELECT ctg FROM "
+//                        + "Category ctg, "
+                        + "Label l, "
+                        + "Job j, "
+                        + "Build b, "
+                        + "ParameterizedBuild pb "
+                        
+                        + "JOIN l.categories ctg "
+                        + ""
+//                        + "label_category lc "
+
+                        + "WHERE "
+                        + "pb.id = :paramBuildId "
+                        + "AND b.id = pb.id_build "
+                        + "AND b.job = j.id "
+                        + "AND l.job = j.id ")
+//                        + "AND l.id = lc.label_id "
+//                        + "AND ctg.id = lc.category_id ")
+                    .setParameter("paramBuildId", paramBuild.getId());
+            
+            List<Category> categories = new ArrayList<Category>(ctgQuery.list());
+            if(!categories.isEmpty()) {
+                addParamBuildToCategory(paramBuild, categories);
+            }
+            
+          /*  
+SELECT ctg.*
+FROM
+	Category ctg,
+	Label l,
+	Job j,
+	Build b,
+	ParameterizedBuild pb,
+	Label_category lc
+WHERE 	--pb.id = 428
+	pb.id = 398
+	AND b.id = pb.id_build_id
+	AND b.job_id = j.id
+	AND l.job_id = j.id
+	AND l.id = lc.label_id
+	AND ctg.id = lc.category_id
+	--AND l.name = 'jdk=ibm17,label_exp=EAP-RHEL7'
+	AND l.name = 'jdk=ibm1.8,label_exp=EAP-RHEL6-PPC64'
+        
+        */
+        }
+        
+    }
+    
+    private void addParamBuildToCategory(ParameterizedBuild pb, List<Category> categories){
+        Session session = (Session) em.getDelegate();
+
+        for (Category category : categories) {
+            System.out.println("**** ******** ****** " + category.getName());
+            category.addParamBuild(pb);
+            session.saveOrUpdate(category);
+        }
+        
     }
 
 }

@@ -31,7 +31,7 @@ public class Category implements Serializable {
     private List<Job> jobs;
     
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    private List<ParameterizedBuild> parameterizedBuilds;
+    private List<ParameterizedBuild> parameterizedBuilds = new ArrayList<ParameterizedBuild>();
     
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private List<Label> labels = new ArrayList<Label>();
@@ -98,5 +98,9 @@ public class Category implements Serializable {
 
     public void addJob(Job job) {
         jobs.add(job);
+    }
+    
+    public void addParamBuild(ParameterizedBuild pb) {
+        parameterizedBuilds.add(pb);
     }
 }
