@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +24,12 @@ import javax.persistence.TemporalType;
 /**
  * Created by jtymel on 12/15/14.
  */
+@NamedNativeQueries({
+	@NamedNativeQuery(
+	name = "addCategoriesToParamBuild",
+	query = "SELECT count (*) FROM addCategoriesToParamBuild(:id_paramBuild)"
+	)
+})
 @Entity
 public class ParameterizedBuild implements Serializable {
     @OneToMany(mappedBy = "id_parameterizedBuild")
@@ -47,6 +55,15 @@ public class ParameterizedBuild implements Serializable {
     private java.util.Date datetime;
     private String name;
     private String url;
+    private String cachedLabel;
+
+    public String getLabel() {
+        return cachedLabel;
+    }
+
+    public void setLabel(String label) {
+        this.cachedLabel = label;
+    }
 
     public String getUrl() {
         return url;

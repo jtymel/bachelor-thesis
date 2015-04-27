@@ -85,7 +85,7 @@ public class JobList extends Composite {
     Button addButton;
 
     @UiField
-    Button tmpCategoryParamBuildButton;
+    Button addCtgToParamBuildButton;
 
     private SelectionModel<JobDto> selectionModel;
     private ListDataProvider<JobDto> dataProvider;
@@ -132,8 +132,8 @@ public class JobList extends Composite {
         });
     }
     
-    @UiHandler("tmpCategoryParamBuildButton")
-    void onTmpButtonClick(ClickEvent event) {
+    @UiHandler("addCtgToParamBuildButton")
+    void onAddCtgToParamBuildButtonClick(ClickEvent event) {
         List<JobDto> jobs = getSelectedJobs();
         
         for (JobDto jobDto : jobs) {

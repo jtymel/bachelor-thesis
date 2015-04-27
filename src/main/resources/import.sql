@@ -61,3 +61,47 @@ END;
 $BODY$
 LANGUAGE plpgsql VOLATILE
 COST 100^
+
+
+
+CREATE OR REPLACE FUNCTION addCategoriesToParamBuild(p_paramBuildId BIGINT)
+RETURNS VOID AS
+
+$BODY$
+BEGIN
+
+INSERT INTO parambuild_category(category_id, parambuild_id)
+SELECT jc.category_id, pb.id FROM
+  Build b,
+  ParameterizedBuild pb,
+  Job j,
+  job_category jc
+
+  WHERE
+  pb.id = p_paramBuildId
+  AND b.id=pb.id_build_id
+  AND j.id = b.job_id
+  AND jc.job_id = j.id
+  ;
+
+INSERT INTO parambuild_category(category_id, parambuild_id)
+SELECT lc.category_id, pb.id FROM
+  Build b,
+  ParameterizedBuild pb,
+  Job j,
+  Label l,
+  label_category lc
+
+  WHERE
+  pb.id = p_paramBuildId
+  AND b.id=pb.id_build_id
+  AND j.id = b.job_id
+  AND j.id = l.job_id
+  AND lc.label_id = l.id
+  AND pb.cachedLabel = l.name
+  ;
+
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100^

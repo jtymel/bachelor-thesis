@@ -162,6 +162,7 @@ public class JenkinsDownloader {
                     ParameterizedBuild paramBuild = getParamBuild(event, eventReader);
                     paramBuild = getMachineAndDateTimeOfParamBuild(paramBuild);
                     paramBuild.setBuild(build);
+                    paramBuild.setLabel(getLabelName(paramBuild));
                     saveLabel(paramBuild);
 
                     paramBuildServiceBean.saveParamBuild(paramBuild);
@@ -284,14 +285,19 @@ public class JenkinsDownloader {
     }
 
     private void saveLabel(ParameterizedBuild paramBuild) {
-        String labelName = paramBuild.getUrl().substring(0, paramBuild.getUrl().lastIndexOf("/"));
-        labelName = labelName.substring(0, labelName.lastIndexOf("/"));
-        labelName = labelName.substring(labelName.lastIndexOf("/") + 1, labelName.length());
+        String labelName = getLabelName(paramBuild);
 
         Label label = new Label();
         label.setName(labelName);
         label.setJob(paramBuild.getBuild().getJob());
 
         labelServiceBean.saveLabel(label);
+    }
+
+    private String getLabelName(ParameterizedBuild paramBuild) {
+        String labelName = paramBuild.getUrl().substring(0, paramBuild.getUrl().lastIndexOf("/"));
+        labelName = labelName.substring(0, labelName.lastIndexOf("/"));
+        labelName = labelName.substring(labelName.lastIndexOf("/") + 1, labelName.length());
+        return labelName;
     }
 }

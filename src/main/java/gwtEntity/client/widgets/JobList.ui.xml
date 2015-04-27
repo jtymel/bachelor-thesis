@@ -33,7 +33,7 @@
         </g:south>    
 
         <g:south size="2.0">
-            <g:Button ui:field="tmpCategoryParamBuildButton">TEMPORARY button to establish the reference between ParamBuild and Category</g:Button>
+            <g:Button ui:field="addCtgToParamBuildButton">Add categories to parameterized builds</g:Button>
         </g:south>
 
     </g:DockLayoutPanel>

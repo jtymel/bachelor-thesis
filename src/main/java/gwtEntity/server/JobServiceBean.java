@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NamedNativeQueries;
@@ -31,6 +32,9 @@ import org.hibernate.Session;
 public class JobServiceBean {
 
     public static final String STR = "nazdar";
+    
+    @EJB
+    private StoreParamBuildCategoriesBean storeParamBuildCategoriesBean;
     
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
@@ -187,55 +191,7 @@ public class JobServiceBean {
         }
 
         for (ParameterizedBuild paramBuild : paramBuilds) {
-            String labelName = paramBuild.getUrl().substring(0, paramBuild.getUrl().lastIndexOf("/"));
-            labelName = labelName.substring(0, labelName.lastIndexOf("/"));
-            labelName = labelName.substring(labelName.lastIndexOf("/") + 1, labelName.length());
-            
-            Query ctgQuery = session.createQuery("SELECT ctg FROM "
-//                        + "Category ctg, "
-                        + "Label l, "
-                        + "Job j, "
-                        + "Build b, "
-                        + "ParameterizedBuild pb "
-                        
-                        + "JOIN l.categories ctg "
-                        + ""
-//                        + "label_category lc "
-
-                        + "WHERE "
-                        + "pb.id = :paramBuildId "
-                        + "AND b.id = pb.id_build "
-                        + "AND b.job = j.id "
-                        + "AND l.job = j.id ")
-//                        + "AND l.id = lc.label_id "
-//                        + "AND ctg.id = lc.category_id ")
-                    .setParameter("paramBuildId", paramBuild.getId());
-            
-            List<Category> categories = new ArrayList<Category>(ctgQuery.list());
-            if(!categories.isEmpty()) {
-                addParamBuildToCategory(paramBuild, categories);
-            }
-            
-          /*  
-SELECT ctg.*
-FROM
-	Category ctg,
-	Label l,
-	Job j,
-	Build b,
-	ParameterizedBuild pb,
-	Label_category lc
-WHERE 	--pb.id = 428
-	pb.id = 398
-	AND b.id = pb.id_build_id
-	AND b.job_id = j.id
-	AND l.job_id = j.id
-	AND l.id = lc.label_id
-	AND ctg.id = lc.category_id
-	--AND l.name = 'jdk=ibm17,label_exp=EAP-RHEL7'
-	AND l.name = 'jdk=ibm1.8,label_exp=EAP-RHEL6-PPC64'
-        
-        */
+            storeParamBuildCategoriesBean.saveTestResult(paramBuild);
         }
         
     }
