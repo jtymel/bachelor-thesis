@@ -189,7 +189,7 @@ public class JobList extends Composite {
 
             @Override
             public String asString() {
-                return "Neme";
+                return "Name";
             }
         }), nameFooter);
 
