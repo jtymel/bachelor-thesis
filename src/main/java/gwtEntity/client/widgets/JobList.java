@@ -64,6 +64,7 @@ public class JobList extends Composite {
     private final JobServiceAsync jobService = GWT.create(JobService.class);
     
     private JobListDetailBridge jobListDetailBridge;
+    private JobListBuildListBridge jobListBuildListBridge;
 
     interface JobListUiBinder extends UiBinder<Widget, JobList> {
     }
@@ -85,6 +86,9 @@ public class JobList extends Composite {
     Button addButton;
 
     @UiField
+    Button showDetailButton;
+
+    @UiField
     Button addCtgToParamBuildButton;
 
     private SelectionModel<JobDto> selectionModel;
@@ -101,6 +105,11 @@ public class JobList extends Composite {
         jobListDetailBridge = bridge;
     }
     
+    public void setJobListBuildListBridge(JobListBuildListBridge bridge) {       
+        jobListBuildListBridge = bridge;
+    }
+    
+    
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
         List<JobDto> jobList = getSelectedJobs();
@@ -113,6 +122,15 @@ public class JobList extends Composite {
 
     }
 
+    @UiHandler("showDetailButton")
+    void onShowDetailButtonClick(ClickEvent event) {
+        List<JobDto> jobList = getSelectedJobs();
+
+        for (JobDto jobDto : jobList) {
+            jobListDetailBridge.setJobAndDisplayDetail(jobDto);
+        }
+
+    }
     @UiHandler("addButton")
     void onAddButtonClick(ClickEvent event) {
         jobListDetailBridge.setJobAndDisplayDetail(null);
@@ -203,10 +221,11 @@ public class JobList extends Composite {
 
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
+
                 List<JobDto> jobList = getSelectedJobs();
 
-                for (JobDto jobDTO : jobList) {
-                    jobListDetailBridge.setJobAndDisplayDetail(jobDTO);
+                for (JobDto jobDto : jobList) {
+                    jobListBuildListBridge.setJobAndDisplayBuilds(jobDto);
                 }                
             }
         }, DoubleClickEvent.getType());

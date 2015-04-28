@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge {
 
     private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);       
 
@@ -84,6 +84,12 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     public void displayJobDetail() {
         tabPanel.selectTab(jobDetail);
     }
+    
+    @Override
+    public void setJobAndDisplayBuilds(JobDto job) {
+        buildList.setJob(job);
+        tabPanel.selectTab(buildList);
+    }
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
     
@@ -110,6 +116,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
     @UiField
     JobCategories jobCategories;
+
+    @UiField
+    BuildList buildList;
     
     @UiField
     TabLayoutPanel tabPanel;
@@ -126,6 +135,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         labelDetail.setJobDetailLabelDetailBridge(MainPanel.this);
         jobDetail.setJobDetailCategoriesBridge(MainPanel.this);
         jobCategories.setJobDetailCategoriesBridge(MainPanel.this);
+        jobList.setJobListBuildListBridge(MainPanel.this);
+        buildList.setJobListBuildListBridge(MainPanel.this);
     }
     
     public List<JobDto> getSelectedJobs() {
@@ -146,6 +157,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
         if(tabPanel.getWidget(selectedTab).equals(jobCategories)) {
             jobCategories.onTabShow();
+        }
+        if(tabPanel.getWidget(selectedTab).equals(buildList)) {
+            buildList.onTabShow();
         }
     }
 

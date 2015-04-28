@@ -22,10 +22,14 @@
 package gwtEntity.server;
 
 import gwtEntity.client.BuildDto;
+import gwtEntity.client.JobDto;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -63,6 +67,35 @@ public class BuildServiceBean {
         System.out.println(build.getId());
         
         return build.getId();
-    }    
+    }
+    
+    public List<BuildDto> getBuilds(JobDto jobDto) {
+        if(jobDto == null)
+            return null;
+        
+        Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM Build WHERE job_id = :jobId")
+                .setParameter("jobId", jobDto.getId());                
+        
+        List<Build> builds = new ArrayList<Build>(query.list());
+        List<BuildDto> buildDtos = new ArrayList<BuildDto>(builds != null ? builds.size() : 0);
+
+        for (Build build : builds) {
+            buildDtos.add(createBuildDto(build));
+        }
+//        session.getTransaction().commit();
+        return buildDtos;
+    }
+    
+    private BuildDto createBuildDto(Build build){
+        BuildDto buildDto = new BuildDto();
+        
+        buildDto.setId(build.getId());
+        buildDto.setName(build.getName());
+        buildDto.setUrl(build.getUrl());
+        
+        return buildDto;
+    }
+    
 
 }

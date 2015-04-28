@@ -24,6 +24,8 @@ package gwtEntity.server;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.BuildDto;
 import gwtEntity.client.BuildService;
+import gwtEntity.client.JobDto;
+import java.util.List;
 import javax.ejb.EJB;
 
 /**
@@ -38,6 +40,11 @@ public class BuildServiceImpl extends RemoteServiceServlet implements BuildServi
     @Override
     public Long saveBuild(BuildDto buildDto) {
         return buildServiceBean.saveBuild(buildDto);
+    }
+
+    @Override
+    public List<BuildDto> getBuilds(JobDto jobDto) {
+        return buildServiceBean.getBuilds(jobDto);
     }
     
 }
