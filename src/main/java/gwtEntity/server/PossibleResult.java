@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class PossibleResult implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
@@ -21,6 +22,26 @@ public class PossibleResult implements Serializable {
 
     @OneToMany(mappedBy = "id_possibleResult")
     private List<Result> results;
-    
+
     private String name;
+
+    public PossibleResult() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

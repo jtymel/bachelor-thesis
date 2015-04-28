@@ -14,6 +14,7 @@ import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
+import gwtEntity.client.ParameterizedBuildDto;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -21,13 +22,13 @@ import java.util.logging.Logger;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge, BuildListParamBuildListBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge, BuildListParamBuildListBridge, ParamBuildResultListBridge {
 
-    private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);       
+    private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);
 
     interface MainPanelUiBinder extends UiBinder<Widget, MainPanel> {
     }
-    
+
     @Override
     public void setJobAndDisplayDetail(JobDto jobDTO) {
         jobDetail.setJob(jobDTO);
@@ -37,9 +38,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     @Override
     public void displayList() {
         jobList.updateDataGrid();
-        tabPanel.selectTab(jobList);        
+        tabPanel.selectTab(jobList);
     }
-    
+
     @Override
     public void setCategorizationAndDisplayDetail(CategorizationDto categorizationDto) {
         categorizationDetail.setCategorization(categorizationDto);
@@ -51,7 +52,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         categorizationList.updateDataGrid();
         tabPanel.selectTab(categorizationList);
     }
-    
+
     @Override
     public void setCategoryAndDisplayDetail(CategoryDto categoryDto) {
         categoryDetail.setCategory(categoryDto);
@@ -63,7 +64,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         categoryList.updateDataGrid();
         tabPanel.selectTab(categoryList);
     }
-    
+
     @Override
     public void setLabelAndDisplayDetail(LabelDto label, JobDto job) {
         labelDetail.setLabel(label, job);
@@ -72,7 +73,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
     @Override
     public void displayLabelList() {
-        tabPanel.selectTab(jobDetail);        
+        tabPanel.selectTab(jobDetail);
     }
 
     @Override
@@ -85,39 +86,45 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     public void displayJobDetail() {
         tabPanel.selectTab(jobDetail);
     }
-    
+
     @Override
     public void setJobAndDisplayBuilds(JobDto job) {
         buildList.setJob(job);
         tabPanel.selectTab(buildList);
     }
-    
+
     @Override
     public void setBuildAndDisplayParamBuilds(BuildDto build) {
         paramBuildList.setBuild(build);
         tabPanel.selectTab(paramBuildList);
     }
 
+    @Override
+    public void setParamBuildAndDisplayResults(ParameterizedBuildDto paramBuild) {
+        resultList.setParamBuild(paramBuild);
+        tabPanel.selectTab(resultList);
+    }
+
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
-    
+
     @UiField
     JobDetail jobDetail;
-    
+
     @UiField
-    JobList jobList; 
-    
+    JobList jobList;
+
     @UiField
     CategorizationList categorizationList;
-    
+
     @UiField
     CategorizationDetail categorizationDetail;
-    
+
     @UiField
     CategoryList categoryList;
-    
+
     @UiField
     CategoryDetail categoryDetail;
-    
+
     @UiField
     LabelDetail labelDetail;
 
@@ -126,14 +133,17 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
     @UiField
     BuildList buildList;
-    
+
     @UiField
     ParamBuildList paramBuildList;
-    
+
+    @UiField
+    ResultList resultList;
+
     @UiField
     TabLayoutPanel tabPanel;
-       
-    public MainPanel() {     
+
+    public MainPanel() {
         initWidget(uiBinder.createAndBindUi(this));
         jobList.setJobListDetailBridge(MainPanel.this);
         jobDetail.setJobListDetailBridge(MainPanel.this);
@@ -149,34 +159,40 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         buildList.setJobListBuildListBridge(MainPanel.this);
         buildList.setBuildListParamBuildListBridge(MainPanel.this);
         paramBuildList.setBuildListParamBuildListBridge(MainPanel.this);
+        paramBuildList.setParamBuildResultListBridge(MainPanel.this);
+        resultList.setParamBuildResultListBridge(MainPanel.this);
     }
-    
+
     public List<JobDto> getSelectedJobs() {
-        return jobList.getSelectedJobs();    
+        return jobList.getSelectedJobs();
     }
 
     @UiHandler("tabPanel")
     void onTabSelection(SelectionEvent<Integer> event) {
         int selectedTab = event.getSelectedItem();
 
-        if(tabPanel.getWidget(selectedTab).equals(labelDetail)) {
+        if (tabPanel.getWidget(selectedTab).equals(labelDetail)) {
             labelDetail.onTabShow();
         }
-        
-        if(tabPanel.getWidget(selectedTab).equals(categoryDetail)) {
-            categoryDetail.getCategorizations();            
+
+        if (tabPanel.getWidget(selectedTab).equals(categoryDetail)) {
+            categoryDetail.getCategorizations();
         }
 
-        if(tabPanel.getWidget(selectedTab).equals(jobCategories)) {
+        if (tabPanel.getWidget(selectedTab).equals(jobCategories)) {
             jobCategories.onTabShow();
         }
 
-        if(tabPanel.getWidget(selectedTab).equals(buildList)) {
+        if (tabPanel.getWidget(selectedTab).equals(buildList)) {
             buildList.onTabShow();
         }
 
-        if(tabPanel.getWidget(selectedTab).equals(paramBuildList)) {
+        if (tabPanel.getWidget(selectedTab).equals(paramBuildList)) {
             paramBuildList.onTabShow();
+        }
+
+        if (tabPanel.getWidget(selectedTab).equals(resultList)) {
+            resultList.onTabShow();
         }
     }
 

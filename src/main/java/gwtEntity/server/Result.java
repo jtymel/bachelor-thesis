@@ -16,40 +16,72 @@ import javax.persistence.NamedNativeQuery;
 /**
  * Created by jtymel on 12/15/14.
  */
-
-
 // 2015-02-18 tiny "hack" (count (*) FROM) added, otherwise causes 'org.hibernate.MappingException: No Dialect mapping for JDBC type: 1111'
 @NamedNativeQueries({
-	@NamedNativeQuery(
-	name = "storeTestResultProcedure",
-	query = "SELECT count (*) FROM storeTestResult(:id_paramBuild, :result, :test, :testCase, :duration)"
-	)
+    @NamedNativeQuery(
+            name = "storeTestResultProcedure",
+            query = "SELECT count (*) FROM storeTestResult(:id_paramBuild, :result, :test, :testCase, :duration)"
+    )
 })
 @Entity
 @IdClass(Result.ResultId.class)
 public class Result implements Serializable {
 //    @EmbeddedId
 //    private ResultID resultID;
-    
+
     @Id
     @ManyToOne
     private PossibleResult id_possibleResult;
-    
+
     @Id
     @ManyToOne
     private Test id_test;
-    
+
     @Id
     @ManyToOne
     private ParameterizedBuild id_parameterizedBuild;
-    
-    private float duration;
-    
 
+    private float duration;
+
+    public Result() {
+    }
+
+    public PossibleResult getId_possibleResult() {
+        return id_possibleResult;
+    }
+
+    public void setId_possibleResult(PossibleResult id_possibleResult) {
+        this.id_possibleResult = id_possibleResult;
+    }
+
+    public Test getId_test() {
+        return id_test;
+    }
+
+    public void setId_test(Test id_test) {
+        this.id_test = id_test;
+    }
+
+    public ParameterizedBuild getId_parameterizedBuild() {
+        return id_parameterizedBuild;
+    }
+
+    public void setId_parameterizedBuild(ParameterizedBuild id_parameterizedBuild) {
+        this.id_parameterizedBuild = id_parameterizedBuild;
+    }
+
+    public float getDuration() {
+        return duration;
+    }
+
+    public void setDuration(float duration) {
+        this.duration = duration;
+    }
 
 //@Embeddable
-    public class ResultId implements Serializable {
-        private PossibleResult id_possibleResult;    
+    public static class ResultId implements Serializable {
+
+        private PossibleResult id_possibleResult;
         private Test id_test;
         private ParameterizedBuild id_parameterizedBuild;
 
@@ -60,7 +92,7 @@ public class Result implements Serializable {
             this.id_possibleResult = id_possibleResult;
             this.id_test = id_test;
             this.id_parameterizedBuild = id_parameterizedBuild;
-        }        
+        }
 
         @Override
         public int hashCode() {
@@ -92,5 +124,5 @@ public class Result implements Serializable {
             return true;
         }
 
-    }   
+    }
 }

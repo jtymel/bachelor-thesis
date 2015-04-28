@@ -58,6 +58,7 @@ public class ParamBuildList extends Composite {
     private final ParameterizedBuildServiceAsync paramBuildService = GWT.create(ParameterizedBuildService.class);
 
     private BuildListParamBuildListBridge buildListParamBuildListBridge;
+    private ParamBuildResultListBridge paramBuildResultListBridge;
 
     interface ParamBuildListUiBinder extends UiBinder<Widget, ParamBuildList> {
     }
@@ -89,9 +90,10 @@ public class ParamBuildList extends Composite {
         buildListParamBuildListBridge = bridge;
     }
 
-//    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {       
-//        categoryListDetailBridge = bridge;
-//    }
+    public void setParamBuildResultListBridge(ParamBuildResultListBridge bridge) {
+        paramBuildResultListBridge = bridge;
+    }
+
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
         List<ParameterizedBuildDto> paramBuildList = getSelectedParamBuilds();
@@ -168,11 +170,11 @@ public class ParamBuildList extends Composite {
 
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-//                List<ParameterizedBuildDto> categoryList = getSelectedParamBuilds();
-//
-//                for (ParameterizedBuildDto buildDto : categoryList) {
-//                    categoryListDetailBridge.setCategoryAndDisplayDetail(buildDto);
-//                }                
+                List<ParameterizedBuildDto> paramBuilds = getSelectedParamBuilds();
+
+                for (ParameterizedBuildDto paramBuild : paramBuilds) {
+                    paramBuildResultListBridge.setParamBuildAndDisplayResults(paramBuild);
+                }
             }
         }, DoubleClickEvent.getType());
 

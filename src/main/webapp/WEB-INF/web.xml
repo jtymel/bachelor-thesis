@@ -34,6 +34,10 @@
     <servlet-name>labelServlet</servlet-name>
     <servlet-class>gwtEntity.server.LabelServiceImpl</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>resultServlet</servlet-name>
+    <servlet-class>gwtEntity.server.ResultServiceImpl</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>jobServlet</servlet-name>
@@ -62,6 +66,10 @@
   <servlet-mapping>
     <servlet-name>labelServlet</servlet-name>
     <url-pattern>/module/labelService</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>resultServlet</servlet-name>
+    <url-pattern>/module/resultService</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->
