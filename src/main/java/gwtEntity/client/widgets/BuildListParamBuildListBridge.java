@@ -19,17 +19,16 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.client;
+package gwtEntity.client.widgets;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import java.util.List;
+import gwtEntity.client.BuildDto;
 
 /**
  *
  * @author jtymel
  */
-@RemoteServiceRelativePath("parambuildservice")
-public interface ParameterizedBuildService extends RemoteService {    
-    public List<ParameterizedBuildDto> getParamBuilds(BuildDto build);
+public interface BuildListParamBuildListBridge {
+
+    public void setBuildAndDisplayParamBuilds(BuildDto build);
+
 }

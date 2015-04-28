@@ -26,6 +26,7 @@ import gwtEntity.client.BuildDto;
 import gwtEntity.client.BuildService;
 import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.ParameterizedBuildService;
+import java.util.List;
 import javax.ejb.EJB;
 
 /**
@@ -39,8 +40,8 @@ public class ParameterizedBuildServiceImpl extends RemoteServiceServlet implemen
     ParameterizedBuildServiceBean paramBuildServiceBean;
 
     @Override
-    public Long saveParamBuild(ParameterizedBuildDto paramBuildDto) {
-        return paramBuildServiceBean.saveParamBuild(paramBuildDto);
-    }        
+    public List<ParameterizedBuildDto> getParamBuilds(BuildDto build) {
+        return paramBuildServiceBean.getParamBuilds(build);
+    }
 }
 

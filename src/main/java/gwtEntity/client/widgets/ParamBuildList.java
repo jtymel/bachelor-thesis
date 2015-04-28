@@ -32,7 +32,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -42,9 +41,9 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.BuildDto;
-import gwtEntity.client.BuildService;
-import gwtEntity.client.BuildServiceAsync;
-import gwtEntity.client.JobDto;
+import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.ParameterizedBuildService;
+import gwtEntity.client.ParameterizedBuildServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,66 +51,60 @@ import java.util.List;
  *
  * @author jtymel
  */
-public class BuildList extends Composite {
-    private static BuildListUiBinder uiBinder = GWT.create(BuildListUiBinder.class);
+public class ParamBuildList extends Composite {
 
-    private final BuildServiceAsync buildService = GWT.create(BuildService.class);
-    
-    private JobListBuildListBridge jobListBuildListBridge;
+    private static ParamBuildListUiBinder uiBinder = GWT.create(ParamBuildListUiBinder.class);
+
+    private final ParameterizedBuildServiceAsync paramBuildService = GWT.create(ParameterizedBuildService.class);
+
     private BuildListParamBuildListBridge buildListParamBuildListBridge;
 
-    interface BuildListUiBinder extends UiBinder<Widget, BuildList> {
+    interface ParamBuildListUiBinder extends UiBinder<Widget, ParamBuildList> {
     }
 
     @UiField(provided = true)
-    DataGrid<BuildDto> dataGrid;
+    DataGrid<ParameterizedBuildDto> dataGrid;
 
     @UiField(provided = true)
     SimplePager pager;
 
     @UiField
     Button deleteButton;
-    
-    private JobDto job;
-    
+
+    private BuildDto build;
+
 //    @UiField
 //    Button addButton;
+    private SelectionModel<ParameterizedBuildDto> selectionModel;
+    private ListDataProvider<ParameterizedBuildDto> dataProvider;
 
-    private SelectionModel<BuildDto> selectionModel;
-    private ListDataProvider<BuildDto> dataProvider;
-
-    public BuildList() {
-        dataGrid = new DataGrid<BuildDto>(20);
+    public ParamBuildList() {
+        dataGrid = new DataGrid<ParameterizedBuildDto>(20);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
     }
-    
-    public void setJobListBuildListBridge(JobListBuildListBridge bridge) {       
-        jobListBuildListBridge = bridge;
-    }
-    
-    public void setBuildListParamBuildListBridge(BuildListParamBuildListBridge bridge) {       
+
+    public void setBuildListParamBuildListBridge(BuildListParamBuildListBridge bridge) {
         buildListParamBuildListBridge = bridge;
     }
 
 //    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {       
 //        categoryListDetailBridge = bridge;
 //    }
-    
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
-        List<BuildDto> buildList = getSelectedBuilds();
+        List<ParameterizedBuildDto> paramBuildList = getSelectedParamBuilds();
 
-        for (BuildDto buildDto : buildList) {
-            if (selectionModel.isSelected(buildDto)) {
-                deleteBuild(buildDto);
+        for (ParameterizedBuildDto paramBuildDto : paramBuildList) {
+            if (selectionModel.isSelected(paramBuildDto)) {
+                deleteParamBuild(paramBuildDto);
             }
         }
 
     }
-    
-    private void deleteBuild(BuildDto buildDto) {
+
+    private void deleteParamBuild(ParameterizedBuildDto paramBuildDto) {
 //        buildService.deleteBuild(buildDto, new AsyncCallback<Void>() {
 //
 //            @Override
@@ -124,48 +117,62 @@ public class BuildList extends Composite {
 //            }
 //        });
     }
-    
-    void setJob(JobDto jobDto) {                
-        if(jobDto == null) {
-            throw new RuntimeException("Job must not be null");
+
+    void setBuild(BuildDto buildDto) {
+        if (buildDto == null) {
+            throw new RuntimeException("Build must not be null");
         } else {
-            job = jobDto;
+            build = buildDto;
         }
     }
 
     private void initDatagrid() {
 
-        TextColumn<BuildDto> nameColumn = new TextColumn<BuildDto>() {
+        TextColumn<ParameterizedBuildDto> nameColumn = new TextColumn<ParameterizedBuildDto>() {
             @Override
-            public String getValue(BuildDto object) {
+            public String getValue(ParameterizedBuildDto object) {
                 return object.getName();
+
             }
         };
-        
-        TextColumn<BuildDto> urlColumn = new TextColumn<BuildDto>() {
+
+        TextColumn<ParameterizedBuildDto> labelColumn = new TextColumn<ParameterizedBuildDto>() {
             @Override
-            public String getValue(BuildDto object) {
+            public String getValue(ParameterizedBuildDto object) {
+                String label = object.getUrl().substring(0, object.getUrl().lastIndexOf("/"));
+                label = label.substring(0, label.lastIndexOf("/"));
+                label = label.substring(label.lastIndexOf("/") + 1, label.length());
+                return label;
+            }
+        };
+
+        TextColumn<ParameterizedBuildDto> urlColumn = new TextColumn<ParameterizedBuildDto>() {
+            @Override
+            public String getValue(ParameterizedBuildDto object) {
                 return object.getUrl();
             }
         };
 
-        dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
+        dataGrid.setColumnWidth(nameColumn, 15, Style.Unit.PX);
         dataGrid.addColumn(nameColumn, "Name");
-        
+
+        dataGrid.setColumnWidth(labelColumn, 25, Style.Unit.PX);
+        dataGrid.addColumn(labelColumn, "Parameterization");
+
         dataGrid.setColumnWidth(urlColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(urlColumn, "URL");
 
-        selectionModel = new SingleSelectionModel<BuildDto>(keyProvider);
+        selectionModel = new SingleSelectionModel<ParameterizedBuildDto>(keyProvider);
 
         dataGrid.addDomHandler(new DoubleClickHandler() {
 
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                List<BuildDto> buildList = getSelectedBuilds();
-
-                for (BuildDto buildDto : buildList) {
-                    buildListParamBuildListBridge.setBuildAndDisplayParamBuilds(buildDto);
-                }                
+//                List<ParameterizedBuildDto> categoryList = getSelectedParamBuilds();
+//
+//                for (ParameterizedBuildDto buildDto : categoryList) {
+//                    categoryListDetailBridge.setCategoryAndDisplayDetail(buildDto);
+//                }                
             }
         }, DoubleClickEvent.getType());
 
@@ -178,21 +185,21 @@ public class BuildList extends Composite {
         pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
         pager.setDisplay(dataGrid);
     }
-    
+
     public void onTabShow() {
         updateDataGrid();
     }
 
     public void updateDataGrid() {
-        buildService.getBuilds(job, new AsyncCallback<List<BuildDto>>() {
+        paramBuildService.getParamBuilds(build, new AsyncCallback<List<ParameterizedBuildDto>>() {
 
             @Override
             public void onFailure(Throwable caught) {
             }
 
             @Override
-            public void onSuccess(List<BuildDto> result) {
-                dataProvider = new ListDataProvider<BuildDto>();
+            public void onSuccess(List<ParameterizedBuildDto> result) {
+                dataProvider = new ListDataProvider<ParameterizedBuildDto>();
                 dataProvider.setList(result);
                 dataProvider.addDataDisplay(dataGrid);
                 dataGrid.setRowCount(result.size());
@@ -201,26 +208,26 @@ public class BuildList extends Composite {
 
     }
 
-    ProvidesKey<BuildDto> keyProvider = new ProvidesKey<BuildDto>() {
+    ProvidesKey<ParameterizedBuildDto> keyProvider = new ProvidesKey<ParameterizedBuildDto>() {
         @Override
-        public Object getKey(BuildDto category) {
-            return (category == null) ? null : category.getId();
+        public Object getKey(ParameterizedBuildDto paramBuild) {
+            return (paramBuild == null) ? null : paramBuild.getId();
         }
     };
-    
-    public List<BuildDto> getSelectedBuilds() {        
-        List<BuildDto> buildList = (List<BuildDto>) dataProvider.getList();
-        List<BuildDto> selectedBuilds = new ArrayList<BuildDto>();
-        
+
+    public List<ParameterizedBuildDto> getSelectedParamBuilds() {
+        List<ParameterizedBuildDto> paramBuildList = (List<ParameterizedBuildDto>) dataProvider.getList();
+        List<ParameterizedBuildDto> selectedParamBuilds = new ArrayList<ParameterizedBuildDto>();
+
         Long i = 0L;
-        
-        for (BuildDto buildDto : buildList) {
-            if (selectionModel.isSelected(buildDto)) {                                                
-                selectedBuilds.add(buildDto);
+
+        for (ParameterizedBuildDto paramBuildDto : paramBuildList) {
+            if (selectionModel.isSelected(paramBuildDto)) {
+                selectedParamBuilds.add(paramBuildDto);
             }
             i++;
         }
-                
-        return selectedBuilds;
+
+        return selectedParamBuilds;
     }
 }

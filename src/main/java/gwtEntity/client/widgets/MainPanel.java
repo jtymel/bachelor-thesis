@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import gwtEntity.client.BuildDto;
 import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge, BuildListParamBuildListBridge {
 
     private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);       
 
@@ -90,6 +91,12 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         buildList.setJob(job);
         tabPanel.selectTab(buildList);
     }
+    
+    @Override
+    public void setBuildAndDisplayParamBuilds(BuildDto build) {
+        paramBuildList.setBuild(build);
+        tabPanel.selectTab(paramBuildList);
+    }
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
     
@@ -121,6 +128,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     BuildList buildList;
     
     @UiField
+    ParamBuildList paramBuildList;
+    
+    @UiField
     TabLayoutPanel tabPanel;
        
     public MainPanel() {     
@@ -137,6 +147,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         jobCategories.setJobDetailCategoriesBridge(MainPanel.this);
         jobList.setJobListBuildListBridge(MainPanel.this);
         buildList.setJobListBuildListBridge(MainPanel.this);
+        buildList.setBuildListParamBuildListBridge(MainPanel.this);
+        paramBuildList.setBuildListParamBuildListBridge(MainPanel.this);
     }
     
     public List<JobDto> getSelectedJobs() {
@@ -158,8 +170,13 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         if(tabPanel.getWidget(selectedTab).equals(jobCategories)) {
             jobCategories.onTabShow();
         }
+
         if(tabPanel.getWidget(selectedTab).equals(buildList)) {
             buildList.onTabShow();
+        }
+
+        if(tabPanel.getWidget(selectedTab).equals(paramBuildList)) {
+            paramBuildList.onTabShow();
         }
     }
 

@@ -67,6 +67,12 @@ Uncomment this for XHTML entities
                     </g:header>
                     <thesui:BuildList ui:field="buildList" />
                 </g:tab>
+                <g:tab>
+                    <g:header>
+                        List of parameterized builds
+                    </g:header>
+                    <thesui:ParamBuildList ui:field="paramBuildList" />
+                </g:tab>
             </g:TabLayoutPanel>
         </g:north>
     </g:DockLayoutPanel>

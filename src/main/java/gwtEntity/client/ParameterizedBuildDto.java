@@ -12,13 +12,20 @@ import java.util.List;
  * @author jtymel
  */
 public class ParameterizedBuildDto implements Serializable {
-//    private List<Result> results;
     private Long id;    
-//    private List<Category> categories;
     private BuildDto id_build;
     private java.util.Date datetime;
     private String name;
     private String url;
+    private String machine;    
+
+    public String getMachine() {
+        return machine;
+    }
+
+    public void setMachine(String machine) {
+        this.machine = machine;
+    }
 
     public String getUrl() {
         return url;
@@ -44,14 +51,6 @@ public class ParameterizedBuildDto implements Serializable {
         this.name = name;
     }
 
-//    public List<Result> getResults() {
-//        return results;
-//    }
-//
-//    public void setResults(List<Result> results) {
-//        this.results = results;
-//    }
-
     public Long getId() {
         return id;
     }
@@ -60,21 +59,6 @@ public class ParameterizedBuildDto implements Serializable {
         this.id = id;
     }
 
-//    public List<Category> getCategories() {
-//        return categories;
-//    }
-//
-//    public void setCategories(List<Category> categories) {
-//        this.categories = categories;
-//    }
-//
-//    public Build getBuild() {
-//        return id_build;
-//    }
-//
-//    public void setBuild(Build build) {
-//        this.id_build = build;
-//    }
 
     public Date getDatetime() {
         return datetime;

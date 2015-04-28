@@ -21,11 +21,16 @@
  */
 package gwtEntity.server;
 
+import gwtEntity.client.BuildDto;
+import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -54,5 +59,33 @@ public class ParameterizedBuildServiceBean {
         session.saveOrUpdate(paramBuild);
         
         return paramBuild.getId();    
+    }
+    
+    public List<ParameterizedBuildDto> getParamBuilds(BuildDto buildDto) {
+        if(buildDto == null)
+            return null;
+        
+        Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM ParameterizedBuild WHERE id_build_id = :buildId")
+                .setParameter("buildId", buildDto.getId());                
+        
+        List<ParameterizedBuild> paramBuilds = new ArrayList<ParameterizedBuild>(query.list());
+        List<ParameterizedBuildDto> paramBuildDtos = new ArrayList<ParameterizedBuildDto>(paramBuilds != null ? paramBuilds.size() : 0);
+
+        for (ParameterizedBuild paramBuild : paramBuilds) {
+            paramBuildDtos.add(createBuildDto(paramBuild));
+        }
+//        session.getTransaction().commit();
+        return paramBuildDtos;
+    }
+    
+    private ParameterizedBuildDto createBuildDto(ParameterizedBuild paramBuild){
+        ParameterizedBuildDto paramBuildDto = new ParameterizedBuildDto();
+        
+        paramBuildDto.setId(paramBuild.getId());
+        paramBuildDto.setName(paramBuild.getName());
+        paramBuildDto.setUrl(paramBuild.getUrl());
+        
+        return paramBuildDto;
     }
 }
