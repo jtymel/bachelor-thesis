@@ -36,6 +36,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -98,8 +99,18 @@ public class ResultList extends Composite {
             }
         };
 
-        dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
-        dataGrid.addColumn(nameColumn, "Name");
+        TextColumn<ResultDto> testCaseColumn = new TextColumn<ResultDto>() {
+            @Override
+            public String getValue(ResultDto object) {
+                return object.getTestCase();
+            }
+        };
+
+//        dataGrid.setColumnWidth(nameColumn, 10, Style.Unit.PX);
+        dataGrid.addColumn(nameColumn, "Test name");
+
+//        dataGrid.setColumnWidth(nameColumn, 10, Style.Unit.PX);
+        dataGrid.addColumn(testCaseColumn, "TestCase name");
 
         selectionModel = new SingleSelectionModel<ResultDto>(keyProvider);
 
@@ -134,7 +145,7 @@ public class ResultList extends Composite {
     }
 
     public void updateDataGrid() {
-        if (dataGrid.getColumnCount() == 1) {
+        if (dataGrid.getColumnCount() <= 2) {
             resultService.getPossibleResults(new AsyncCallback<List<PossibleResultDto>>() {
 
                 @Override
@@ -148,15 +159,14 @@ public class ResultList extends Composite {
                         TextColumn<ResultDto> resultColumn = new TextColumn<ResultDto>() {
                             @Override
                             public String getValue(ResultDto object) {
-                                if (object.getResults().containsKey(possibleResult.getName())) {
-                                    return object.getResults().get(possibleResult.getName()).toString();
+                                if (object.getResults().containsKey(possibleResult.getId())) {
+                                    return object.getResults().get(possibleResult.getId()).toString();
                                 } else {
-                                    return "0";
+                                    return "";
                                 }
                             }
                         };
-
-                        dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.PX);
+                        dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.EM);
                         dataGrid.addColumn(resultColumn, possibleResult.getName());
                     }
                     getResults();
@@ -186,8 +196,8 @@ public class ResultList extends Composite {
 
     ProvidesKey<ResultDto> keyProvider = new ProvidesKey<ResultDto>() {
         @Override
-        public Object getKey(ResultDto category) {
-            return (category == null) ? null : category.getTest();
+        public Object getKey(ResultDto result) {
+            return (result == null) ? null : result.getTest() + result.getTestCase();
         }
     };
 

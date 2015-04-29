@@ -10,7 +10,7 @@ import java.util.Map;
 public class ResultDto extends PossibleResultDto {
     private String test;
     private String testCase;
-    private Map<String, Integer> results = new HashMap<String, Integer>();
+    private Map<Long, Integer> results = new HashMap<Long, Integer>();
 
     public String getTest() {
         return test;
@@ -28,11 +28,11 @@ public class ResultDto extends PossibleResultDto {
         this.testCase = testCase;
     }
 
-    public void addResult(String result, int count) {
-        results.put(result, new Integer(count));
+    public void setResults(Map<Long, Integer> results) {
+        this.results = results;
     }
 
-    public Map<String, Integer> getResults() {
+    public Map<Long, Integer> getResults() {
         return results;
     }
 
