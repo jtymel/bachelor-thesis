@@ -60,7 +60,7 @@ import java.util.List;
 public class JobDetail extends Composite {
 
     private static JobDetailUiBinder uiBinder = GWT.create(JobDetailUiBinder.class);
-    
+
     private final JobServiceAsync jobService = GWT.create(JobService.class);
 
     private final LabelServiceAsync labelService = GWT.create(LabelService.class);
@@ -70,7 +70,7 @@ public class JobDetail extends Composite {
     private JobDetailCategoriesBridge jobDetailCategoriesBridge;
 
     void setJob(JobDto jobDTO) {
-        if(jobDTO != null) {
+        if (jobDTO != null) {
             jobNameField.setText(jobDTO.getName());
             jobUrlField.setText(jobDTO.getUrl());
         } else {
@@ -90,25 +90,23 @@ public class JobDetail extends Composite {
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
     }
-    
+
     @UiField
     TextBox jobNameField;
 
     @UiField
     TextBox jobUrlField;
-    
+
     @UiField
     Button saveButton;
-    
-    @UiField
-    Button getParameterization;
+
 
     @UiField
     Button setCategories;
 
     @UiField(provided = true)
     DataGrid<LabelDto> dataGrid;
-    
+
     @UiField(provided = true)
     SimplePager pager;
 
@@ -116,10 +114,10 @@ public class JobDetail extends Composite {
     private ListDataProvider<LabelDto> dataProvider;
 
     JobDto editedJob = null;
-    
+
     @UiHandler("saveButton")
     void onSaveClick(ClickEvent event) {
-        addJob();        
+        addJob();
     }
 
     @UiHandler("setCategories")
@@ -133,29 +131,28 @@ public class JobDetail extends Composite {
             addJob();
         }
     }
-    
-    @UiHandler("getParameterization")
-    void onGetParameterizationClick(ClickEvent event) {
-        getParameterizations();        
+
+    public void onTabShow() {
+        getParameterizations();
     }
-    
-    public void setJobListDetailBridge(JobListDetailBridge bridge) {       
+
+    public void setJobListDetailBridge(JobListDetailBridge bridge) {
         jobListDetailBridge = bridge; // I was stolen of 45 minutes of my life by this line! I want this time back! :-)
     }
-        
+
     private void addJob() {
         JobDto jobDTO;
-        
-        if(editedJob == null) {
+
+        if (editedJob == null) {
             jobDTO = new JobDto(jobNameField.getText(), jobUrlField.getText());
         } else {
             jobDTO = editedJob;
             jobDTO.setName(jobNameField.getText());
             jobDTO.setUrl(jobUrlField.getText());
-            
+
             editedJob = null;
         }
-        
+
 //        Window.alert("JobDetail got: " + jobDTO.getId() + " | " + jobDTO.getName() + ", " + jobDTO.getUrl());                        
         jobService.saveJob(jobDTO, new AsyncCallback<Long>() {
 
@@ -170,7 +167,7 @@ public class JobDetail extends Composite {
         });
 
     }
-    
+
     private void initDatagrid() {
 
         TextColumn<LabelDto> nameColumn = new TextColumn<LabelDto>() {
@@ -179,22 +176,21 @@ public class JobDetail extends Composite {
                 return object.getName();
             }
         };
-        
+
         ButtonCell buttonCell = new ButtonCell();
         Column buttonColumn = new Column<LabelDto, String>(buttonCell) {
             @Override
             public String getValue(LabelDto object) {
-              // The value to display in the button.
-              return "Edit categories";
+                // The value to display in the button.
+                return "Edit categories";
             }
         };
-        
+
         buttonColumn.setFieldUpdater(new FieldUpdater<LabelDto, String>() {
             public void update(int index, LabelDto object, String value) {
-                jobDetailLabelDetailBridge.setLabelAndDisplayDetail(object, editedJob);                            
+                jobDetailLabelDetailBridge.setLabelAndDisplayDetail(object, editedJob);
             }
         });
-        
 
         dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(nameColumn, "Parameterization");
@@ -219,7 +215,7 @@ public class JobDetail extends Composite {
         pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
         pager.setDisplay(dataGrid);
     }
-    
+
     private void getParameterizations() {
         labelService.getLabels(editedJob, new AsyncCallback<List<LabelDto>>() {
 
@@ -238,7 +234,7 @@ public class JobDetail extends Composite {
         });
     }
 
-    public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {       
+    public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {
         jobDetailLabelDetailBridge = bridge;
     }
 

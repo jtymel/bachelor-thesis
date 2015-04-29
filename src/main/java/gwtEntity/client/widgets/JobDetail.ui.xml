@@ -8,7 +8,7 @@
     
     <g:DockLayoutPanel unit="EM">                
         <!--<g:north size="4.0">-->
-<!--            <g:HTMLPanel>
+        <!--            <g:HTMLPanel>
                 <g:TextBox ui:field="nameField" text="Enter job's name" />
                 <g:TextBox ui:field="urlField" text="Enter job's url" />
                 <g:Button ui:field="addButton">Add job</g:Button>
@@ -19,64 +19,48 @@
         <g:north size="8.0">
             <g:HTMLPanel>
                 <table style="width:50%">
-                  <tr>
-                    <td>
-                      <g:Label>Name of job</g:Label>
-                    </td>
-                    <td>
-                      <g:TextBox ui:field="jobNameField" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <g:Label>URL of job</g:Label>
-                    </td>
-                    <td>
-                      <g:TextBox ui:field="jobUrlField" />
-                    </td>
-                  </tr>
-                  <tr>
-                      <td colspan="2" align="center" >
-                          <g:Button ui:field="saveButton">Save changes</g:Button>
-                      </td>
-                  </tr>
+                    <tr>
+                        <td>
+                            <g:Label>Name of job</g:Label>
+                        </td>
+                        <td>
+                            <g:TextBox ui:field="jobNameField" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <g:Label>URL of job</g:Label>
+                        </td>
+                        <td>
+                            <g:TextBox ui:field="jobUrlField" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center" >
+                            <g:Button ui:field="saveButton">Save changes</g:Button>
+                        </td>
+                    </tr>
                 </table>
                 <g:Button ui:field="setCategories">Set categories</g:Button>
-          </g:HTMLPanel>                
+            </g:HTMLPanel>                
         </g:north>
 
         <g:center>
-                <c:DataGrid ui:field='dataGrid' />
+            <c:DataGrid ui:field='dataGrid' />
         </g:center>
         
         <g:south size="3.0">
             <g:HTMLPanel>
                 <table style="width:100%">
-                  <tr>
-                    <td align="center">
-                      <c:SimplePager ui:field="pager" />
-                    </td>
-                  </tr>
-                </table>
-          </g:HTMLPanel>
-        </g:south>
-        
-        <g:south size="4.0">
-            <g:HTMLPanel>
-                <table>
                     <tr>
-                        <td>
-                            <g:Button ui:field="getParameterization">Get parameterization</g:Button>
+                        <td align="center">
+                            <c:SimplePager ui:field="pager" />
                         </td>
                     </tr>
-                    <tr>
-                    <td align="center">
-                      <!--<c:SimplePager ui:field="pager" />-->
-                    </td>
-                  </tr>
                 </table>
             </g:HTMLPanel>
         </g:south>
+
 
     </g:DockLayoutPanel>
 </ui:UiBinder>
