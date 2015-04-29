@@ -22,6 +22,8 @@
 package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import gwtEntity.client.BuildDto;
+import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
@@ -37,7 +39,7 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
 
     @EJB
     ResultServiceBean resultServiceBean;
-    
+
     @Override
     public List<PossibleResultDto> getPossibleResults() {
         return resultServiceBean.getPossibleResults();
@@ -47,5 +49,15 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
     public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto) {
         return resultServiceBean.getResults(paramBuildDto);
     }
-    
+
+    @Override
+    public List<ResultDto> getResults(BuildDto buildDto) {
+        return resultServiceBean.getResults(buildDto);
+    }
+
+    @Override
+    public List<ResultDto> getResults(JobDto jobDto) {
+        return resultServiceBean.getResults(jobDto);
+    }
+
 }

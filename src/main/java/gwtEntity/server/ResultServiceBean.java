@@ -21,6 +21,8 @@
  */
 package gwtEntity.server;
 
+import gwtEntity.client.BuildDto;
+import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
@@ -70,13 +72,7 @@ public class ResultServiceBean {
         return possibleResultDto;
     }
 
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto) {
-        if (paramBuildDto == null) {
-            return null;
-        }
-
-        List<PossibleResult> possibleResults = getPlainPossibleResults();
-
+    private String getCommonPartOfQuery(List<PossibleResult> possibleResults) {
         String queryString = "WITH ";
 
         if (possibleResults != null && !possibleResults.isEmpty()) {
@@ -103,6 +99,17 @@ public class ResultServiceBean {
             queryString += ", ";
         }
 
+        return queryString;
+    }
+
+    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto) {
+        if (paramBuildDto == null) {
+            return null;
+        }
+
+        List<PossibleResult> possibleResults = getPlainPossibleResults();
+
+        String queryString = getCommonPartOfQuery(possibleResults);
         queryString += "PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
@@ -113,6 +120,69 @@ public class ResultServiceBean {
                 + " GROUP BY t.name, tc.name";
 
         System.out.println("## ### ####### ###### " + queryString);
+
+        Session session = (Session) em.getDelegate();
+        Query query = session.createSQLQuery(queryString);
+
+        List<Object[]> testResults = query.list();
+        List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
+        for (Object[] testResult : testResults) {
+            resultDtos.add(createResultDto(testResult, possibleResults));
+
+        }
+
+        return resultDtos;
+    }
+
+    public List<ResultDto> getResults(BuildDto buildDto) {
+        if (buildDto == null) {
+            return null;
+        }
+
+        List<PossibleResult> possibleResults = getPlainPossibleResults();
+
+        String queryString = getCommonPartOfQuery(possibleResults);
+        queryString += "PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb, Build b"
+                + " WHERE"
+                + "	r.possibleresult_id = pr.id"
+                + "	AND r.test_id = t.id"
+                + "	AND r.parameterizedbuild_id = pb.id"
+                + "	AND t.testcase_id = tc.id"
+                + "	AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = " + buildDto.getId()
+                + " GROUP BY t.name, tc.name";
+
+        Session session = (Session) em.getDelegate();
+        Query query = session.createSQLQuery(queryString);
+
+        List<Object[]> testResults = query.list();
+        List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
+        for (Object[] testResult : testResults) {
+            resultDtos.add(createResultDto(testResult, possibleResults));
+
+        }
+
+        return resultDtos;
+    }
+
+    public List<ResultDto> getResults(JobDto jobDto) {
+        if (jobDto == null) {
+            return null;
+        }
+
+        List<PossibleResult> possibleResults = getPlainPossibleResults();
+
+        String queryString = getCommonPartOfQuery(possibleResults);
+        queryString += "PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb, Build b, Job j"
+                + " WHERE"
+                + "	r.possibleresult_id = pr.id"
+                + "	AND r.test_id = t.id"
+                + "	AND r.parameterizedbuild_id = pb.id"
+                + "	AND t.testcase_id = tc.id"
+                + "	AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = b.id"
+                + "     AND b.job_id = " + jobDto.getId()
+                + " GROUP BY t.name, tc.name";
 
         Session session = (Session) em.getDelegate();
         Query query = session.createSQLQuery(queryString);

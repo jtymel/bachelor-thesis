@@ -31,6 +31,12 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("resultService")
 public interface ResultService extends RemoteService {
+
     public List<PossibleResultDto> getPossibleResults();
+
     public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto);
+
+    public List<ResultDto> getResults(BuildDto buildDto);
+
+    public List<ResultDto> getResults(JobDto jobDto);
 }
