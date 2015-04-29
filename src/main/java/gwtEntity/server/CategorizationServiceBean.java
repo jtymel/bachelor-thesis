@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
@@ -33,11 +34,11 @@ public class CategorizationServiceBean {
 
         return categorizationDtos;
     }
-    
+
     private CategorizationDto createCategorizationDto(Categorization categorization) {
         return new CategorizationDto(categorization.getId(), categorization.getName());
     }
-    
+
     public Long saveCategorization(CategorizationDto categorizationDto) {
         Session session = (Session) em.getDelegate();
         Categorization categorization = new Categorization(categorizationDto);
@@ -46,11 +47,25 @@ public class CategorizationServiceBean {
 
         return categorization.getId();
     }
-    
+
     public void deleteCategorization(CategorizationDto categorizationDto) {
         Session session = (Session) em.getDelegate();
-        
-        Categorization categorization = new Categorization(categorizationDto);
-        em.remove(em.contains(categorization) ? categorization : em.merge(categorization));
+        Query query = session.createQuery("FROM Categorization WHERE id = :categorizationId")
+                .setParameter("categorizationId", categorizationDto.getId());
+        Categorization categorization = (Categorization) query.uniqueResult();
+
+        session.delete(categorization);
+
+        // Not running cascade deletion
+//        Session session = (Session) em.getDelegate();
+//        
+//        Categorization categorization = new Categorization(categorizationDto);
+//        em.remove(em.contains(categorization) ? categorization : em.merge(categorization));
+
+        // Not running cascade deletion
+//        Session session = (Session) em.getDelegate();
+//        Query query = session.createQuery("DELETE Categorization WHERE id = :categorizationId")
+//                .setParameter("categorizationId", categorizationDto.getId()); 
+//        query.executeUpdate();
     }
 }

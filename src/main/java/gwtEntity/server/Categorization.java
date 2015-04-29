@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -18,7 +20,8 @@ public class Categorization implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @OneToMany(mappedBy = "categorization")
+    @OneToMany(mappedBy = "categorization")//, cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Category> categories;
 
     private String name;
