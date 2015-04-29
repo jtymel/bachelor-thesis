@@ -39,6 +39,9 @@ public class LabelServiceBean {
     }
     
     public List<LabelDto> getLabels(JobDto job) {
+        if (job == null)
+            return null;
+        
         Session session = (Session) em.getDelegate();
 
         List<Label> labels = new ArrayList<Label>(session.createQuery("FROM Label WHERE job_id = :jobID").setParameter("jobID", job.getId()).list());
