@@ -37,7 +37,7 @@ public class CategoryServiceBean {
     
     private CategoryDto createCategoryDto(Category category) {
         CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName());
-        categoryDto.setCategorization(category.getId_categorization().getName());
+        categoryDto.setCategorization(category.getCategorization().getName());
         return categoryDto;
     }
     
@@ -54,7 +54,7 @@ public class CategoryServiceBean {
         Session session = (Session) em.getDelegate();
         Category category = new Category(categoryDto);
         Categorization categorization = new Categorization(categorizationDto);
-        category.setId_categorization(categorization);
+        category.setCategorization(categorization);
         
         session.saveOrUpdate(category);
 

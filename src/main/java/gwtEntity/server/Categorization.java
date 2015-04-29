@@ -18,7 +18,7 @@ public class Categorization implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @OneToMany(mappedBy = "id_categorization")
+    @OneToMany(mappedBy = "categorization")
     private List<Category> categories;
 
     private String name;

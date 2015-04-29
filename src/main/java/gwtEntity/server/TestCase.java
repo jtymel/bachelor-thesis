@@ -20,7 +20,7 @@ public class TestCase implements Serializable {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @OneToMany(mappedBy = "id_testCase")
+    @OneToMany(mappedBy = "testCase")
     private List<Test> tests;
 
     private String name;

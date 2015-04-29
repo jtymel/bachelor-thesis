@@ -70,7 +70,7 @@ public class ResultServiceBean {
             return null;
         
         Session session = (Session) em.getDelegate();
-        Query query = session.createQuery("FROM Result WHERE id_parameterizedBuild_id = :paramBuildId")
+        Query query = session.createQuery("FROM Result WHERE parameterizedBuild_id = :paramBuildId")
                 .setParameter("paramBuildId", paramBuildDto.getId());
 
         List<Result> results = new ArrayList<Result>(query.list());
@@ -85,9 +85,9 @@ public class ResultServiceBean {
     
     private ResultDto createResultDto(Result result) {
         ResultDto resultDto = new ResultDto();
-        resultDto.setTest(result.getId_test().getName());
-        resultDto.setTestCase(result.getId_test().getId_testCase().getName());
-        resultDto.addResult(result.getId_possibleResult().getName(), 1);
+        resultDto.setTest(result.getTest().getName());
+        resultDto.setTestCase(result.getTest().getTestCase().getName());
+        resultDto.addResult(result.getPossibleResult().getName(), 1);
         
         return resultDto;
     }

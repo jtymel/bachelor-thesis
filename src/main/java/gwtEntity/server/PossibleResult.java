@@ -20,7 +20,7 @@ public class PossibleResult implements Serializable {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @OneToMany(mappedBy = "id_possibleResult")
+    @OneToMany(mappedBy = "possibleResult")
     private List<Result> results;
 
     private String name;

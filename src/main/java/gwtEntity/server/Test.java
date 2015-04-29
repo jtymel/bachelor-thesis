@@ -20,11 +20,11 @@ public class Test {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @OneToMany(mappedBy = "id_test")
+    @OneToMany(mappedBy = "test")
     private List<Result> results;
 
     @ManyToOne
-    private TestCase id_testCase;
+    private TestCase testCase;
 
     private String name;
 
@@ -44,12 +44,12 @@ public class Test {
         this.results = results;
     }
 
-    public TestCase getId_testCase() {
-        return id_testCase;
+    public TestCase getTestCase() {
+        return testCase;
     }
 
-    public void setId_testCase(TestCase id_testCase) {
-        this.id_testCase = id_testCase;
+    public void setTestCase(TestCase testCase) {
+        this.testCase = testCase;
     }
 
     public String getName() {

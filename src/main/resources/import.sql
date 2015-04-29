@@ -45,12 +45,12 @@ IF v_testCaseId IS NULL THEN
     INSERT INTO TESTCASE (name) VALUES (p_testCase) returning id into v_testCaseId;
 END IF;
 
-SELECT id INTO v_testId FROM TEST WHERE name = p_test AND id_testcase_id = v_testCaseId LIMIT 1;
+SELECT id INTO v_testId FROM TEST WHERE name = p_test AND testcase_id = v_testCaseId LIMIT 1;
 IF v_testId IS NULL THEN
-    INSERT INTO TEST (name, id_testcase_id) VALUES (p_test, v_testCaseId) returning id into v_testId;
+    INSERT INTO TEST (name, testcase_id) VALUES (p_test, v_testCaseId) returning id into v_testId;
 END IF;
 
-INSERT INTO RESULT(id_possibleresult_id, id_parameterizedbuild_id, id_test_id, duration)
+INSERT INTO RESULT(possibleresult_id, parameterizedbuild_id, test_id, duration)
 VALUES (v_posRes, id_paramBuild, v_testId, duration);
 
 -- RETURNING id INTO newId;
@@ -79,7 +79,7 @@ SELECT jc.category_id, pb.id FROM
 
   WHERE
   pb.id = p_paramBuildId
-  AND b.id=pb.id_build_id
+  AND b.id=pb.build_id
   AND j.id = b.job_id
   AND jc.job_id = j.id
   ;
@@ -94,7 +94,7 @@ SELECT lc.category_id, pb.id FROM
 
   WHERE
   pb.id = p_paramBuildId
-  AND b.id=pb.id_build_id
+  AND b.id=pb.build_id
   AND j.id = b.job_id
   AND j.id = l.job_id
   AND lc.label_id = l.id

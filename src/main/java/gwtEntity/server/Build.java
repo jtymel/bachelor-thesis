@@ -20,7 +20,7 @@ public class Build implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @OneToMany(mappedBy = "id_build")
+    @OneToMany(mappedBy = "build")
     private List<ParameterizedBuild> parameterizedBuilds;    
     
     @ManyToOne

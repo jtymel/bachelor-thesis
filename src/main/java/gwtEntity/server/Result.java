@@ -31,43 +31,43 @@ public class Result implements Serializable {
 
     @Id
     @ManyToOne
-    private PossibleResult id_possibleResult;
+    private PossibleResult possibleResult;
 
     @Id
     @ManyToOne
-    private Test id_test;
+    private Test test;
 
     @Id
     @ManyToOne
-    private ParameterizedBuild id_parameterizedBuild;
+    private ParameterizedBuild parameterizedBuild;
 
     private float duration;
 
     public Result() {
     }
 
-    public PossibleResult getId_possibleResult() {
-        return id_possibleResult;
+    public PossibleResult getPossibleResult() {
+        return possibleResult;
     }
 
-    public void setId_possibleResult(PossibleResult id_possibleResult) {
-        this.id_possibleResult = id_possibleResult;
+    public void setPossibleResult(PossibleResult possibleResult) {
+        this.possibleResult = possibleResult;
     }
 
-    public Test getId_test() {
-        return id_test;
+    public Test getTest() {
+        return test;
     }
 
-    public void setId_test(Test id_test) {
-        this.id_test = id_test;
+    public void setTest(Test test) {
+        this.test = test;
     }
 
-    public ParameterizedBuild getId_parameterizedBuild() {
-        return id_parameterizedBuild;
+    public ParameterizedBuild getParameterizedBuild() {
+        return parameterizedBuild;
     }
 
-    public void setId_parameterizedBuild(ParameterizedBuild id_parameterizedBuild) {
-        this.id_parameterizedBuild = id_parameterizedBuild;
+    public void setParameterizedBuild(ParameterizedBuild parameterizedBuild) {
+        this.parameterizedBuild = parameterizedBuild;
     }
 
     public float getDuration() {
@@ -81,25 +81,25 @@ public class Result implements Serializable {
 //@Embeddable
     public static class ResultId implements Serializable {
 
-        private PossibleResult id_possibleResult;
-        private Test id_test;
-        private ParameterizedBuild id_parameterizedBuild;
+        private PossibleResult possibleResult;
+        private Test test;
+        private ParameterizedBuild parameterizedBuild;
 
         public ResultId() {
         }
 
-        public ResultId(PossibleResult id_possibleResult, Test id_test, ParameterizedBuild id_parameterizedBuild) {
-            this.id_possibleResult = id_possibleResult;
-            this.id_test = id_test;
-            this.id_parameterizedBuild = id_parameterizedBuild;
+        public ResultId(PossibleResult possibleResult, Test test, ParameterizedBuild parameterizedBuild) {
+            this.possibleResult = possibleResult;
+            this.test = test;
+            this.parameterizedBuild = parameterizedBuild;
         }
 
         @Override
         public int hashCode() {
             int hash = 3;
-            hash = 53 * hash + Objects.hashCode(this.id_possibleResult);
-            hash = 53 * hash + Objects.hashCode(this.id_test);
-            hash = 53 * hash + Objects.hashCode(this.id_parameterizedBuild);
+            hash = 53 * hash + Objects.hashCode(this.possibleResult);
+            hash = 53 * hash + Objects.hashCode(this.test);
+            hash = 53 * hash + Objects.hashCode(this.parameterizedBuild);
             return hash;
         }
 
@@ -112,13 +112,13 @@ public class Result implements Serializable {
                 return false;
             }
             final ResultId other = (ResultId) obj;
-            if (!Objects.equals(this.id_possibleResult, other.id_possibleResult)) {
+            if (!Objects.equals(this.possibleResult, other.possibleResult)) {
                 return false;
             }
-            if (!Objects.equals(this.id_test, other.id_test)) {
+            if (!Objects.equals(this.test, other.test)) {
                 return false;
             }
-            if (!Objects.equals(this.id_parameterizedBuild, other.id_parameterizedBuild)) {
+            if (!Objects.equals(this.parameterizedBuild, other.parameterizedBuild)) {
                 return false;
             }
             return true;

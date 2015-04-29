@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class ParameterizedBuildDto implements Serializable {
     private Long id;    
-    private BuildDto id_build;
+    private BuildDto build;
     private java.util.Date datetime;
     private String name;
     private String url;
@@ -35,12 +35,12 @@ public class ParameterizedBuildDto implements Serializable {
         this.url = url;
     }
 
-    public BuildDto getId_build() {
-        return id_build;
+    public BuildDto getBuild() {
+        return build;
     }
 
-    public void setId_build(BuildDto id_build) {
-        this.id_build = id_build;
+    public void setBuild(BuildDto build) {
+        this.build = build;
     }
 
     public String getName() {

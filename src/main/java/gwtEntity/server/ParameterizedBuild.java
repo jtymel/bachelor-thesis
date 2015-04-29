@@ -32,7 +32,7 @@ import javax.persistence.TemporalType;
 })
 @Entity
 public class ParameterizedBuild implements Serializable {
-    @OneToMany(mappedBy = "id_parameterizedBuild")
+    @OneToMany(mappedBy = "parameterizedBuild")
     private List<Result> results;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,7 +46,7 @@ public class ParameterizedBuild implements Serializable {
     private List<Category> categories;
 
     @ManyToOne
-    private Build id_build;
+    private Build build;
 
     private String machine;
     
@@ -73,12 +73,12 @@ public class ParameterizedBuild implements Serializable {
         this.url = url;
     }
 
-    public Build getId_build() {
-        return id_build;
+    public Build getBuild() {
+        return build;
     }
 
-    public void setId_build(Build id_build) {
-        this.id_build = id_build;
+    public void setBuild(Build build) {
+        this.build = build;
     }
 
     public String getName() {
@@ -113,13 +113,6 @@ public class ParameterizedBuild implements Serializable {
         this.categories = categories;
     }
 
-    public Build getBuild() {
-        return id_build;
-    }
-
-    public void setBuild(Build build) {
-        this.id_build = build;
-    }
 
     public String getMachine() {
         return machine;
@@ -140,11 +133,11 @@ public class ParameterizedBuild implements Serializable {
     public ParameterizedBuild() {
     }
 
-    public ParameterizedBuild(List<Result> results, Long id, List<Category> categories, Build id_build, String machine, Date datetime, String name) {
+    public ParameterizedBuild(List<Result> results, Long id, List<Category> categories, Build build, String machine, Date datetime, String name) {
         this.results = results;
         this.id = id;
         this.categories = categories;
-        this.id_build = id_build;
+        this.build = build;
         this.machine = machine;
         this.datetime = datetime;
         this.name = name;
@@ -156,8 +149,8 @@ public class ParameterizedBuild implements Serializable {
         this.name = build.getName();
         this.url = build.getUrl();
                 
-        Build aux = new Build(build.getId_build());
-        this.id_build = aux;
+        Build aux = new Build(build.getBuild());
+        this.build = aux;
     }
        
 }

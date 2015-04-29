@@ -25,7 +25,7 @@ public class Category implements Serializable {
     private String name;
 
     @ManyToOne
-    private Categorization id_categorization;
+    private Categorization categorization;
       
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private List<Job> jobs;
@@ -60,12 +60,12 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public Categorization getId_categorization() {
-        return id_categorization;
+    public Categorization getCategorization() {
+        return categorization;
     }
 
-    public void setId_categorization(Categorization id_categorization) {
-        this.id_categorization = id_categorization;
+    public void setCategorization(Categorization categorization) {
+        this.categorization = categorization;
     }
 
     public List<Job> getJobs() {

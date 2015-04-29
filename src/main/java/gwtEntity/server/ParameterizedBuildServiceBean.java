@@ -66,7 +66,7 @@ public class ParameterizedBuildServiceBean {
             return null;
         
         Session session = (Session) em.getDelegate();
-        Query query = session.createQuery("FROM ParameterizedBuild WHERE id_build_id = :buildId")
+        Query query = session.createQuery("FROM ParameterizedBuild WHERE build_id = :buildId")
                 .setParameter("buildId", buildDto.getId());                
         
         List<ParameterizedBuild> paramBuilds = new ArrayList<ParameterizedBuild>(query.list());
