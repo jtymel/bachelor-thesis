@@ -45,6 +45,8 @@ import gwtEntity.client.BuildDto;
 import gwtEntity.client.BuildService;
 import gwtEntity.client.BuildServiceAsync;
 import gwtEntity.client.JobDto;
+import gwtEntity.client.ResultService;
+import gwtEntity.client.ResultServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,12 +55,15 @@ import java.util.List;
  * @author jtymel
  */
 public class BuildList extends Composite {
+
     private static BuildListUiBinder uiBinder = GWT.create(BuildListUiBinder.class);
 
     private final BuildServiceAsync buildService = GWT.create(BuildService.class);
-    
+    private final ResultServiceAsync resultService = GWT.create(ResultService.class);
+
     private JobListBuildListBridge jobListBuildListBridge;
     private BuildListParamBuildListBridge buildListParamBuildListBridge;
+    private BuildListResultListBridge buildListResultListBridge;
 
     interface BuildListUiBinder extends UiBinder<Widget, BuildList> {
     }
@@ -70,12 +75,9 @@ public class BuildList extends Composite {
     SimplePager pager;
 
     @UiField
-    Button deleteButton;
-    
+    Button showResultsButton;
+
     private JobDto job;
-    
-//    @UiField
-//    Button addButton;
 
     private SelectionModel<BuildDto> selectionModel;
     private ListDataProvider<BuildDto> dataProvider;
@@ -86,47 +88,33 @@ public class BuildList extends Composite {
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
     }
-    
-    public void setJobListBuildListBridge(JobListBuildListBridge bridge) {       
+
+    public void setJobListBuildListBridge(JobListBuildListBridge bridge) {
         jobListBuildListBridge = bridge;
     }
-    
-    public void setBuildListParamBuildListBridge(BuildListParamBuildListBridge bridge) {       
+
+    public void setBuildListParamBuildListBridge(BuildListParamBuildListBridge bridge) {
         buildListParamBuildListBridge = bridge;
     }
 
-//    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {       
-//        categoryListDetailBridge = bridge;
-//    }
-    
-    @UiHandler("deleteButton")
-    void onDeleteButtonClick(ClickEvent event) {
+    public void setBuildListResultListBridge(BuildListResultListBridge bridge) {
+        buildListResultListBridge = bridge;
+    }
+
+    @UiHandler("showResultsButton")
+    void onShowResultButtonClick(ClickEvent event) {
         List<BuildDto> buildList = getSelectedBuilds();
 
         for (BuildDto buildDto : buildList) {
             if (selectionModel.isSelected(buildDto)) {
-                deleteBuild(buildDto);
+                buildListResultListBridge.setBuildAndDisplayResults(buildDto);
             }
         }
 
     }
-    
-    private void deleteBuild(BuildDto buildDto) {
-//        buildService.deleteBuild(buildDto, new AsyncCallback<Void>() {
-//
-//            @Override
-//            public void onFailure(Throwable caught) {
-//            }
-//
-//            @Override
-//            public void onSuccess(Void result) {
-//                updateDataGrid();
-//            }
-//        });
-    }
-    
-    void setJob(JobDto jobDto) {                
-        if(jobDto == null) {
+
+    void setJob(JobDto jobDto) {
+        if (jobDto == null) {
             throw new RuntimeException("Job must not be null");
         } else {
             job = jobDto;
@@ -141,7 +129,7 @@ public class BuildList extends Composite {
                 return object.getName();
             }
         };
-        
+
         TextColumn<BuildDto> urlColumn = new TextColumn<BuildDto>() {
             @Override
             public String getValue(BuildDto object) {
@@ -151,7 +139,7 @@ public class BuildList extends Composite {
 
         dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(nameColumn, "Name");
-        
+
         dataGrid.setColumnWidth(urlColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(urlColumn, "URL");
 
@@ -165,7 +153,7 @@ public class BuildList extends Composite {
 
                 for (BuildDto buildDto : buildList) {
                     buildListParamBuildListBridge.setBuildAndDisplayParamBuilds(buildDto);
-                }                
+                }
             }
         }, DoubleClickEvent.getType());
 
@@ -178,7 +166,7 @@ public class BuildList extends Composite {
         pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
         pager.setDisplay(dataGrid);
     }
-    
+
     public void onTabShow() {
         updateDataGrid();
     }
@@ -207,20 +195,20 @@ public class BuildList extends Composite {
             return (category == null) ? null : category.getId();
         }
     };
-    
-    public List<BuildDto> getSelectedBuilds() {        
+
+    public List<BuildDto> getSelectedBuilds() {
         List<BuildDto> buildList = (List<BuildDto>) dataProvider.getList();
         List<BuildDto> selectedBuilds = new ArrayList<BuildDto>();
-        
+
         Long i = 0L;
-        
+
         for (BuildDto buildDto : buildList) {
-            if (selectionModel.isSelected(buildDto)) {                                                
+            if (selectionModel.isSelected(buildDto)) {
                 selectedBuilds.add(buildDto);
             }
             i++;
         }
-                
+
         return selectedBuilds;
     }
 }

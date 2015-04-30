@@ -68,6 +68,8 @@ public class ResultList extends Composite {
     }
 
     ParamBuildResultListBridge paramBuildResultListBridge;
+    BuildListResultListBridge buildListResultListBridge;
+    JobListResultListBridge jobListResultListBridge;
 
     @UiField(provided = true)
     DataGrid<ResultDto> dataGrid;
@@ -77,7 +79,9 @@ public class ResultList extends Composite {
 
     private SelectionModel<ResultDto> selectionModel;
     private ListDataProvider<ResultDto> dataProvider;
-    private ParameterizedBuildDto paramBuild;
+//    private ParameterizedBuildDto paramBuild;
+//    private BuildDto build;
+//    private JobDto job;
 
     public ResultList() {
         dataGrid = new DataGrid<ResultDto>(20);
@@ -90,7 +94,41 @@ public class ResultList extends Composite {
         paramBuildResultListBridge = bridge;
     }
 
+    public void setBuildListResultListBridge(BuildListResultListBridge bridge) {
+        buildListResultListBridge = bridge;
+    }
+
+    public void setJobListResultListBridge(JobListResultListBridge bridge) {
+        jobListResultListBridge = bridge;
+    }
+
     private void initDatagrid() {
+        selectionModel = new SingleSelectionModel<ResultDto>(keyProvider);
+        dataGrid.setSelectionModel(selectionModel);
+    }
+
+    private void initPager() {
+        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+        pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
+        pager.setDisplay(dataGrid);
+    }
+
+    public void showParamBuildResults(ParameterizedBuildDto paramBuildDto) {
+        addColumnsAndCallForResults(paramBuildDto);
+    }
+
+    public void showBuildResults(BuildDto buildDto) {
+        addColumnsAndCallForResults(buildDto);
+    }
+
+    public void showJobResults(JobDto jobDto) {
+        addColumnsAndCallForResults(jobDto);
+    }
+
+    private void addColumnsAndCallForResults(final Object entity) {
+        for (int i = dataGrid.getColumnCount() - 1; i >= 0; i--) {
+            dataGrid.removeColumn(i);
+        }
 
         TextColumn<ResultDto> nameColumn = new TextColumn<ResultDto>() {
             @Override
@@ -106,77 +144,56 @@ public class ResultList extends Composite {
             }
         };
 
-//        dataGrid.setColumnWidth(nameColumn, 10, Style.Unit.PX);
         dataGrid.addColumn(nameColumn, "Test name");
-
-//        dataGrid.setColumnWidth(nameColumn, 10, Style.Unit.PX);
         dataGrid.addColumn(testCaseColumn, "TestCase name");
 
-        selectionModel = new SingleSelectionModel<ResultDto>(keyProvider);
-
-        dataGrid.addDomHandler(new DoubleClickHandler() {
+        resultService.getPossibleResults(new AsyncCallback<List<PossibleResultDto>>() {
 
             @Override
-            public void onDoubleClick(DoubleClickEvent event) {
-//                List<BuildDto> buildList = getSelectedBuilds();
-//
-//                for (BuildDto buildDto : buildList) {
-//                    buildListParamBuildListBridge.setBuildAndDisplayParamBuilds(buildDto);
-//                }                
+            public void onFailure(Throwable caught) {
+                throw new UnsupportedOperationException("Not supported yet.");
             }
-        }, DoubleClickEvent.getType());
 
-        dataGrid.setSelectionModel(selectionModel);
-        updateDataGrid();
-    }
-
-    private void initPager() {
-        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-        pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
-        pager.setDisplay(dataGrid);
-    }
-
-    public void onTabShow() {
-        updateDataGrid();
-    }
-
-    public void setParamBuild(ParameterizedBuildDto paramBuildDto) {
-        paramBuild = paramBuildDto;
-    }
-
-    public void updateDataGrid() {
-        if (dataGrid.getColumnCount() <= 2) {
-            resultService.getPossibleResults(new AsyncCallback<List<PossibleResultDto>>() {
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void onSuccess(List<PossibleResultDto> possibleResults) {
-                    for (final PossibleResultDto possibleResult : possibleResults) {
-                        TextColumn<ResultDto> resultColumn = new TextColumn<ResultDto>() {
-                            @Override
-                            public String getValue(ResultDto object) {
-                                if (object.getResults().containsKey(possibleResult.getId())) {
-                                    return object.getResults().get(possibleResult.getId()).toString();
-                                } else {
-                                    return "";
-                                }
+            @Override
+            public void onSuccess(List<PossibleResultDto> possibleResults) {
+                for (final PossibleResultDto possibleResult : possibleResults) {
+                    TextColumn<ResultDto> resultColumn = new TextColumn<ResultDto>() {
+                        @Override
+                        public String getValue(ResultDto object) {
+                            if (object.getResults().containsKey(possibleResult.getId())) {
+                                return object.getResults().get(possibleResult.getId()).toString();
+                            } else {
+                                return "";
                             }
-                        };
-                        dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.EM);
-                        dataGrid.addColumn(resultColumn, possibleResult.getName());
-                    }
-                    getResults();
+                        }
+                    };
+                    dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.EM);
+                    dataGrid.addColumn(resultColumn, possibleResult.getName());
                 }
-            });
-        }
+                if (entity instanceof ParameterizedBuildDto) {
+                    getResults((ParameterizedBuildDto) entity);
+                }
 
+                if (entity instanceof BuildDto) {
+                    getResults((BuildDto) entity);
+                }
+
+                if (entity instanceof JobDto) {
+                    getResults((JobDto) entity);
+                }
+            }
+
+        });
     }
 
-    public void getResults() {
+    private void fillDataGrid(List<ResultDto> result) {
+        dataProvider = new ListDataProvider<ResultDto>();
+        dataProvider.setList(result);
+        dataProvider.addDataDisplay(dataGrid);
+        dataGrid.setRowCount(result.size());
+    }
+
+    public void getResults(ParameterizedBuildDto paramBuild) {
         resultService.getResults(paramBuild, new AsyncCallback<List<ResultDto>>() {
 
             @Override
@@ -186,10 +203,37 @@ public class ResultList extends Composite {
 
             @Override
             public void onSuccess(List<ResultDto> result) {
-                dataProvider = new ListDataProvider<ResultDto>();
-                dataProvider.setList(result);
-                dataProvider.addDataDisplay(dataGrid);
-                dataGrid.setRowCount(result.size());
+                fillDataGrid(result);
+            }
+        });
+    }
+
+    public void getResults(BuildDto build) {
+        resultService.getResults(build, new AsyncCallback<List<ResultDto>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onSuccess(List<ResultDto> result) {
+                fillDataGrid(result);
+            }
+        });
+    }
+
+    public void getResults(JobDto job) {
+        resultService.getResults(job, new AsyncCallback<List<ResultDto>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onSuccess(List<ResultDto> result) {
+                fillDataGrid(result);
             }
         });
     }

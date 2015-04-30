@@ -47,6 +47,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
+import gwtEntity.client.BuildDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.JobService;
 import gwtEntity.client.JobServiceAsync;
@@ -62,9 +63,10 @@ public class JobList extends Composite {
     private static JobListUiBinder uiBinder = GWT.create(JobListUiBinder.class);
 
     private final JobServiceAsync jobService = GWT.create(JobService.class);
-    
+
     private JobListDetailBridge jobListDetailBridge;
     private JobListBuildListBridge jobListBuildListBridge;
+    private JobListResultListBridge jobListResultListBridge;
 
     interface JobListUiBinder extends UiBinder<Widget, JobList> {
     }
@@ -81,7 +83,7 @@ public class JobList extends Composite {
 
     @UiField
     Button deleteButton;
-    
+
     @UiField
     Button addButton;
 
@@ -101,15 +103,18 @@ public class JobList extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void setJobListDetailBridge(JobListDetailBridge bridge) {       
+    public void setJobListDetailBridge(JobListDetailBridge bridge) {
         jobListDetailBridge = bridge;
     }
-    
-    public void setJobListBuildListBridge(JobListBuildListBridge bridge) {       
+
+    public void setJobListBuildListBridge(JobListBuildListBridge bridge) {
         jobListBuildListBridge = bridge;
     }
-    
-    
+
+    public void setJobListResultListBridge(JobListResultListBridge bridge) {
+        jobListResultListBridge = bridge;
+    }
+
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
         List<JobDto> jobList = getSelectedJobs();
@@ -131,11 +136,24 @@ public class JobList extends Composite {
         }
 
     }
+
     @UiHandler("addButton")
     void onAddButtonClick(ClickEvent event) {
         jobListDetailBridge.setJobAndDisplayDetail(null);
     }
-    
+
+    @UiHandler("showResultsButton")
+    void onShowResultButtonClick(ClickEvent event) {
+        List<JobDto> jobList = getSelectedJobs();
+
+        for (JobDto jobDto : jobList) {
+            if (selectionModel.isSelected(jobDto)) {
+                jobListResultListBridge.setJobAndDisplayResults(jobDto);
+            }
+        }
+
+    }
+
     private void deleteJob(JobDto jobDTO) {
         jobService.deleteJob(jobDTO, new AsyncCallback<Void>() {
 
@@ -149,27 +167,27 @@ public class JobList extends Composite {
             }
         });
     }
-    
+
     @UiHandler("addCtgToParamBuildButton")
     void onAddCtgToParamBuildButtonClick(ClickEvent event) {
         List<JobDto> jobs = getSelectedJobs();
-        
+
         for (JobDto jobDto : jobs) {
             jobService.addCategoriesToParamBuild(jobDto, new AsyncCallback<Void>() {
 
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert("An error occured during addition categories to param build");
-            }
+                @Override
+                public void onFailure(Throwable caught) {
+                    Window.alert("An error occured during addition categories to param build");
+                }
 
-            @Override
-            public void onSuccess(Void result) {
-                Window.alert("Categories were correctly added");
-            }
-        });
+                @Override
+                public void onSuccess(Void result) {
+                    Window.alert("Categories were correctly added");
+                }
+            });
         }
-        
-    }   
+
+    }
 
     private void initDatagrid() {
         Column<JobDto, String> urlColumn = new Column<JobDto, String>(new TextCell()) {
@@ -226,7 +244,7 @@ public class JobList extends Composite {
 
                 for (JobDto jobDto : jobList) {
                     jobListBuildListBridge.setJobAndDisplayBuilds(jobDto);
-                }                
+                }
             }
         }, DoubleClickEvent.getType());
 
@@ -244,7 +262,7 @@ public class JobList extends Composite {
         jobService.getJobs(new AsyncCallback<List<JobDto>>() {
 
             @Override
-            public void onFailure(Throwable caught) {                
+            public void onFailure(Throwable caught) {
             }
 
             @Override
@@ -263,20 +281,20 @@ public class JobList extends Composite {
             return (job == null) ? null : job.getId();
         }
     };
-    
-    public List<JobDto> getSelectedJobs() {        
+
+    public List<JobDto> getSelectedJobs() {
         List<JobDto> jobList = (List<JobDto>) dataProvider.getList();
         List<JobDto> selectedJobs = new ArrayList<JobDto>();
-        
+
         Long i = 0L;
-        
+
         for (JobDto jobDTO : jobList) {
-            if (selectionModel.isSelected(jobDTO)) {                                                
+            if (selectionModel.isSelected(jobDTO)) {
                 selectedJobs.add(jobDTO);
             }
             i++;
         }
-                
+
         return selectedJobs;
     }
 

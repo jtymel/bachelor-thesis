@@ -25,7 +25,7 @@
         </g:south>
         
         <g:south size="2.0">            
-            <g:Button ui:field="deleteButton">Delete build</g:Button>            
+            <g:Button ui:field="showResultsButton">Show results</g:Button>
         </g:south>
 
     </g:DockLayoutPanel>
