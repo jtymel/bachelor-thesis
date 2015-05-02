@@ -10,8 +10,8 @@ Uncomment this for XHTML entities
 
     </ui:style>
     
-    <g:DockLayoutPanel unit="EM">
-        <g:north size="75.0">
+<!--    <g:DockLayoutPanel unit="EM">
+        <g:north size="75.0">-->
             <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="60">
                 <g:tab>
                     <g:header>
@@ -80,6 +80,6 @@ Uncomment this for XHTML entities
                     <thesui:ResultList ui:field="resultList" />
                 </g:tab>
             </g:TabLayoutPanel>
-        </g:north>
-    </g:DockLayoutPanel>
+<!--        </g:north>
+    </g:DockLayoutPanel>-->
 </ui:UiBinder>

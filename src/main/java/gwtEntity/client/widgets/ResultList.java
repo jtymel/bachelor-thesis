@@ -84,7 +84,7 @@ public class ResultList extends Composite {
 //    private JobDto job;
 
     public ResultList() {
-        dataGrid = new DataGrid<ResultDto>(20);
+        dataGrid = new DataGrid<ResultDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
