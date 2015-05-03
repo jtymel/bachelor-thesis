@@ -2,6 +2,7 @@ package gwtEntity.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -34,6 +35,32 @@ public class ResultDto extends PossibleResultDto {
 
     public Map<Long, Integer> getResults() {
         return results;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.test);
+        hash = 29 * hash + Objects.hashCode(this.testCase);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ResultDto other = (ResultDto) obj;
+        if (!Objects.equals(this.test, other.test)) {
+            return false;
+        }
+        if (!Objects.equals(this.testCase, other.testCase)) {
+            return false;
+        }
+        return true;
     }
 
 }

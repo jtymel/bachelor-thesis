@@ -72,64 +72,27 @@ public class ResultServiceBean {
         return possibleResultDto;
     }
 
-    private String getCommonPartOfQuery(List<PossibleResult> possibleResults) {
-        String queryString = "WITH ";
-
-        if (possibleResults != null && !possibleResults.isEmpty()) {
-            for (PossibleResult possibleResult : possibleResults) {
-                queryString += "t_" + possibleResult.getId() + " AS (SELECT test_id, parameterizedbuild_id FROM Result WHERE possibleresult_id =" + possibleResult.getId() + "),";
-            }
-            queryString = queryString.substring(0, queryString.length() - 1);
-        }
-
-        queryString += " SELECT t.name as testName, tc.name as testCaseName, ";
-        if (possibleResults != null && !possibleResults.isEmpty()) {
-            for (PossibleResult possibleResult : possibleResults) {
-                queryString += " COUNT(t_" + possibleResult.getId() + ".test_id) AS res" + possibleResult.getId() + ",";
-            }
-            queryString = queryString.substring(0, queryString.length() - 1);
-        }
-
-        queryString += " FROM Result r ";
-        if (possibleResults != null && !possibleResults.isEmpty()) {
-            for (PossibleResult possibleResult : possibleResults) {
-                queryString += " LEFT JOIN t_" + possibleResult.getId() + " ON t_" + possibleResult.getId() + ".test_id = r.test_id "
-                        + " AND t_" + possibleResult.getId() + ".parameterizedbuild_id = r.parameterizedbuild_id";
-            }
-            queryString += ", ";
-        }
-
-        return queryString;
-    }
-
     public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto) {
         if (paramBuildDto == null) {
             return null;
         }
 
-        List<PossibleResult> possibleResults = getPlainPossibleResults();
-
-        String queryString = getCommonPartOfQuery(possibleResults);
-        queryString += "PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb"
+        String queryString = "SELECT t.name as testName, tc.name as testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, PossibleResult pr, Test t, TestCase tc"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
                 + "	AND r.test_id = t.id"
-                + "	AND r.parameterizedbuild_id = pb.id"
                 + "	AND t.testcase_id = tc.id"
-                + "	AND r.parameterizedbuild_id = " + paramBuildDto.getId()
-                + " GROUP BY t.name, tc.name";
-
-        System.out.println("## ### ####### ###### " + queryString);
+                + "	AND r.parameterizedbuild_id = :paramBuildId"
+                + " GROUP BY t.name, tc.name, r.possibleresult_id";
 
         Session session = (Session) em.getDelegate();
-        Query query = session.createSQLQuery(queryString);
+        Query query = session.createSQLQuery(queryString).setParameter("paramBuildId", paramBuildDto.getId());
 
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
-        for (Object[] testResult : testResults) {
-            resultDtos.add(createResultDto(testResult, possibleResults));
 
-        }
+        addOrEditResults(testResults, resultDtos);
 
         return resultDtos;
     }
@@ -139,28 +102,23 @@ public class ResultServiceBean {
             return null;
         }
 
-        List<PossibleResult> possibleResults = getPlainPossibleResults();
-
-        String queryString = getCommonPartOfQuery(possibleResults);
-        queryString += "PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb, Build b"
+        String queryString = "SELECT t.name as testName, tc.name as testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
                 + "	AND r.test_id = t.id"
-                + "	AND r.parameterizedbuild_id = pb.id"
                 + "	AND t.testcase_id = tc.id"
                 + "	AND r.parameterizedbuild_id = pb.id"
-                + "     AND pb.build_id = " + buildDto.getId()
-                + " GROUP BY t.name, tc.name";
+                + "     AND pb.build_id = :buildId"
+                + " GROUP BY t.name, tc.name, r.possibleresult_id";
 
         Session session = (Session) em.getDelegate();
-        Query query = session.createSQLQuery(queryString);
+        Query query = session.createSQLQuery(queryString).setParameter("buildId", buildDto.getId());
 
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
-        for (Object[] testResult : testResults) {
-            resultDtos.add(createResultDto(testResult, possibleResults));
 
-        }
+        addOrEditResults(testResults, resultDtos);
 
         return resultDtos;
     }
@@ -170,47 +128,57 @@ public class ResultServiceBean {
             return null;
         }
 
-        List<PossibleResult> possibleResults = getPlainPossibleResults();
-
-        String queryString = getCommonPartOfQuery(possibleResults);
-        queryString += "PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb, Build b, Job j"
+        String queryString = "SELECT t.name as testName, tc.name as testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb, Build b"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
                 + "	AND r.test_id = t.id"
-                + "	AND r.parameterizedbuild_id = pb.id"
                 + "	AND t.testcase_id = tc.id"
                 + "	AND r.parameterizedbuild_id = pb.id"
                 + "     AND pb.build_id = b.id"
-                + "     AND b.job_id = " + jobDto.getId()
-                + " GROUP BY t.name, tc.name";
+                + "     AND b.job_id = :jobId"
+                + " GROUP BY t.name, tc.name, r.possibleresult_id";
 
         Session session = (Session) em.getDelegate();
-        Query query = session.createSQLQuery(queryString);
+        Query query = session.createSQLQuery(queryString).setParameter("jobId", jobDto.getId());
 
         List<Object[]> testResults = query.list();
-        List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
-        for (Object[] testResult : testResults) {
-            resultDtos.add(createResultDto(testResult, possibleResults));
+        List<ResultDto> resultDtos = new ArrayList<ResultDto>();
 
-        }
+        addOrEditResults(testResults, resultDtos);
 
         return resultDtos;
     }
 
-    private ResultDto createResultDto(Object[] result, List<PossibleResult> possibleResults) {
+    private void addOrEditResults(List<Object[]> testResults, List<ResultDto> resultDtos) {
+        for (Object[] testResult : testResults) {
+            ResultDto aux = createAuxResultDto(testResult);
+
+            if (resultDtos.contains(aux)) {
+                for (int i = resultDtos.size() - 1; i >= 0; i--) {
+
+                    if (resultDtos.get(i).equals(aux)) {
+                        resultDtos.get(i).getResults().putAll(aux.getResults());
+                        break;
+                    }
+
+                }
+            } else {
+                resultDtos.add(aux);
+            }
+        }
+    }
+
+    private ResultDto createAuxResultDto(Object[] result) {
         ResultDto resultDto = new ResultDto();
         resultDto.setTest(result[0].toString());
         resultDto.setTestCase(result[1].toString());
 
         Map<Long, Integer> testResults = new HashMap<Long, Integer>();
-
-        int i = 2;
-        for (PossibleResult possibleResult : possibleResults) {
-            testResults.put(possibleResult.getId(), Integer.parseInt(result[i].toString()));
-            i++;
-        }
+        testResults.put(Long.parseLong(result[2].toString()), Integer.parseInt(result[3].toString()));
 
         resultDto.setResults(testResults);
         return resultDto;
     }
+
 }
