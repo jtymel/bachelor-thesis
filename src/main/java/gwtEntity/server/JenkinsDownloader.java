@@ -166,7 +166,6 @@ public class JenkinsDownloader {
                     saveLabel(paramBuild);
 
                     paramBuildServiceBean.saveParamBuild(paramBuild);
-                    LOGGER.log(Level.SEVERE, "Kod bezprostredne za volanim beany");
                     paramBuilds.add(paramBuild);
                 }
 
@@ -189,7 +188,7 @@ public class JenkinsDownloader {
             
             if (event.asStartElement().getName().getLocalPart().equals("url")) {
                 paramBuild.setUrl(eventReader.getElementText());
-                LOGGER.log(Level.SEVERE, "URL of parameterized build " + paramBuild.getUrl());
+                LOGGER.log(Level.INFO, "Downloaded build with url: " + paramBuild.getUrl());
                 return paramBuild;
             }
         }
@@ -247,7 +246,7 @@ public class JenkinsDownloader {
                 if (event.asStartElement().getName().getLocalPart().equals("status")) {
                     testResult.setResult(eventReader.getElementText());
 
-                    LOGGER.log(Level.INFO, "Test result: " + testResult.getResult() + " [" + testResult.getDuration() + "],  " + testResult.getTest() + " from " + testResult.getTestCase());
+                    LOGGER.log(Level.FINEST, "Test result: " + testResult.getResult() + " [" + testResult.getDuration() + "],  " + testResult.getTest() + " from " + testResult.getTestCase());
 
                     return testResult;
                 }

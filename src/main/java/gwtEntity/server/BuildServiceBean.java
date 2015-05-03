@@ -36,66 +36,57 @@ import org.hibernate.Session;
  *
  * @author jtymel
  */
-
 @Stateless
 @Transactional(Transactional.TxType.REQUIRED)
 public class BuildServiceBean {
-    
+
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
-    
+
     public Long saveBuild(BuildDto buildDto) {
         Session session = (Session) em.getDelegate();
         Build build = new Build(buildDto);
 
         session.saveOrUpdate(build);
-//        session.persist(job);
 
-//        session.save(job);
-        System.out.println(build.getId());
-        
         return build.getId();
     }
-    
+
     public Long saveBuild(Build build) {
-        Session session = (Session) em.getDelegate();        
+        Session session = (Session) em.getDelegate();
 
         session.saveOrUpdate(build);
-//        session.persist(job);
 
-//        session.save(job);
-        System.out.println(build.getId());
-        
         return build.getId();
     }
-    
+
     public List<BuildDto> getBuilds(JobDto jobDto) {
-        if(jobDto == null)
+        if (jobDto == null) {
             return null;
-        
+        }
+
         Session session = (Session) em.getDelegate();
         Query query = session.createQuery("FROM Build WHERE job_id = :jobId")
-                .setParameter("jobId", jobDto.getId());                
-        
+                .setParameter("jobId", jobDto.getId());
+
         List<Build> builds = new ArrayList<Build>(query.list());
         List<BuildDto> buildDtos = new ArrayList<BuildDto>(builds != null ? builds.size() : 0);
 
         for (Build build : builds) {
             buildDtos.add(createBuildDto(build));
         }
-//        session.getTransaction().commit();
+
         return buildDtos;
     }
-    
-    private BuildDto createBuildDto(Build build){
+
+    private BuildDto createBuildDto(Build build) {
         BuildDto buildDto = new BuildDto();
-        
+
         buildDto.setId(build.getId());
         buildDto.setName(build.getName());
         buildDto.setUrl(build.getUrl());
-        
+
         return buildDto;
     }
-    
 
 }
