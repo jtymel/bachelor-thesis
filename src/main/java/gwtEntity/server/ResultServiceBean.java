@@ -61,7 +61,7 @@ public class ResultServiceBean {
 
     private List<PossibleResult> getPlainPossibleResults() {
         Session session = (Session) em.getDelegate();
-        Query query = session.createQuery("FROM PossibleResult");
+        Query query = session.createQuery("FROM PossibleResult ORDER BY name");
         return new ArrayList<PossibleResult>(query.list());
     }
 
