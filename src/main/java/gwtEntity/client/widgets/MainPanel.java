@@ -121,19 +121,28 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     @Override
     public void setTestAndDisplayHistory(ResultDto result, JobDto job) {
         testDetail.showTestHistory(result, job);
+        tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
     }
 
     @Override
     public void setTestAndDisplayHistory(ResultDto result, BuildDto build) {
         testDetail.showTestHistory(result, build);
+        tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
     }
 
     @Override
     public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild) {
         testDetail.showTestHistory(result, paramBuild);
+        tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
+    }
+
+    @Override
+    public void cancelTestDetailAndDisplayResultList() {
+        tabPanel.remove(testDetail);
+        tabPanel.selectTab(resultList);
     }
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
@@ -179,28 +188,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
     public MainPanel() {
         initWidget(uiBinder.createAndBindUi(this));
-        jobList.setJobListDetailBridge(MainPanel.this);
-        jobDetail.setJobListDetailBridge(MainPanel.this);
-        categorizationList.setCategorizationListDetailBridge(MainPanel.this);
-        categorizationDetail.setCategorizationListDetailBridge(MainPanel.this);
-        categoryList.setCategoryListDetailBridge(MainPanel.this);
-        categoryDetail.setCategoryListDetailBridge(MainPanel.this);
-        jobDetail.setJobDetailLabelDetailBridge(MainPanel.this);
-        labelDetail.setJobDetailLabelDetailBridge(MainPanel.this);
-        jobDetail.setJobDetailCategoriesBridge(MainPanel.this);
-        jobCategories.setJobDetailCategoriesBridge(MainPanel.this);
-        jobList.setJobListBuildListBridge(MainPanel.this);
-        buildList.setJobListBuildListBridge(MainPanel.this);
-        buildList.setBuildListParamBuildListBridge(MainPanel.this);
-        paramBuildList.setBuildListParamBuildListBridge(MainPanel.this);
-        paramBuildList.setParamBuildResultListBridge(MainPanel.this);
-        resultList.setParamBuildResultListBridge(MainPanel.this);
-        buildList.setBuildListResultListBridge(MainPanel.this);
-        resultList.setBuildListResultListBridge(MainPanel.this);
-        jobList.setJobListResultListBridge(MainPanel.this);
-        resultList.setJobListResultListBridge(MainPanel.this);
-        resultList.setResultListTestDetailBridge(MainPanel.this);
-        testDetail.setResultListTestDetailBridge(MainPanel.this);
+        setBridges();
+        removeUnnecessaryTabs();
     }
 
     public List<JobDto> getSelectedJobs() {
@@ -234,6 +223,35 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         if (tabPanel.getWidget(selectedTab).equals(jobDetail)) {
             jobDetail.onTabShow();
         }
+    }
+
+    private void setBridges() {
+        jobList.setJobListDetailBridge(MainPanel.this);
+        jobDetail.setJobListDetailBridge(MainPanel.this);
+        categorizationList.setCategorizationListDetailBridge(MainPanel.this);
+        categorizationDetail.setCategorizationListDetailBridge(MainPanel.this);
+        categoryList.setCategoryListDetailBridge(MainPanel.this);
+        categoryDetail.setCategoryListDetailBridge(MainPanel.this);
+        jobDetail.setJobDetailLabelDetailBridge(MainPanel.this);
+        labelDetail.setJobDetailLabelDetailBridge(MainPanel.this);
+        jobDetail.setJobDetailCategoriesBridge(MainPanel.this);
+        jobCategories.setJobDetailCategoriesBridge(MainPanel.this);
+        jobList.setJobListBuildListBridge(MainPanel.this);
+        buildList.setJobListBuildListBridge(MainPanel.this);
+        buildList.setBuildListParamBuildListBridge(MainPanel.this);
+        paramBuildList.setBuildListParamBuildListBridge(MainPanel.this);
+        paramBuildList.setParamBuildResultListBridge(MainPanel.this);
+        resultList.setParamBuildResultListBridge(MainPanel.this);
+        buildList.setBuildListResultListBridge(MainPanel.this);
+        resultList.setBuildListResultListBridge(MainPanel.this);
+        jobList.setJobListResultListBridge(MainPanel.this);
+        resultList.setJobListResultListBridge(MainPanel.this);
+        resultList.setResultListTestDetailBridge(MainPanel.this);
+        testDetail.setResultListTestDetailBridge(MainPanel.this);
+    }
+
+    private void removeUnnecessaryTabs() {
+        tabPanel.remove(testDetail);
     }
 
 }

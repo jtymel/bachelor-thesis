@@ -38,4 +38,6 @@ public interface ResultListTestDetailBridge {
 
     public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild);
 
+    public void cancelTestDetailAndDisplayResultList();
+
 }

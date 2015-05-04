@@ -206,7 +206,7 @@ public class ResultServiceBean {
         ParameterizedBuild paramBuild = (ParameterizedBuild) query.uniqueResult();
 
         query = session.createSQLQuery(getTestHistoryQuery())
-                .setParameter("jobId", paramBuildDto.getBuild().getJob().getId())
+                .setParameter("jobId", paramBuild.getBuild().getJob().getId())
                 .setParameter("testName", resultDto.getTest())
                 .setParameter("testCaseName", resultDto.getTestCase());
 
