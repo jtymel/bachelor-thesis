@@ -12,7 +12,7 @@ Uncomment this for XHTML entities
     
 <!--    <g:DockLayoutPanel unit="EM">
         <g:north size="75.0">-->
-            <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="60">
+            <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="30">
                 <g:tab>
                     <g:header>
                         List of jobs

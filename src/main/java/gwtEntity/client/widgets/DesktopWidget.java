@@ -65,63 +65,6 @@ public class DesktopWidget extends Composite {
                     Window.alert("Results have been correctly downloaded");
                 }
             });
-            
-            
-            
-            /*
-            for (JobDto job : jobList) {
-                Window.alert(job.getUrl()); 
-                // ma brat jako parametr jobList
-                jenkinsService.downloadBuilds(job, new AsyncCallback<List<BuildDto>>() {
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        Window.alert("Error during parsing builds " + caught.toString());
-                    }
-
-                    // zase reseno na serveru v implementaci DW builds
-                    // zapamatovat pro ucely bakalarky, ze to je divny
-                    @Override
-                    public void onSuccess(List<BuildDto> result) {
-                        for (final BuildDto build : result) {
-                            buildService.saveBuild(build, new AsyncCallback<Long>() {
-
-                                @Override
-                                public void onFailure(Throwable caught) {
-                                    Window.alert("Error during saving builds " + caught.toString());
-                                }
-
-                                @Override
-                                public void onSuccess(Long result) {
-                                    Window.alert("New Build: " + result);
-                                    jenkinsService.downloadParameterizedBuilds(build, new AsyncCallback<List<ParameterizedBuildDto>>() {
-
-                                        @Override
-                                        public void onFailure(Throwable caught) {
-                                        }
-
-                                        @Override
-                                        public void onSuccess(List<ParameterizedBuildDto> result) {
-                                            for (ParameterizedBuildDto paramBuild : result) {
-                                                paramBuildService.saveParamBuild(paramBuild, new AsyncCallback<Long>() {
-
-                                                    @Override
-                                                    public void onFailure(Throwable caught) {
-                                                    }
-
-                                                    @Override
-                                                    public void onSuccess(Long result) {
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }
-                });
-            } */            
         }
     }
 

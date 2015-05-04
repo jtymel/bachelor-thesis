@@ -31,4 +31,5 @@ public interface JobListResultListBridge {
 
     public void setJobAndDisplayResults(JobDto job);
 
+    public void cancelResultListAndDisplayJobList();
 }

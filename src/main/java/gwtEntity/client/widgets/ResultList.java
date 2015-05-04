@@ -91,6 +91,21 @@ public class ResultList extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
+    @UiHandler("cancelButton")
+    void onCancelButtonClick(ClickEvent event) {
+        if (job != null) {
+            jobListResultListBridge.cancelResultListAndDisplayJobList();
+        }
+
+        if (build != null) {
+            buildListResultListBridge.cancelResultListAndDisplayBuildList();
+        }
+
+        if (paramBuild != null) {
+            paramBuildResultListBridge.cancelResultListAndDisplayParamBuildList();
+        }
+    }
+
     public void setParamBuildResultListBridge(ParamBuildResultListBridge bridge) {
         paramBuildResultListBridge = bridge;
     }

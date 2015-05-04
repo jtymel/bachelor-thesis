@@ -14,8 +14,8 @@ Uncomment this for XHTML entities
             <g:DockLayoutPanel unit="EM">
                 <g:north size="2.0">
                     <g:MenuBar>
-                        <g:MenuItem>Menu<g:MenuBar vertical="true">
-                            <g:MenuItem ui:field="menuDownloadAll">Stahnout vsechny vysledky</g:MenuItem>
+                        <g:MenuItem>Tools<g:MenuBar vertical="true">
+                            <g:MenuItem ui:field="menuDownloadAll">Download all results of selected job</g:MenuItem>
                         </g:MenuBar></g:MenuItem>
                     </g:MenuBar>
                 </g:north>

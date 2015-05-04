@@ -12,11 +12,8 @@
             <g:HTMLPanel>
                 <table style="width:50%" align="center">
                   <tr>
-                    <td>
-                      <g:Label>Job's name</g:Label>
-                    </td>
-                    <td>
-                      <g:TextBox ui:field="labelNameField" />
+                    <td align="center">
+                      <g:Label ui:field="jobName"></g:Label>
                     </td>
                   </tr>
                 </table>

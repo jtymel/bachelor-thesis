@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -60,6 +61,9 @@ public class JobCategories extends Composite {
 
     @UiField
     Button cancelButton;
+
+    @UiField
+    Label jobName;
 
     private JobDto job;
 
@@ -198,5 +202,6 @@ public class JobCategories extends Composite {
 
     public void setJob(JobDto jobDto) {
         job = jobDto;
+        jobName.setText(jobDto.getName());
     }
 }

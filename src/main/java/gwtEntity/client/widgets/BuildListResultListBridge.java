@@ -28,5 +28,8 @@ import gwtEntity.client.BuildDto;
  * @author jtymel
  */
 public interface BuildListResultListBridge {
+
     public void setBuildAndDisplayResults(BuildDto build);
+
+    public void cancelResultListAndDisplayBuildList();
 }

@@ -30,4 +30,6 @@ import gwtEntity.client.ParameterizedBuildDto;
 public interface ParamBuildResultListBridge {
 
     public void setParamBuildAndDisplayResults(ParameterizedBuildDto paramBuild);
+
+    public void cancelResultListAndDisplayParamBuildList();
 }

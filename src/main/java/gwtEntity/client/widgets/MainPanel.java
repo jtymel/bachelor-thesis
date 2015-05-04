@@ -105,18 +105,21 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     @Override
     public void setParamBuildAndDisplayResults(ParameterizedBuildDto paramBuild) {
         resultList.showParamBuildResults(paramBuild);
+        tabPanel.add(resultList, "List of results");
         tabPanel.selectTab(resultList);
     }
 
     @Override
     public void setBuildAndDisplayResults(BuildDto build) {
         resultList.showBuildResults(build);
+        tabPanel.add(resultList, "List of results");
         tabPanel.selectTab(resultList);
     }
 
     @Override
     public void setJobAndDisplayResults(JobDto job) {
         resultList.showJobResults(job);
+        tabPanel.add(resultList, "List of results");
         tabPanel.selectTab(resultList);
     }
 
@@ -145,6 +148,24 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     public void cancelTestDetailAndDisplayResultList() {
         tabPanel.remove(testDetail);
         tabPanel.selectTab(resultList);
+    }
+
+    @Override
+    public void cancelResultListAndDisplayJobList() {
+        tabPanel.remove(resultList);
+        tabPanel.selectTab(jobList);
+    }
+
+    @Override
+    public void cancelResultListAndDisplayParamBuildList() {
+        tabPanel.remove(resultList);
+        tabPanel.selectTab(paramBuildList);
+    }
+
+    @Override
+    public void cancelResultListAndDisplayBuildList() {
+        tabPanel.remove(resultList);
+        tabPanel.selectTab(buildList);
     }
 
     private static final Logger LOGGER = Logger.getLogger("gwtEntity");
@@ -255,6 +276,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     private void removeUnnecessaryTabs() {
         tabPanel.remove(testDetail);
         tabPanel.remove(jobCategories);
+        tabPanel.remove(resultList);
     }
 
 }
