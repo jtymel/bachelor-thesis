@@ -77,6 +77,9 @@ public class BuildList extends Composite {
     @UiField
     Button showResultsButton;
 
+    @UiField
+    Button cancelButton;
+
     private JobDto job;
 
     private SelectionModel<BuildDto> selectionModel;
@@ -102,7 +105,7 @@ public class BuildList extends Composite {
     }
 
     @UiHandler("showResultsButton")
-    void onShowResultButtonClick(ClickEvent event) {
+    public void onShowResultButtonClick(ClickEvent event) {
         List<BuildDto> buildList = getSelectedBuilds();
 
         for (BuildDto buildDto : buildList) {
@@ -111,6 +114,11 @@ public class BuildList extends Composite {
             }
         }
 
+    }
+
+    @UiHandler("cancelButton")
+    public void onCancelButtonClick(ClickEvent event) {
+        jobListBuildListBridge.cancelBuildListAndDisplayJobList();
     }
 
     void setJob(JobDto jobDto) {

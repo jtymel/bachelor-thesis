@@ -189,6 +189,10 @@ public class JobList extends Composite {
 
     }
 
+    public void onTabShow() {
+        updateDataGrid();
+    }
+
     private void initDatagrid() {
         Column<JobDto, String> urlColumn = new Column<JobDto, String>(new TextCell()) {
 
@@ -258,7 +262,7 @@ public class JobList extends Composite {
         pager.setDisplay(dataGrid);
     }
 
-    public void updateDataGrid() {
+    private void updateDataGrid() {
         jobService.getJobs(new AsyncCallback<List<JobDto>>() {
 
             @Override

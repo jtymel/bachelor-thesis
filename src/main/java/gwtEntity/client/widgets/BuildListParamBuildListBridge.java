@@ -31,4 +31,6 @@ public interface BuildListParamBuildListBridge {
 
     public void setBuildAndDisplayParamBuilds(BuildDto build);
 
+    public void cancelParamBuildListAndDisplazBuildList();
+
 }

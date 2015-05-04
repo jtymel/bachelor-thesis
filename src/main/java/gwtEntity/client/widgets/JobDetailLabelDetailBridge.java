@@ -9,5 +9,5 @@ import gwtEntity.client.LabelDto;
  */
 public interface JobDetailLabelDetailBridge {
     public void setLabelAndDisplayDetail(LabelDto label, JobDto job);
-    public void displayLabelList();
+    public void cancelLabelDetailAndDisplayJobDetail();
 }

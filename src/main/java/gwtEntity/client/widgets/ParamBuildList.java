@@ -70,12 +70,10 @@ public class ParamBuildList extends Composite {
     SimplePager pager;
 
     @UiField
-    Button deleteButton;
+    Button cancelButton;
 
     private BuildDto build;
 
-//    @UiField
-//    Button addButton;
     private SelectionModel<ParameterizedBuildDto> selectionModel;
     private ListDataProvider<ParameterizedBuildDto> dataProvider;
 
@@ -94,30 +92,9 @@ public class ParamBuildList extends Composite {
         paramBuildResultListBridge = bridge;
     }
 
-    @UiHandler("deleteButton")
-    void onDeleteButtonClick(ClickEvent event) {
-        List<ParameterizedBuildDto> paramBuildList = getSelectedParamBuilds();
-
-        for (ParameterizedBuildDto paramBuildDto : paramBuildList) {
-            if (selectionModel.isSelected(paramBuildDto)) {
-                deleteParamBuild(paramBuildDto);
-            }
-        }
-
-    }
-
-    private void deleteParamBuild(ParameterizedBuildDto paramBuildDto) {
-//        buildService.deleteBuild(buildDto, new AsyncCallback<Void>() {
-//
-//            @Override
-//            public void onFailure(Throwable caught) {
-//            }
-//
-//            @Override
-//            public void onSuccess(Void result) {
-//                updateDataGrid();
-//            }
-//        });
+    @UiHandler("cancelButton")
+    void onCancelButtonClick(ClickEvent event) {
+        buildListParamBuildListBridge.cancelParamBuildListAndDisplazBuildList();
     }
 
     void setBuild(BuildDto buildDto) {

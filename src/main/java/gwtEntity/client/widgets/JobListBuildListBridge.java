@@ -29,4 +29,5 @@ import gwtEntity.client.JobDto;
  */
 public interface JobListBuildListBridge {
     public void setJobAndDisplayBuilds(JobDto job);
+    public void cancelBuildListAndDisplayJobList();
 }

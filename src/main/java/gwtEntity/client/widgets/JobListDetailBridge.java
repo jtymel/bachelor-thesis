@@ -8,5 +8,5 @@ import gwtEntity.client.JobDto;
  */
 public interface JobListDetailBridge {
     public void setJobAndDisplayDetail(JobDto jobDTO);
-    public void displayList();
+    public void cancelJobDetailAndDisplayJobList();
 }

@@ -100,7 +100,6 @@ public class JobDetail extends Composite {
     @UiField
     Button saveButton;
 
-
     @UiField
     Button setCategories;
 
@@ -130,6 +129,11 @@ public class JobDetail extends Composite {
         if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
             addJob();
         }
+    }
+
+    @UiHandler("cancelButton")
+    void onCancelButtonClick(ClickEvent event) {
+        jobListDetailBridge.cancelJobDetailAndDisplayJobList();
     }
 
     public void onTabShow() {
@@ -162,7 +166,7 @@ public class JobDetail extends Composite {
 
             @Override
             public void onSuccess(Long result) {
-                jobListDetailBridge.displayList();
+                jobListDetailBridge.cancelJobDetailAndDisplayJobList();
             }
         });
 

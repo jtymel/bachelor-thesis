@@ -36,17 +36,14 @@ import java.util.List;
  * @author jtymel
  */
 public class LabelDetail extends Composite {
-    
+
     private static LabelDetail.LabelDetailUiBinder uiBinder = GWT.create(LabelDetail.LabelDetailUiBinder.class);
 
     private final LabelServiceAsync labelService = GWT.create(LabelService.class);
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
-    
+
     private JobDetailLabelDetailBridge jobDetailLabelDetailBridge;
-    
-//    private LabelListDetailBridge categorizationListDetailBridge;
-    
-    
+
     interface LabelDetailUiBinder extends UiBinder<Widget, LabelDetail> {
     }
 
@@ -55,15 +52,17 @@ public class LabelDetail extends Composite {
 
     @UiField(provided = true)
     SimplePager pager;
-    
+
     @UiField
     Button addButton;
+
+    @UiField
+    Button cancelButton;
 
     @UiField
     TextBox labelNameField;
 
     private LabelDto editedLabel = null;
-    private JobDto job;
 
     private MultiSelectionModel<CategoryDto> selectionModel;
     private ListDataProvider<CategoryDto> dataProvider;
@@ -75,27 +74,27 @@ public class LabelDetail extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-//    public void setLabelListDetailBridge(LabelListDetailBridge bridge) {       
-//        categorizationListDetailBridge = bridge;
-//    }
-
     @UiHandler("addButton")
-    void onAddButtonClick(ClickEvent event) {
+    public void onAddButtonClick(ClickEvent event) {
         final List<CategoryDto> categories = getSelectedCategories();
 
         labelService.addCategoriesToLabel(editedLabel, categories, new AsyncCallback<Void>() {
 
             @Override
             public void onFailure(Throwable caught) {
-                Window.alert("jeste nefunguje");
+                Window.alert("Categories were not added to particular label");
             }
 
             @Override
             public void onSuccess(Void result) {
-                Window.alert("mozna funguje");
-                jobDetailLabelDetailBridge.displayLabelList();
+                jobDetailLabelDetailBridge.cancelLabelDetailAndDisplayJobDetail();
             }
         });
+    }
+
+    @UiHandler("cancelButton")
+    public void onCancelButtonClick(ClickEvent event) {
+        jobDetailLabelDetailBridge.cancelLabelDetailAndDisplayJobDetail();
     }
 
     public void onTabShow() {
@@ -103,13 +102,13 @@ public class LabelDetail extends Composite {
     }
 
     private void initDatagrid() {
-        
+
         Column<CategoryDto, Boolean> checkColumn = new Column<CategoryDto, Boolean>(new CheckboxCell(true, false)) {
-          @Override
-          public Boolean getValue(CategoryDto object) {
-            // Get the value from the selection model.
-            return selectionModel.isSelected(object);
-          }
+            @Override
+            public Boolean getValue(CategoryDto object) {
+                // Get the value from the selection model.
+                return selectionModel.isSelected(object);
+            }
         };
 
         TextColumn<CategoryDto> categoryName = new TextColumn<CategoryDto>() {
@@ -118,7 +117,7 @@ public class LabelDetail extends Composite {
                 return object.getName();
             }
         };
-        
+
         TextColumn<CategoryDto> categorizationName = new TextColumn<CategoryDto>() {
             @Override
             public String getValue(CategoryDto object) {
@@ -131,13 +130,13 @@ public class LabelDetail extends Composite {
 
         dataGrid.setColumnWidth(categorizationName, 40, Style.Unit.PX);
         dataGrid.addColumn(categorizationName, "Categorization");
-        
+
         dataGrid.setColumnWidth(categoryName, 40, Style.Unit.PX);
         dataGrid.addColumn(categoryName, "Category");
 
         selectionModel = new MultiSelectionModel<CategoryDto>(keyProvider);
 
-        dataGrid.setSelectionModel(selectionModel, DefaultSelectionEventManager.<CategoryDto> createCheckboxManager());                
+        dataGrid.setSelectionModel(selectionModel, DefaultSelectionEventManager.<CategoryDto>createCheckboxManager());
         updateDataGrid();
     }
 
@@ -162,7 +161,7 @@ public class LabelDetail extends Composite {
                 dataProvider.addDataDisplay(dataGrid);
                 dataGrid.setRowCount(result.size());
             }
-        });                
+        });
 
     }
 
@@ -172,29 +171,29 @@ public class LabelDetail extends Composite {
             return (category == null) ? null : category.getId();
         }
     };
-    
+
     private List<CategoryDto> getSelectedCategories() {
         List<CategoryDto> categories = (List<CategoryDto>) dataProvider.getList();
         List<CategoryDto> selectedCategories = new ArrayList<CategoryDto>();
-        
+
         Long i = 0L;
-        
+
         for (CategoryDto categoryDto : categories) {
-            if (selectionModel.isSelected(categoryDto)) {                                                
+            if (selectionModel.isSelected(categoryDto)) {
                 selectedCategories.add(categoryDto);
             }
             i++;
         }
-                
+
         return selectedCategories;
     }
-    
-    public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {       
+
+    public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {
         jobDetailLabelDetailBridge = bridge;
     }
 
     public void setLabel(LabelDto label, JobDto job) {
-        if(label != null) {
+        if (label != null) {
             labelNameField.setText(label.getName());
         } else {
             labelNameField.setText("");
