@@ -21,28 +21,58 @@
  */
 package gwtEntity.client;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  * @author jtymel
  */
-@RemoteServiceRelativePath("resultService")
-public interface ResultService extends RemoteService {
+public class TestDto implements Serializable {
 
-    public List<PossibleResultDto> getPossibleResults();
+    private String name;
+    private java.util.Date date;
+    private String result;
+    private String machine;
+    private float duration;
 
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto);
+    public String getName() {
+        return name;
+    }
 
-    public List<ResultDto> getResults(BuildDto buildDto);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public List<ResultDto> getResults(JobDto jobDto);
+    public java.util.Date getDate() {
+        return date;
+    }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto);
+    public void setDate(java.util.Date date) {
+        this.date = date;
+    }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto);
+    public String getResult() {
+        return result;
+    }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto);
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getMachine() {
+        return machine;
+    }
+
+    public void setMachine(String machine) {
+        this.machine = machine;
+    }
+
+    public float getDuration() {
+        return duration;
+    }
+
+    public void setDuration(float duration) {
+        this.duration = duration;
+    }
+
 }

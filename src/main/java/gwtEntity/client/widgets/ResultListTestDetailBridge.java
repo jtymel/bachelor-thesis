@@ -19,30 +19,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.client;
+package gwtEntity.client.widgets;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import java.util.List;
+import gwtEntity.client.BuildDto;
+import gwtEntity.client.JobDto;
+import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.ResultDto;
 
 /**
  *
  * @author jtymel
  */
-@RemoteServiceRelativePath("resultService")
-public interface ResultService extends RemoteService {
+public interface ResultListTestDetailBridge {
 
-    public List<PossibleResultDto> getPossibleResults();
+    public void setTestAndDisplayHistory(ResultDto result, JobDto job);
 
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto);
+    public void setTestAndDisplayHistory(ResultDto result, BuildDto build);
 
-    public List<ResultDto> getResults(BuildDto buildDto);
+    public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild);
 
-    public List<ResultDto> getResults(JobDto jobDto);
-
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto);
-
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto);
-
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto);
 }

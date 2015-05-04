@@ -70,6 +70,7 @@ public class ResultList extends Composite {
     ParamBuildResultListBridge paramBuildResultListBridge;
     BuildListResultListBridge buildListResultListBridge;
     JobListResultListBridge jobListResultListBridge;
+    ResultListTestDetailBridge resultListTestDetailBridge;
 
     @UiField(provided = true)
     DataGrid<ResultDto> dataGrid;
@@ -79,9 +80,9 @@ public class ResultList extends Composite {
 
     private SelectionModel<ResultDto> selectionModel;
     private ListDataProvider<ResultDto> dataProvider;
-//    private ParameterizedBuildDto paramBuild;
-//    private BuildDto build;
-//    private JobDto job;
+    private ParameterizedBuildDto paramBuild;
+    private BuildDto build;
+    private JobDto job;
 
     public ResultList() {
         dataGrid = new DataGrid<ResultDto>(500);
@@ -102,9 +103,39 @@ public class ResultList extends Composite {
         jobListResultListBridge = bridge;
     }
 
+    public void setResultListTestDetailBridge(ResultListTestDetailBridge bridge) {
+        resultListTestDetailBridge = bridge;
+    }
+
     private void initDatagrid() {
         selectionModel = new SingleSelectionModel<ResultDto>(keyProvider);
         dataGrid.setSelectionModel(selectionModel);
+
+        dataGrid.addDomHandler(new DoubleClickHandler() {
+
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                List<ResultDto> resultList = getSelectedBuilds();
+                if (job != null) {
+                    for (ResultDto result : resultList) {
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, job);
+                    }
+                }
+
+                if (build != null) {
+                    for (ResultDto result : resultList) {
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, build);
+                    }
+                }
+
+                if (paramBuild != null) {
+                    for (ResultDto result : resultList) {
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, paramBuild);
+                    }
+                }
+
+            }
+        }, DoubleClickEvent.getType());
     }
 
     private void initPager() {
@@ -206,6 +237,10 @@ public class ResultList extends Composite {
                 fillDataGrid(result);
             }
         });
+
+        this.paramBuild = paramBuild;
+        this.build = null;
+        this.job = null;
     }
 
     public void getResults(BuildDto build) {
@@ -221,6 +256,10 @@ public class ResultList extends Composite {
                 fillDataGrid(result);
             }
         });
+
+        this.paramBuild = null;
+        this.build = build;
+        this.job = null;
     }
 
     public void getResults(JobDto job) {
@@ -236,6 +275,10 @@ public class ResultList extends Composite {
                 fillDataGrid(result);
             }
         });
+
+        this.paramBuild = null;
+        this.build = null;
+        this.job = job;
     }
 
     ProvidesKey<ResultDto> keyProvider = new ProvidesKey<ResultDto>() {

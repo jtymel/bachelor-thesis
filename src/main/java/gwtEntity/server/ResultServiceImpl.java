@@ -28,6 +28,7 @@ import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
 import gwtEntity.client.ResultService;
+import gwtEntity.client.TestDto;
 import java.util.List;
 import javax.ejb.EJB;
 
@@ -58,6 +59,21 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
     @Override
     public List<ResultDto> getResults(JobDto jobDto) {
         return resultServiceBean.getResults(jobDto);
+    }
+
+    @Override
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto) {
+        return resultServiceBean.getTestResults(resultDto, paramBuildDto);
+    }
+
+    @Override
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto) {
+        return resultServiceBean.getTestResults(resultDto, buildDto);
+    }
+
+    @Override
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto) {
+        return resultServiceBean.getTestResults(resultDto, jobDto);
     }
 
 }

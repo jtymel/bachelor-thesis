@@ -79,6 +79,12 @@ Uncomment this for XHTML entities
                     </g:header>
                     <thesui:ResultList ui:field="resultList" />
                 </g:tab>
+                <g:tab>
+                    <g:header>
+                        History of test
+                    </g:header>
+                    <thesui:TestDetail ui:field="testDetail" />
+                </g:tab>
             </g:TabLayoutPanel>
 <!--        </g:north>
     </g:DockLayoutPanel>-->

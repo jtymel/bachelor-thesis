@@ -26,6 +26,8 @@ import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
+import gwtEntity.client.TestDto;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +79,7 @@ public class ResultServiceBean {
             return null;
         }
 
-        String queryString = "SELECT t.name as testName, tc.name as testCaseName, r.possibleresult_id, COUNT(*) AS res"
+        String queryString = "SELECT t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, PossibleResult pr, Test t, TestCase tc"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
@@ -102,7 +104,7 @@ public class ResultServiceBean {
             return null;
         }
 
-        String queryString = "SELECT t.name as testName, tc.name as testCaseName, r.possibleresult_id, COUNT(*) AS res"
+        String queryString = "SELECT t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
@@ -128,7 +130,7 @@ public class ResultServiceBean {
             return null;
         }
 
-        String queryString = "SELECT t.name as testName, tc.name as testCaseName, r.possibleresult_id, COUNT(*) AS res"
+        String queryString = "SELECT t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb, Build b"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
@@ -152,7 +154,7 @@ public class ResultServiceBean {
 
     private void addOrEditResults(List<Object[]> testResults, List<ResultDto> resultDtos) {
         for (Object[] testResult : testResults) {
-            ResultDto aux = createAuxResultDto(testResult);
+            ResultDto aux = createResultDto(testResult);
 
             if (resultDtos.contains(aux)) {
                 for (int i = resultDtos.size() - 1; i >= 0; i--) {
@@ -169,7 +171,7 @@ public class ResultServiceBean {
         }
     }
 
-    private ResultDto createAuxResultDto(Object[] result) {
+    private ResultDto createResultDto(Object[] result) {
         ResultDto resultDto = new ResultDto();
         resultDto.setTest(result[0].toString());
         resultDto.setTestCase(result[1].toString());
@@ -179,6 +181,92 @@ public class ResultServiceBean {
 
         resultDto.setResults(testResults);
         return resultDto;
+    }
+
+    private String getTestHistoryQuery() {
+        return "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration"
+                + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
+                + " WHERE"
+                + "	r.possibleresult_id = pr.id"
+                + "	AND r.test_id = t.id"
+                + "	AND t.testcase_id = tc.id"
+                + "	AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = b.id"
+                + "     AND b.job_id = :jobId"
+                + "     AND t.name = :testName"
+                + "     AND tc.name = :testCaseName"
+                + " ORDER BY pb.dateTime DESC";
+    }
+
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto) {
+        Session session = (Session) em.getDelegate();
+
+        Query query = session.createQuery("FROM ParameterizedBuild WHERE id = :paramBuildId")
+                .setParameter("paramBuildId", paramBuildDto.getId());
+        ParameterizedBuild paramBuild = (ParameterizedBuild) query.uniqueResult();
+
+        query = session.createSQLQuery(getTestHistoryQuery())
+                .setParameter("jobId", paramBuildDto.getBuild().getJob().getId())
+                .setParameter("testName", resultDto.getTest())
+                .setParameter("testCaseName", resultDto.getTestCase());
+
+        List<Object[]> testResults = query.list();
+
+        return getTestHistory(testResults);
+    }
+
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto) {
+        Session session = (Session) em.getDelegate();
+
+        Query query = session.createQuery("FROM Build WHERE id = :buildId")
+                .setParameter("buildId", buildDto.getId());
+        Build build = (Build) query.uniqueResult();
+
+        query = session.createSQLQuery(getTestHistoryQuery())
+                .setParameter("jobId", build.getJob().getId())
+                .setParameter("testName", resultDto.getTest())
+                .setParameter("testCaseName", resultDto.getTestCase());
+
+        List<Object[]> testResults = query.list();
+
+        return getTestHistory(testResults);
+    }
+
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto) {
+        Session session = (Session) em.getDelegate();
+
+        Query query = session.createQuery("FROM Job WHERE id = :jobId")
+                .setParameter("jobId", jobDto.getId());
+        Job job = (Job) query.uniqueResult();
+
+        query = session.createSQLQuery(getTestHistoryQuery())
+                .setParameter("jobId", job.getId())
+                .setParameter("testName", resultDto.getTest())
+                .setParameter("testCaseName", resultDto.getTestCase());
+
+        List<Object[]> testResults = query.list();
+
+        return getTestHistory(testResults);
+    }
+
+    private List<TestDto> getTestHistory(List<Object[]> testResults) {
+        List<TestDto> testHistory = new ArrayList<TestDto>(testResults.size());
+
+        for (Object[] testResult : testResults) {
+            testHistory.add(createTestDto(testResult));
+        }
+
+        return testHistory;
+    }
+
+    private TestDto createTestDto(Object[] test) {
+        TestDto testDto = new TestDto();
+        testDto.setDate((Date) test[0]);
+        testDto.setResult(test[1].toString());
+        testDto.setMachine(test[2].toString());
+        testDto.setDuration(Float.parseFloat(test[3].toString()));
+
+        return testDto;
     }
 
 }
