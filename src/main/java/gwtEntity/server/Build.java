@@ -3,6 +3,7 @@ package gwtEntity.server;
 import gwtEntity.client.BuildDto;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -88,6 +89,28 @@ public class Build implements Serializable {
 //        this.job = build.getJob();
         this.name = build.getName();
         this.url = build.getUrl();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.url);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Build other = (Build) obj;
+        if (!Objects.equals(this.url, other.url)) {
+            return false;
+        }
+        return true;
     }
    
 }

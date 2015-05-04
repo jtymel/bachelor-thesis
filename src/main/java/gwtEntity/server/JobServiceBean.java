@@ -86,6 +86,13 @@ public class JobServiceBean {
         session.saveOrUpdate(job);
     }
 
+    public Job getPlainJob(JobDto jobDto) {
+        Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM Job WHERE id = :jobId")
+                .setParameter("jobId", jobDto.getId());
+        return (Job) query.uniqueResult();
+    }
+
     private void addJobToCategory(Job job, Category category) {
         Session session = (Session) em.getDelegate();
         category.addJob(job);
