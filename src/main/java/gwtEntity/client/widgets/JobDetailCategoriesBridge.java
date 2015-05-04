@@ -8,5 +8,5 @@ import gwtEntity.client.JobDto;
  */
 public interface JobDetailCategoriesBridge {
     public void setJobAndDisplayCategories(JobDto job);
-    public void displayJobDetail();
+    public void cancelJobCategoriesAndDisplayJobDetail();
 }

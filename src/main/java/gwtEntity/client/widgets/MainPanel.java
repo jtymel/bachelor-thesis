@@ -80,11 +80,13 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     @Override
     public void setJobAndDisplayCategories(JobDto job) {
         jobCategories.setJob(job);
+        tabPanel.add(jobCategories, "Job categories");
         tabPanel.selectTab(jobCategories);
     }
 
     @Override
-    public void displayJobDetail() {
+    public void cancelJobCategoriesAndDisplayJobDetail() {
+        tabPanel.remove(jobCategories);
         tabPanel.selectTab(jobDetail);
     }
 
@@ -252,6 +254,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
     private void removeUnnecessaryTabs() {
         tabPanel.remove(testDetail);
+        tabPanel.remove(jobCategories);
     }
 
 }
