@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -22,6 +24,7 @@ public class Build implements Serializable {
     private Long id;
     
     @OneToMany(mappedBy = "build")
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<ParameterizedBuild> parameterizedBuilds;    
     
     @ManyToOne

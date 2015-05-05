@@ -24,7 +24,6 @@ package gwtEntity.server;
 import gwtEntity.client.JobDto;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,6 +34,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 
 
@@ -51,19 +52,22 @@ public class Job implements Serializable {
     private Long id;
 
     @OneToMany(mappedBy = "job")
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Build> builds;
 
     @OneToMany(mappedBy = "job")
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Label> labels;
 
 //    org.hibernate.exception.SQLGrammarException: could not extract ResultSet
 //    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "job_category", joinColumns = { 
 			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 					nullable = false, updatable = false) })
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Category> categories;
     
 

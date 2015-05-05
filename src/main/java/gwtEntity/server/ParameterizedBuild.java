@@ -20,6 +20,7 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Cascade;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -33,6 +34,7 @@ import javax.persistence.TemporalType;
 @Entity
 public class ParameterizedBuild implements Serializable {
     @OneToMany(mappedBy = "parameterizedBuild")
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     private List<Result> results;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

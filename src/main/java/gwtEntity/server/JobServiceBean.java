@@ -58,11 +58,15 @@ public class JobServiceBean {
         return job.getId();
     }
 
-    public void deleteJob(JobDto jobDTO) {
+    public void deleteJob(JobDto jobDto) {
         Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM Job WHERE id = :jobId")
+                .setParameter("jobId", jobDto.getId());
+        Job job = (Job) query.uniqueResult();
+        job.getCategories().clear();
 
-        Job job = new Job(jobDTO);
-        em.remove(em.contains(job) ? job : em.merge(job));
+        session.delete(job);
+//        em.remove(em.contains(job) ? job : em.merge(job));
     }
 
     public void addCategoriesToLabel(JobDto jobDto, List<CategoryDto> categoriesDto) {
