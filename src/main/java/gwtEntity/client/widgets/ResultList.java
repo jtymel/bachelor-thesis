@@ -23,6 +23,8 @@ package gwtEntity.client.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
@@ -32,19 +34,15 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.BuildDto;
-import gwtEntity.client.BuildService;
-import gwtEntity.client.BuildServiceAsync;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.PossibleResultDto;
@@ -78,17 +76,22 @@ public class ResultList extends Composite {
     @UiField(provided = true)
     SimplePager pager;
 
+    @UiField
+    ListBox possibleResultListBox;
+
     private SelectionModel<ResultDto> selectionModel;
     private ListDataProvider<ResultDto> dataProvider;
     private ParameterizedBuildDto paramBuild;
     private BuildDto build;
     private JobDto job;
+    private List<PossibleResultDto> possibleResultsList;
 
     public ResultList() {
         dataGrid = new DataGrid<ResultDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
+        initListBox();
     }
 
     @UiHandler("cancelButton")
@@ -130,7 +133,7 @@ public class ResultList extends Composite {
 
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
-                List<ResultDto> resultList = getSelectedBuilds();
+                List<ResultDto> resultList = getSelectedResults();
                 if (job != null) {
                     for (ResultDto result : resultList) {
                         resultListTestDetailBridge.setTestAndDisplayHistory(result, job);
@@ -157,6 +160,19 @@ public class ResultList extends Composite {
         SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
         pager = new SimplePager(SimplePager.TextLocation.CENTER, pagerResources, false, 0, true);
         pager.setDisplay(dataGrid);
+    }
+
+    private void initListBox() {
+        possibleResultListBox.addItem("All");
+
+        possibleResultListBox.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                filterSelectedResults(possibleResultListBox.getSelectedItemText());
+
+            }
+        });
     }
 
     public void showParamBuildResults(ParameterizedBuildDto paramBuildDto) {
@@ -203,6 +219,8 @@ public class ResultList extends Composite {
             @Override
             public void onSuccess(List<PossibleResultDto> possibleResults) {
                 for (final PossibleResultDto possibleResult : possibleResults) {
+                    possibleResultListBox.addItem(possibleResult.getName());
+
                     TextColumn<ResultDto> resultColumn = new TextColumn<ResultDto>() {
                         @Override
                         public String getValue(ResultDto object) {
@@ -216,6 +234,10 @@ public class ResultList extends Composite {
                     dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.EM);
                     dataGrid.addColumn(resultColumn, possibleResult.getName());
                 }
+
+                storePossibleResults(possibleResults);
+                refreshPossibleResultListBox(possibleResults);
+
                 if (entity instanceof ParameterizedBuildDto) {
                     getResults((ParameterizedBuildDto) entity);
                 }
@@ -237,6 +259,49 @@ public class ResultList extends Composite {
         dataProvider.setList(result);
         dataProvider.addDataDisplay(dataGrid);
         dataGrid.setRowCount(result.size());
+    }
+
+    private void refreshPossibleResultListBox(List<PossibleResultDto> possibleResults) {
+        possibleResultListBox.clear();
+
+        possibleResultListBox.addItem("All");
+
+        for (PossibleResultDto possibleResult : possibleResults) {
+            possibleResultListBox.addItem(possibleResult.getName());
+        }
+
+    }
+
+    private void filterSelectedResults(String selectedResults) {
+        if (selectedResults.equals("All")) {
+            fillDataGrid(dataProvider.getList());
+        } else {
+            Long possibleResultId = null;
+
+            for (PossibleResultDto possibleResult : possibleResultsList) {
+                if (possibleResult.getName().equals(selectedResults)) {
+                    possibleResultId = possibleResult.getId();
+                    break;
+                }
+            }
+
+            List<ResultDto> auxResultList = new ArrayList<ResultDto>();
+
+            for (ResultDto auxResult : dataProvider.getList()) {
+                if (auxResult.getResults().containsKey(possibleResultId)) {
+                    auxResultList.add(auxResult);
+                }
+            }
+            ListDataProvider<ResultDto> auxListProvider = new ListDataProvider<ResultDto>();
+
+            auxListProvider.setList(auxResultList);
+            auxListProvider.addDataDisplay(dataGrid);
+            dataGrid.setRowCount(auxResultList.size());
+        }
+    }
+
+    private void storePossibleResults(List<PossibleResultDto> possibleResults) {
+        possibleResultsList = possibleResults;
     }
 
     public void getResults(ParameterizedBuildDto paramBuild) {
@@ -303,7 +368,7 @@ public class ResultList extends Composite {
         }
     };
 
-    public List<ResultDto> getSelectedBuilds() {
+    public List<ResultDto> getSelectedResults() {
         List<ResultDto> buildList = (List<ResultDto>) dataProvider.getList();
         List<ResultDto> selectedBuilds = new ArrayList<ResultDto>();
 
