@@ -29,16 +29,17 @@ import java.util.List;
  * @author jtymel
  */
 public class CategoryDetail extends Composite {
+
     private static CategoryDetailUiBinder uiBinder = GWT.create(CategoryDetailUiBinder.class);
 
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
     private final CategorizationServiceAsync categorizationService = GWT.create(CategorizationService.class);
 
     private CategoryListDetailBridge categoryListDetailBridge;
-    
+
     interface CategoryDetailUiBinder extends UiBinder<Widget, CategoryDetail> {
     }
-    
+
     @UiField
     TextBox categoryNameField;
 
@@ -47,17 +48,20 @@ public class CategoryDetail extends Composite {
 
     @UiField
     Button saveButton;
-    
+
+    @UiField
+    Button cancelButton;
+
     CategoryDto editedCategory = null;
     List<CategorizationDto> categorizations;
 
     void setCategory(CategoryDto categoryDto) {
-        if(categoryDto != null) {
+        if (categoryDto != null) {
             categoryNameField.setText(categoryDto.getName());
         } else {
             categoryNameField.setText("");
         }
-        
+
         editedCategory = categoryDto;
 //        getCategorizations();
     }
@@ -67,8 +71,13 @@ public class CategoryDetail extends Composite {
     }
 
     @UiHandler("saveButton")
-    void onSaveClick(ClickEvent event) {
-        addCategory();        
+    void onSaveButtonClick(ClickEvent event) {
+        addCategory();
+    }
+
+    @UiHandler("cancelButton")
+    void onCancelButtonClick(ClickEvent event) {
+        categoryListDetailBridge.cancelCategoryDetailAndDisplayCategoryList();
     }
 
     @UiHandler("categoryNameField")
@@ -78,14 +87,14 @@ public class CategoryDetail extends Composite {
         }
     }
 
-    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {       
+    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {
         categoryListDetailBridge = bridge;
     }
 
     private void addCategory() {
         CategoryDto categoryDto;
 
-        if(editedCategory == null) {
+        if (editedCategory == null) {
             categoryDto = new CategoryDto();
         } else {
             categoryDto = editedCategory;
@@ -93,7 +102,7 @@ public class CategoryDetail extends Composite {
         }
 
         categoryDto.setName(categoryNameField.getText());
-        
+
         categoryService.saveCategory(categoryDto, categorizations.get(categorizationListField.getSelectedIndex()), new AsyncCallback<Long>() {
 
             @Override
@@ -102,12 +111,12 @@ public class CategoryDetail extends Composite {
 
             @Override
             public void onSuccess(Long result) {
-                categoryListDetailBridge.displayCategoryList();
+                categoryListDetailBridge.cancelCategoryDetailAndDisplayCategoryList();
             }
         });
 
     }
-    
+
     public void getCategorizations() {
         categorizationService.getCategorizations(new AsyncCallback<List<CategorizationDto>>() {
 
@@ -119,21 +128,20 @@ public class CategoryDetail extends Composite {
             public void onSuccess(List<CategorizationDto> result) {
                 //        This needs to be reviewed and done better!
 //                if (categorizations != null) categorizations.clear();
-                
+
                 categorizationListField.clear();
-                
+
                 categorizations = result;
                 for (CategorizationDto categorization : categorizations) {
                     categorizationListField.addItem(categorization.getName());
-                 }
+                }
             }
         });
-         
+
 //        categorizationListField.clear();
 //        for (CategorizationDto categorization : categorizations) {
 //            categorizationListField.addItem(categorization.getName());
 //        }
- 
     }
-    
+
 }

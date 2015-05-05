@@ -35,7 +35,7 @@ import java.util.List;
 public class DesktopWidget extends Composite {
 
     private static DesktopWidgetUiBinder uiBinder = GWT.create(DesktopWidgetUiBinder.class);
-    
+
     private final JenkinsServiceAsync jenkinsService = GWT.create(JenkinsService.class);
     private final BuildServiceAsync buildService = GWT.create(BuildService.class);
     private final ParameterizedBuildServiceAsync paramBuildService = GWT.create(ParameterizedBuildService.class);
@@ -45,11 +45,18 @@ public class DesktopWidget extends Composite {
 
     @UiField
     MenuItem menuDownloadAll;
-    
+
+    @UiField
+    MenuItem menuCategorizations;
+
+    @UiField
+    MenuItem menuCategories;
+
     @UiField
     MainPanel mainPanel;
 
     private class DownloadAllCommand implements Scheduler.ScheduledCommand {
+
         @Override
         public void execute() {
             List<JobDto> jobList = mainPanel.getSelectedJobs();
@@ -57,7 +64,7 @@ public class DesktopWidget extends Composite {
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    Window.alert("An error occured during download");
+                    Window.alert("An error occured during downloading results");
                 }
 
                 @Override
@@ -68,10 +75,28 @@ public class DesktopWidget extends Composite {
         }
     }
 
-  
+    private class showCategorizationsCommand implements Scheduler.ScheduledCommand {
+
+        @Override
+        public void execute() {
+            mainPanel.showCategorizationList();
+        }
+
+    }
+
+    private class showCategoriesCommand implements Scheduler.ScheduledCommand {
+
+        @Override
+        public void execute() {
+            mainPanel.showCategoryList();
+        }
+    }
+
     public DesktopWidget() {
         initWidget(uiBinder.createAndBindUi(this));
 
         menuDownloadAll.setScheduledCommand(new DownloadAllCommand());
+        menuCategorizations.setScheduledCommand(new showCategorizationsCommand());
+        menuCategories.setScheduledCommand(new showCategoriesCommand());
     }
 }

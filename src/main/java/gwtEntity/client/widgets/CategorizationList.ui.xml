@@ -12,26 +12,25 @@
             <c:DataGrid ui:field='dataGrid' />
         </g:center>
         
+        <g:south size="2.0">
+            <g:FlowPanel>
+                <g:Button ui:field="addButton">Add new categorization</g:Button>
+                <g:Button ui:field="deleteButton">Delete categorization</g:Button>
+                <g:Button ui:field="cancelButton">Cancel</g:Button>
+            </g:FlowPanel>
+        </g:south>
+
         <g:south size="3.0">
             <g:HTMLPanel>
                 <table style="width:100%">
-                  <tr>
-                    <td align="center">
-                      <c:SimplePager ui:field="pager" />
-                    </td>
-                  </tr>
+                    <tr>
+                        <td align="center">
+                            <c:SimplePager ui:field="pager" />
+                        </td>
+                    </tr>
                 </table>
-          </g:HTMLPanel>
+            </g:HTMLPanel>
         </g:south>
-        
-        <g:south size="2.0">            
-            <g:Button ui:field="deleteButton">Delete categorization</g:Button>            
-        </g:south>
-        
-        <g:south size="2.0">
-            <g:Button ui:field="addButton">Add new categorization</g:Button>        
-        </g:south>    
-        
-        
+
     </g:DockLayoutPanel>
 </ui:UiBinder>

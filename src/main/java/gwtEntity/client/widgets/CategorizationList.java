@@ -51,11 +51,11 @@ import java.util.List;
  * @author jtymel
  */
 public class CategorizationList extends Composite {
-    
+
     private static CategorizationListUiBinder uiBinder = GWT.create(CategorizationListUiBinder.class);
 
     private final CategorizationServiceAsync categorizationService = GWT.create(CategorizationService.class);
-    
+
     private CategorizationListDetailBridge categorizationListDetailBridge;
 
     interface CategorizationListUiBinder extends UiBinder<Widget, CategorizationList> {
@@ -73,9 +73,12 @@ public class CategorizationList extends Composite {
 
     @UiField
     Button deleteButton;
-    
+
     @UiField
     Button addButton;
+
+    @UiField
+    Button cancelButton;
 
     private SelectionModel<CategorizationDto> selectionModel;
     private ListDataProvider<CategorizationDto> dataProvider;
@@ -87,10 +90,10 @@ public class CategorizationList extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void setCategorizationListDetailBridge(CategorizationListDetailBridge bridge) {       
+    public void setCategorizationListDetailBridge(CategorizationListDetailBridge bridge) {
         categorizationListDetailBridge = bridge;
     }
-    
+
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
         List<CategorizationDto> categorizationLost = getSelectedCategorizations();
@@ -107,7 +110,16 @@ public class CategorizationList extends Composite {
     void onAddButtonClick(ClickEvent event) {
         categorizationListDetailBridge.setCategorizationAndDisplayDetail(null);
     }
-    
+
+    @UiHandler("cancelButton")
+    void onCancelButtonClick(ClickEvent event) {
+        categorizationListDetailBridge.cancelCategorizationList();
+    }
+
+    public void onTabShow() {
+        updateDataGrid();
+    }
+
     private void deleteCategorization(CategorizationDto categorizationDto) {
         categorizationService.deleteCategorization(categorizationDto, new AsyncCallback<Void>() {
 
@@ -144,7 +156,7 @@ public class CategorizationList extends Composite {
 
                 for (CategorizationDto categorizationDto : categorizationList) {
                     categorizationListDetailBridge.setCategorizationAndDisplayDetail(categorizationDto);
-                }                
+                }
             }
         }, DoubleClickEvent.getType());
 
@@ -158,7 +170,7 @@ public class CategorizationList extends Composite {
         pager.setDisplay(dataGrid);
     }
 
-    public void updateDataGrid() {
+    private void updateDataGrid() {
         categorizationService.getCategorizations(new AsyncCallback<List<CategorizationDto>>() {
 
             @Override
@@ -182,21 +194,21 @@ public class CategorizationList extends Composite {
             return (categorization == null) ? null : categorization.getId();
         }
     };
-    
-    public List<CategorizationDto> getSelectedCategorizations() {        
+
+    public List<CategorizationDto> getSelectedCategorizations() {
         List<CategorizationDto> categorizationList = (List<CategorizationDto>) dataProvider.getList();
         List<CategorizationDto> selectedCategorizations = new ArrayList<CategorizationDto>();
-        
+
         Long i = 0L;
-        
+
         for (CategorizationDto categorizationDto : categorizationList) {
-            if (selectionModel.isSelected(categorizationDto)) {                                                
+            if (selectionModel.isSelected(categorizationDto)) {
                 selectedCategorizations.add(categorizationDto);
             }
             i++;
         }
-                
+
         return selectedCategorizations;
     }
-    
+
 }

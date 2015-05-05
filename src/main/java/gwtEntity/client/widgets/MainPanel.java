@@ -46,25 +46,39 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     @Override
     public void setCategorizationAndDisplayDetail(CategorizationDto categorizationDto) {
         categorizationDetail.setCategorization(categorizationDto);
+        tabPanel.add(categorizationDetail, "Categorization detail");
         tabPanel.selectTab(categorizationDetail);
     }
 
     @Override
-    public void displayCategorizationList() {
-        categorizationList.updateDataGrid();
+    public void cancelCategorizationDetailAndDisplayCategorizationList() {
+        categorizationList.onTabShow();
         tabPanel.selectTab(categorizationList);
+        tabPanel.remove(categorizationDetail);
+    }
+
+    @Override
+    public void cancelCategorizationList() {
+        tabPanel.remove(categorizationList);
+    }
+
+    @Override
+    public void cancelCategoryList() {
+        tabPanel.remove(categoryList);
     }
 
     @Override
     public void setCategoryAndDisplayDetail(CategoryDto categoryDto) {
         categoryDetail.setCategory(categoryDto);
+        tabPanel.add(categoryDetail, "Category detail");
         tabPanel.selectTab(categoryDetail);
     }
 
     @Override
-    public void displayCategoryList() {
-        categoryList.updateDataGrid();
+    public void cancelCategoryDetailAndDisplayCategoryList() {
+        categoryList.onTabShow();
         tabPanel.selectTab(categoryList);
+        tabPanel.remove(categoryDetail);
     }
 
     @Override
@@ -236,6 +250,16 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         return jobList.getSelectedJobs();
     }
 
+    public void showCategorizationList() {
+        tabPanel.add(categorizationList, "List of categorizations");
+        tabPanel.selectTab(categorizationList);
+    }
+
+    public void showCategoryList() {
+        tabPanel.add(categoryList, "List of categories");
+        tabPanel.selectTab(categoryList);
+    }
+
     @UiHandler("tabPanel")
     void onTabSelection(SelectionEvent<Integer> event) {
         int selectedTab = event.getSelectedItem();
@@ -302,6 +326,10 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.remove(paramBuildList);
         tabPanel.remove(buildList);
         tabPanel.remove(jobDetail);
+        tabPanel.remove(categorizationList);
+        tabPanel.remove(categorizationDetail);
+        tabPanel.remove(categoryList);
+        tabPanel.remove(categoryDetail);
     }
 
 }

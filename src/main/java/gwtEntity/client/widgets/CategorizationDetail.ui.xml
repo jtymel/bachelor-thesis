@@ -10,23 +10,24 @@
         <g:center>
             <g:HTMLPanel>
                 <table style="width:50%">
-                  <tr>
-                    <td>
-                      <g:Label>Name of categorization</g:Label>
-                    </td>
-                    <td>
-                      <g:TextBox ui:field="categorizationNameField" />
-                    </td>
-                  </tr>
-                  <tr>
-                      <td colspan="2" align="center" >
-                          <g:Button ui:field="saveButton">Save changes</g:Button>
-                      </td>
-                  </tr>
+                    <tr>
+                        <td>
+                            <g:Label>Name of categorization</g:Label>
+                        </td>
+                        <td>
+                            <g:TextBox ui:field="categorizationNameField" />
+                        </td>
+                    </tr>
                 </table>
-          </g:HTMLPanel>                
-
+            </g:HTMLPanel>
         </g:center>
-                
+
+        <g:south size="2.0">
+            <g:FlowPanel>
+                <g:Button ui:field="saveButton">Save changes</g:Button>
+                <g:Button ui:field="cancelButton">Cancel</g:Button>
+            </g:FlowPanel>
+        </g:south>
+
     </g:DockLayoutPanel>
 </ui:UiBinder>

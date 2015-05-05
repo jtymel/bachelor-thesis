@@ -30,10 +30,11 @@ import java.util.List;
  * @author jtymel
  */
 public class CategoryList extends Composite {
+
     private static CategoryListUiBinder uiBinder = GWT.create(CategoryListUiBinder.class);
 
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
-    
+
     private CategoryListDetailBridge categoryListDetailBridge;
 
     interface CategoryListUiBinder extends UiBinder<Widget, CategoryList> {
@@ -47,9 +48,12 @@ public class CategoryList extends Composite {
 
     @UiField
     Button deleteButton;
-    
+
     @UiField
     Button addButton;
+
+    @UiField
+    Button cancelButton;
 
     private SelectionModel<CategoryDto> selectionModel;
     private ListDataProvider<CategoryDto> dataProvider;
@@ -61,10 +65,10 @@ public class CategoryList extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {       
+    public void setCategoryListDetailBridge(CategoryListDetailBridge bridge) {
         categoryListDetailBridge = bridge;
     }
-    
+
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
         List<CategoryDto> categoryList = getSelectedCategories();
@@ -81,7 +85,12 @@ public class CategoryList extends Composite {
     void onAddButtonClick(ClickEvent event) {
         categoryListDetailBridge.setCategoryAndDisplayDetail(null);
     }
-    
+
+    @UiHandler("cancelButton")
+    void onCancelButtonClick(ClickEvent event) {
+        categoryListDetailBridge.cancelCategoryList();
+    }
+
     private void deleteCategory(CategoryDto categoryDto) {
         categoryService.deleteCategory(categoryDto, new AsyncCallback<Void>() {
 
@@ -96,6 +105,10 @@ public class CategoryList extends Composite {
         });
     }
 
+    public void onTabShow() {
+        updateDataGrid();
+    }
+
     private void initDatagrid() {
 
         TextColumn<CategoryDto> nameColumn = new TextColumn<CategoryDto>() {
@@ -104,7 +117,7 @@ public class CategoryList extends Composite {
                 return object.getName();
             }
         };
-        
+
         TextColumn<CategoryDto> categorizationColumn = new TextColumn<CategoryDto>() {
             @Override
             public String getValue(CategoryDto object) {
@@ -114,7 +127,7 @@ public class CategoryList extends Composite {
 
         dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(nameColumn, "Name");
-        
+
         dataGrid.setColumnWidth(categorizationColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(categorizationColumn, "Categorization");
 
@@ -128,7 +141,7 @@ public class CategoryList extends Composite {
 
                 for (CategoryDto categoryDto : categoryList) {
                     categoryListDetailBridge.setCategoryAndDisplayDetail(categoryDto);
-                }                
+                }
             }
         }, DoubleClickEvent.getType());
 
@@ -142,7 +155,7 @@ public class CategoryList extends Composite {
         pager.setDisplay(dataGrid);
     }
 
-    public void updateDataGrid() {
+    private void updateDataGrid() {
         categoryService.getCategories(new AsyncCallback<List<CategoryDto>>() {
 
             @Override
@@ -166,20 +179,20 @@ public class CategoryList extends Composite {
             return (category == null) ? null : category.getId();
         }
     };
-    
-    public List<CategoryDto> getSelectedCategories() {        
+
+    public List<CategoryDto> getSelectedCategories() {
         List<CategoryDto> categoryList = (List<CategoryDto>) dataProvider.getList();
         List<CategoryDto> selectedCategories = new ArrayList<CategoryDto>();
-        
+
         Long i = 0L;
-        
+
         for (CategoryDto categoryDto : categoryList) {
-            if (selectionModel.isSelected(categoryDto)) {                                                
+            if (selectionModel.isSelected(categoryDto)) {
                 selectedCategories.add(categoryDto);
             }
             i++;
         }
-                
+
         return selectedCategories;
     }
 }
