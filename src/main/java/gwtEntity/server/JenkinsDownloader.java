@@ -63,12 +63,13 @@ public class JenkinsDownloader {
             List<ParameterizedBuild> paramBuilds = downloadParameterizedBuilds(builds);
         } catch (IOException | XMLStreamException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
         }
         return builds;
     }
 
     public List<Build> findBuilds(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {
-        XMLEventReader eventReader = getEventReader(jobDto.getUrl());
+        XMLEventReader eventReader = getEventReader(jobDto.getUrl() + "/api/xml");
 
         List<Build> builds = new ArrayList<Build>();
         while (eventReader.hasNext()) {
