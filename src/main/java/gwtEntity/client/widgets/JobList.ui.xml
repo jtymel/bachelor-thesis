@@ -28,6 +28,7 @@
             <g:FlowPanel>
                 <g:Button ui:field="deleteButton">Delete job</g:Button>
                 <g:Button ui:field="addButton">Add new job</g:Button>
+                <g:Button ui:field="downloadResultsButton">Download results</g:Button>
                 <g:Button ui:field="addCtgToParamBuildButton">Add categories to parameterized builds</g:Button>
                 <g:Button ui:field="showDetailButton">Show job's detail</g:Button>
                 <g:Button ui:field="showResultsButton">Show results</g:Button>

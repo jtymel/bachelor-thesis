@@ -15,7 +15,6 @@ Uncomment this for XHTML entities
                 <g:north size="2.0">
                     <g:MenuBar>
                         <g:MenuItem>Tools<g:MenuBar vertical="true">
-                                <g:MenuItem ui:field="menuDownloadAll">Download all results of selected job</g:MenuItem>
                                 <g:MenuItem ui:field="menuCategorizations">Show categorizations</g:MenuItem>
                                 <g:MenuItem ui:field="menuCategories">Show categories</g:MenuItem>
                             </g:MenuBar>

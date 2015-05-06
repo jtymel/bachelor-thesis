@@ -32,6 +32,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.SafeHtmlHeader;
@@ -44,14 +45,15 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
-import gwtEntity.client.BuildDto;
+import gwtEntity.client.JenkinsService;
+import gwtEntity.client.JenkinsServiceAsync;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.JobService;
 import gwtEntity.client.JobServiceAsync;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -63,6 +65,7 @@ public class JobList extends Composite {
     private static JobListUiBinder uiBinder = GWT.create(JobListUiBinder.class);
 
     private final JobServiceAsync jobService = GWT.create(JobService.class);
+    private final JenkinsServiceAsync jenkinsService = GWT.create(JenkinsService.class);
 
     private JobListDetailBridge jobListDetailBridge;
     private JobListBuildListBridge jobListBuildListBridge;
@@ -92,6 +95,9 @@ public class JobList extends Composite {
 
     @UiField
     Button addCtgToParamBuildButton;
+
+    @UiField
+    Button downloadResultsButton;
 
     private SelectionModel<JobDto> selectionModel;
     private ListDataProvider<JobDto> dataProvider;
@@ -154,6 +160,25 @@ public class JobList extends Composite {
 
     }
 
+    @UiHandler("downloadResultsButton")
+    void ondDownloadResultsButtonClick(ClickEvent event) {
+        List<JobDto> jobList = getSelectedJobs();
+        jenkinsService.downloadBuilds(jobList, new AsyncCallback<Void>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                CustomWidgets.alertWidget("Unexpected error",
+                        "An error occured during downloading results. See server log for more details.").center();
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                CustomWidgets.alertWidget("Results successfully downloaded",
+                        "Results have been correctly downloaded.").center();
+            }
+        });
+    }
+
     private void deleteJob(JobDto jobDTO) {
         jobService.deleteJob(jobDTO, new AsyncCallback<Void>() {
 
@@ -177,12 +202,14 @@ public class JobList extends Composite {
 
                 @Override
                 public void onFailure(Throwable caught) {
-                    Window.alert("An error occured during addition categories to param build");
+                    CustomWidgets.alertWidget("Unexpected error",
+                            "An error occured during addition categories to param build. See server log for more details.").center();
                 }
 
                 @Override
                 public void onSuccess(Void result) {
-                    Window.alert("Categories were correctly added");
+                    CustomWidgets.alertWidget("Categories correctly added",
+                            "Categories were correctly added.").center();
                 }
             });
         }
@@ -253,6 +280,30 @@ public class JobList extends Composite {
         }, DoubleClickEvent.getType());
 
         dataGrid.setSelectionModel(selectionModel);
+
+        /* Not running yet */
+//        nameColumn.setSortable(true);
+//        ListHandler<JobDto> sortHandler = new ListHandler<JobDto>(dataProvider.getList());
+//
+//        sortHandler.setComparator(nameColumn, new Comparator<JobDto>() {
+//
+//            @Override
+//            public int compare(JobDto o1, JobDto o2) {
+////                return o1.getName().compareTo(o2.getName());
+//                if (o1 == o2) {
+//                    return 0;
+//                }
+//
+//                // Compare the name columns.
+//                if (o1 != null) {
+//                    return (o2 != null) ? o1.getName().compareTo(o2.getName()) : 1;
+//                }
+//                return -1;
+//            }
+//        });
+//
+//        dataGrid.addColumnSortHandler(sortHandler);
+//        dataGrid.getColumnSortList().push(nameColumn);
         updateDataGrid();
     }
 
