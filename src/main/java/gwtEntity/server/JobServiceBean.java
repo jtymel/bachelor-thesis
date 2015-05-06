@@ -117,7 +117,7 @@ public class JobServiceBean {
         }
 
         for (ParameterizedBuild paramBuild : paramBuilds) {
-            storeParamBuildCategoriesBean.saveTestResult(paramBuild);
+            storeParamBuildCategoriesBean.addCategoriesToParamBuild(paramBuild);
         }
 
     }

@@ -39,7 +39,7 @@ public class StoreParamBuildCategoriesBean {
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
     
-    public void saveTestResult(ParameterizedBuild paramBuild) {
+    public void addCategoriesToParamBuild(ParameterizedBuild paramBuild) {
         Session session = (Session) em.getDelegate();
         Query query = session.getNamedQuery("addCategoriesToParamBuild")
             .setParameter("id_paramBuild", paramBuild);            

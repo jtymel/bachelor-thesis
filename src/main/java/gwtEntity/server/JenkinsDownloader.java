@@ -52,6 +52,7 @@ public class JenkinsDownloader {
     public void downloadBuilds(final List<JobDto> jobs) {
         for (JobDto job : jobs) {
             List<Build> builds = downloadBuilds(job);
+            jobServiceBean.addCategoriesToParamBuild(job);
         }
 
     }
