@@ -244,21 +244,13 @@ public class JobList extends Composite {
             }
         };
 
-        Header<String> nameFooter = new Header<String>(new TextCell()) {
-            @Override
-            public String getValue() {
-                List<JobDto> items = dataGrid.getVisibleItems();
-                return "Number of jobs: " + items.size();
-            }
-        };
-
         dataGrid.addColumn(nameColumn, new SafeHtmlHeader(new SafeHtml() {
 
             @Override
             public String asString() {
                 return "Name";
             }
-        }), nameFooter);
+        }));
 
         dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(urlColumn, "URL");

@@ -7,14 +7,6 @@
     </ui:style>
     
     <g:DockLayoutPanel unit="EM">                
-        <!--<g:north size="4.0">-->
-        <!--            <g:HTMLPanel>
-                <g:TextBox ui:field="nameField" text="Enter job's name" />
-                <g:TextBox ui:field="urlField" text="Enter job's url" />
-                <g:Button ui:field="addButton">Add job</g:Button>
-                <g:Label ui:field="errorLabel"></g:Label>
-            </g:HTMLPanel>
-        </g:north>-->
 
         <g:north size="8.0">
             <g:HTMLPanel>
@@ -35,21 +27,20 @@
                             <g:TextBox ui:field="jobUrlField" />
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="2" align="center" >
-                            <g:Button ui:field="saveButton">Save changes</g:Button>
-                        </td>
-                    </tr>
                 </table>
-                <g:Button ui:field="setCategories">Set categories</g:Button>
             </g:HTMLPanel>                
         </g:north>
 
         <g:center>
             <c:DataGrid ui:field='dataGrid' />
         </g:center>
+
         <g:south size="2.0">
-            <g:Button ui:field="cancelButton">Cancel</g:Button>
+            <g:FlowPanel>
+                <g:Button ui:field="saveButton">Save changes</g:Button>
+                <g:Button ui:field="cancelButton">Cancel</g:Button>
+                <g:Button ui:field="setCategories">Set parameterizations</g:Button>
+            </g:FlowPanel>
         </g:south>
         
         <g:south size="3.0">

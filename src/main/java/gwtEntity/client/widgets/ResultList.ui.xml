@@ -13,7 +13,7 @@
         </g:center>
 
         <g:south size="2.0">
-            <g:Button ui:field="cancelButton">Cancel</g:Button>
+            <g:Button ui:field="cancelButton">Close</g:Button>
         </g:south>
 
         <g:south size="3.0">

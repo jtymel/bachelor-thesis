@@ -11,7 +11,18 @@
         <g:center>
             <c:DataGrid ui:field='dataGrid' />
         </g:center>
-        
+
+        <g:south size="2.0">
+            <g:FlowPanel>
+                <g:Button ui:field="showResultsButton">Show results</g:Button>
+                <g:Button ui:field="downloadResultsButton">Download results</g:Button>
+                <g:Button ui:field="showDetailButton">Edit job detail</g:Button>
+                <g:Button ui:field="addCtgToParamBuildButton">Add categories to parameterized builds</g:Button>
+                <g:Button ui:field="addButton">Add new job</g:Button>
+                <g:Button ui:field="deleteButton">Delete job</g:Button>
+            </g:FlowPanel>
+        </g:south>
+
         <g:south size="3.0">
             <g:HTMLPanel>
                 <table style="width:100%">
@@ -23,34 +34,6 @@
                 </table>
           </g:HTMLPanel>
         </g:south>
-        
-        <g:south size="2.0">
-            <g:FlowPanel>
-                <g:Button ui:field="deleteButton">Delete job</g:Button>
-                <g:Button ui:field="addButton">Add new job</g:Button>
-                <g:Button ui:field="downloadResultsButton">Download results</g:Button>
-                <g:Button ui:field="addCtgToParamBuildButton">Add categories to parameterized builds</g:Button>
-                <g:Button ui:field="showDetailButton">Show job's detail</g:Button>
-                <g:Button ui:field="showResultsButton">Show results</g:Button>
-            </g:FlowPanel>
-            <!--<g:Button ui:field="deleteButton">Delete job</g:Button>-->            
-        </g:south>
-        
-<!--        <g:south size="2.0">
-            <g:Button ui:field="addButton">Add new job</g:Button>        
-        </g:south>    
-
-        <g:south size="2.0">
-            <g:Button ui:field="addCtgToParamBuildButton">Add categories to parameterized builds</g:Button>
-        </g:south>
-
-        <g:south size="2.0">
-            <g:Button ui:field="showDetailButton">Show job's detail</g:Button>
-        </g:south>
-
-        <g:south size="2.0">
-            <g:Button ui:field="showResultsButton">Show results</g:Button>
-        </g:south>-->
 
     </g:DockLayoutPanel>
 </ui:UiBinder>

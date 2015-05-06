@@ -15,7 +15,7 @@
         <g:south size="2.0">
             <g:FlowPanel>
                 <g:Button ui:field="showResultsButton">Show results</g:Button>
-                <g:Button ui:field="cancelButton">Cancel</g:Button>
+                <g:Button ui:field="cancelButton">Close</g:Button>
             </g:FlowPanel>
         </g:south>
 
