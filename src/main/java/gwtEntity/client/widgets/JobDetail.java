@@ -85,7 +85,7 @@ public class JobDetail extends Composite {
     }
 
     public JobDetail() {
-        dataGrid = new DataGrid<LabelDto>(20);
+        dataGrid = new DataGrid<LabelDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
@@ -221,21 +221,25 @@ public class JobDetail extends Composite {
     }
 
     private void getParameterizations() {
-        labelService.getLabels(editedJob, new AsyncCallback<List<LabelDto>>() {
+        if (editedJob == null) {
+            dataProvider.getList().clear();
+        } else {
+            labelService.getLabels(editedJob, new AsyncCallback<List<LabelDto>>() {
 
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+                @Override
+                public void onFailure(Throwable caught) {
+                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
 
-            @Override
-            public void onSuccess(List<LabelDto> result) {
-                dataProvider = new ListDataProvider<LabelDto>();
-                dataProvider.setList(result);
-                dataProvider.addDataDisplay(dataGrid);
-                dataGrid.setRowCount(result.size());
-            }
-        });
+                @Override
+                public void onSuccess(List<LabelDto> result) {
+                    dataProvider = new ListDataProvider<LabelDto>();
+                    dataProvider.setList(result);
+                    dataProvider.addDataDisplay(dataGrid);
+                    dataGrid.setRowCount(result.size());
+                }
+            });
+        }
     }
 
     public void setJobDetailLabelDetailBridge(JobDetailLabelDetailBridge bridge) {
