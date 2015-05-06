@@ -27,6 +27,12 @@
                 </table>
             </g:HTMLPanel>
         </g:south>
+        <g:south size="5.0">
+            <g:FlowPanel>
+                <g:Label>Show only tests with result </g:Label>
+                <g:ListBox ui:field="possibleResultListBox"></g:ListBox>
+            </g:FlowPanel>
+        </g:south>
 
     </g:DockLayoutPanel>
 </ui:UiBinder>

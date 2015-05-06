@@ -24,7 +24,9 @@ package gwtEntity.client.widgets;
 import gwtEntity.client.BuildDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
+import java.util.List;
 
 /**
  *
@@ -32,11 +34,11 @@ import gwtEntity.client.ResultDto;
  */
 public interface ResultListTestDetailBridge {
 
-    public void setTestAndDisplayHistory(ResultDto result, JobDto job);
+    public void setTestAndDisplayHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults);
 
-    public void setTestAndDisplayHistory(ResultDto result, BuildDto build);
+    public void setTestAndDisplayHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults);
 
-    public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild);
+    public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults);
 
     public void cancelTestDetailAndDisplayResultList();
 

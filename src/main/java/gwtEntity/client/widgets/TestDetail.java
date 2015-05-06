@@ -23,7 +23,10 @@ package gwtEntity.client.widgets;
 
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -34,6 +37,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -42,10 +46,12 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.BuildDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
 import gwtEntity.client.ResultService;
 import gwtEntity.client.ResultServiceAsync;
 import gwtEntity.client.TestDto;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,6 +78,9 @@ public class TestDetail extends Composite {
     @UiField
     Button cancelButton;
 
+    @UiField
+    ListBox possibleResultListBox;
+
     private SelectionModel<TestDto> selectionModel;
     private ListDataProvider<TestDto> dataProvider;
 
@@ -80,6 +89,7 @@ public class TestDetail extends Composite {
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
+        initListBox();
     }
 
     @UiHandler("cancelButton")
@@ -98,7 +108,8 @@ public class TestDetail extends Composite {
         TextColumn<TestDto> dateColumn = new TextColumn<TestDto>() {
             @Override
             public String getValue(TestDto object) {
-                return object.getDate().toString();
+                DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("d.M.yyyy HH:mm:ss");
+                return dateTimeFormat.format(object.getDate());
             }
         };
 
@@ -136,16 +147,32 @@ public class TestDetail extends Composite {
         pager.setDisplay(dataGrid);
     }
 
-    public void showTestHistory(ResultDto result, ParameterizedBuildDto paramBuild) {
+    private void initListBox() {
+        possibleResultListBox.addItem("All");
+
+        possibleResultListBox.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                filterSelectedResults(possibleResultListBox.getSelectedItemText());
+
+            }
+        });
+    }
+
+    public void showTestHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults) {
         getTestHistory(result, paramBuild);
+        prepareResultsFilter(possibleResults);
     }
 
-    public void showTestHistory(ResultDto result, BuildDto build) {
+    public void showTestHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults) {
         getTestHistory(result, build);
+        prepareResultsFilter(possibleResults);
     }
 
-    public void showTestHistory(ResultDto result, JobDto job) {
+    public void showTestHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults) {
         getTestHistory(result, job);
+        prepareResultsFilter(possibleResults);
     }
 
     private void fillDataGrid(List<TestDto> result) {
@@ -207,4 +234,37 @@ public class TestDetail extends Composite {
         }
     };
 
+    private void refreshPossibleResultListBox(List<PossibleResultDto> possibleResults) {
+        possibleResultListBox.clear();
+
+        possibleResultListBox.addItem("All");
+
+        for (PossibleResultDto possibleResult : possibleResults) {
+            possibleResultListBox.addItem(possibleResult.getName());
+        }
+    }
+
+    private void filterSelectedResults(String selectedResults) {
+        if (selectedResults.equals("All")) {
+            fillDataGrid(dataProvider.getList());
+        } else {
+
+            List<TestDto> auxResultList = new ArrayList<TestDto>();
+
+            for (TestDto auxResult : dataProvider.getList()) {
+                if (auxResult.getResult().equals(selectedResults)) {
+                    auxResultList.add(auxResult);
+                }
+            }
+            ListDataProvider<TestDto> auxListProvider = new ListDataProvider<TestDto>();
+
+            auxListProvider.setList(auxResultList);
+            auxListProvider.addDataDisplay(dataGrid);
+            dataGrid.setRowCount(auxResultList.size());
+        }
+    }
+
+    private void prepareResultsFilter(List<PossibleResultDto> possibleResults) {
+        refreshPossibleResultListBox(possibleResults);
+    }
 }

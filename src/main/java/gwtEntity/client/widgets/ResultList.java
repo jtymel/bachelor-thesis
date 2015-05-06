@@ -136,19 +136,19 @@ public class ResultList extends Composite {
                 List<ResultDto> resultList = getSelectedResults();
                 if (job != null) {
                     for (ResultDto result : resultList) {
-                        resultListTestDetailBridge.setTestAndDisplayHistory(result, job);
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, job, possibleResultsList);
                     }
                 }
 
                 if (build != null) {
                     for (ResultDto result : resultList) {
-                        resultListTestDetailBridge.setTestAndDisplayHistory(result, build);
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, build, possibleResultsList);
                     }
                 }
 
                 if (paramBuild != null) {
                     for (ResultDto result : resultList) {
-                        resultListTestDetailBridge.setTestAndDisplayHistory(result, paramBuild);
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, paramBuild, possibleResultsList);
                     }
                 }
 

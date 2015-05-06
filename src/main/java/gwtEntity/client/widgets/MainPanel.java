@@ -15,6 +15,7 @@ import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
 import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
 import java.util.List;
 import java.util.logging.Logger;
@@ -143,22 +144,22 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     }
 
     @Override
-    public void setTestAndDisplayHistory(ResultDto result, JobDto job) {
-        testDetail.showTestHistory(result, job);
+    public void setTestAndDisplayHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults) {
+        testDetail.showTestHistory(result, job, possibleResults);
         tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
     }
 
     @Override
-    public void setTestAndDisplayHistory(ResultDto result, BuildDto build) {
-        testDetail.showTestHistory(result, build);
+    public void setTestAndDisplayHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults) {
+        testDetail.showTestHistory(result, build, possibleResults);
         tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
     }
 
     @Override
-    public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild) {
-        testDetail.showTestHistory(result, paramBuild);
+    public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults) {
+        testDetail.showTestHistory(result, paramBuild, possibleResults);
         tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
     }
