@@ -160,6 +160,8 @@ public class LabelDetail extends Composite {
                 dataProvider.setList(result);
                 dataProvider.addDataDisplay(dataGrid);
                 dataGrid.setRowCount(result.size());
+
+                markCorrectCategories();
             }
         });
 
@@ -200,5 +202,25 @@ public class LabelDetail extends Composite {
         }
 
         editedLabel = label;
+    }
+
+    private void markCorrectCategories() {
+        for (CategoryDto category : dataProvider.getList()) {
+            selectionModel.setSelected(category, false);
+        }
+        labelService.getCategoriesOfLabel(editedLabel, new AsyncCallback<List<CategoryDto>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onSuccess(List<CategoryDto> result) {
+                for (CategoryDto category : result) {
+                    selectionModel.setSelected(category, true);
+                }
+            }
+        });
     }
 }

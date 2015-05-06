@@ -13,7 +13,7 @@ import javax.ejb.EJB;
  * @author jtymel
  */
 public class LabelServiceImpl extends RemoteServiceServlet implements LabelService {
-    
+
     @EJB
     private LabelServiceBean labelServiceBean;
 
@@ -41,5 +41,10 @@ public class LabelServiceImpl extends RemoteServiceServlet implements LabelServi
     public List<LabelDto> getLabels(JobDto job) {
         return labelServiceBean.getLabels(job);
     }
-    
+
+    @Override
+    public List<CategoryDto> getCategoriesOfLabel(LabelDto labelDto) {
+        return labelServiceBean.getCategoriesOfLabel(labelDto);
+    }
+
 }

@@ -17,7 +17,6 @@ import org.hibernate.Session;
  *
  * @author jtymel
  */
-
 @Stateless
 @Transactional(Transactional.TxType.REQUIRED)
 public class LabelServiceBean {
@@ -37,11 +36,12 @@ public class LabelServiceBean {
 
         return labelDtos;
     }
-    
+
     public List<LabelDto> getLabels(JobDto job) {
-        if (job == null)
+        if (job == null) {
             return null;
-        
+        }
+
         Session session = (Session) em.getDelegate();
 
         List<Label> labels = new ArrayList<Label>(session.createQuery("FROM Label WHERE job_id = :jobID").setParameter("jobID", job.getId()).list());
@@ -53,11 +53,17 @@ public class LabelServiceBean {
 
         return labelDtos;
     }
-    
+
     private LabelDto createLabelDto(Label label) {
         return new LabelDto(label.getId(), label.getName());
     }
-    
+
+    private CategoryDto createCategoryDto(Category category) {
+        CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName());
+        categoryDto.setCategorization(category.getCategorization().getName());
+        return categoryDto;
+    }
+
     public Long saveLabel(LabelDto labelDto, JobDto jobDto) {
         Session session = (Session) em.getDelegate();
         Label label = new Label(labelDto);
@@ -81,7 +87,7 @@ public class LabelServiceBean {
 
         Label storedLabel = (Label) query.uniqueResult();
 
-        if(storedLabel == null) {
+        if (storedLabel == null) {
             session.saveOrUpdate(label);
             return label.getId();
         }
@@ -91,7 +97,7 @@ public class LabelServiceBean {
 
     public void deleteLabel(LabelDto labelDto) {
         Session session = (Session) em.getDelegate();
-        
+
         Label label = new Label(labelDto);
         em.remove(em.contains(label) ? label : em.merge(label));
     }
@@ -107,7 +113,7 @@ public class LabelServiceBean {
 
         for (CategoryDto categoryDto : categoriesDto) {
             Query query2 = session.createQuery("from Category WHERE id = :categoryid")
-                .setParameter("categoryid", categoryDto.getId());
+                    .setParameter("categoryid", categoryDto.getId());
             Category category = (Category) query2.uniqueResult();
             addLabelToCategory(label, category);
             categories.add(category);
@@ -118,11 +124,32 @@ public class LabelServiceBean {
         session.saveOrUpdate(label);
     }
 
-    private void addLabelToCategory(Label label, Category category){
+    private void addLabelToCategory(Label label, Category category) {
         Session session = (Session) em.getDelegate();
 
         category.addLabel(label);
         session.saveOrUpdate(category);
+    }
+
+    public List<CategoryDto> getCategoriesOfLabel(LabelDto labelDto) {
+        if (labelDto == null) {
+            return null;
+        }
+
+        Session session = (Session) em.getDelegate();
+
+        Query query = session.createQuery("from Label WHERE id = :labelid")
+                .setParameter("labelid", labelDto.getId());
+        Label label = (Label) query.uniqueResult();
+
+        List<Category> categories = label.getCategories();
+        List<CategoryDto> categoryDtos = new ArrayList<CategoryDto>(categories.size());
+
+        for (Category category : categories) {
+            categoryDtos.add(createCategoryDto(category));
+        }
+
+        return categoryDtos;
     }
 
 }
