@@ -177,6 +177,10 @@ public class JobList extends Composite {
                         "Results have been correctly downloaded.").center();
             }
         });
+
+        CustomWidgets.alertWidget("Results download",
+                "Results are being downloaded.").center();
+
     }
 
     private void deleteJob(JobDto jobDTO) {
