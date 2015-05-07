@@ -86,7 +86,7 @@ public class JenkinsDownloader {
 
                     if (!job.getBuilds().contains(build)) {
                         build.setJob(job);
-                        LOGGER.log(Level.SEVERE, "Build: " + build.getName() + build.getUrl());
+                        LOGGER.log(Level.INFO, "Downloaded build " + build.getName() + " with URL " + build.getUrl());
                         buildServiceBean.saveBuild(build);
                         builds.add(build);
                     }
@@ -167,14 +167,17 @@ public class JenkinsDownloader {
                 StartElement startElement = event.asStartElement();
 
                 if (startElement.getName().getLocalPart().equals("run")) {
-                    ParameterizedBuild paramBuild = getParamBuild(event, eventReader);
-                    paramBuild = getMachineAndDateTimeOfParamBuild(paramBuild);
-                    paramBuild.setBuild(build);
-                    paramBuild.setLabel(getLabelName(paramBuild));
-                    saveLabel(paramBuild);
+                    ParameterizedBuild paramBuild = getParamBuild(event, eventReader, build);
 
-                    paramBuildServiceBean.saveParamBuild(paramBuild);
-                    paramBuilds.add(paramBuild);
+                    if (paramBuild != null) {
+                        paramBuild = getMachineAndDateTimeOfParamBuild(paramBuild);
+                        paramBuild.setBuild(build);
+                        paramBuild.setLabel(getLabelName(paramBuild));
+                        saveLabel(paramBuild);
+
+                        paramBuildServiceBean.saveParamBuild(paramBuild);
+                        paramBuilds.add(paramBuild);
+                    }
                 }
 
             }
@@ -183,20 +186,26 @@ public class JenkinsDownloader {
         return paramBuilds;
     }
 
-    private static ParameterizedBuild getParamBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
+    private static ParameterizedBuild getParamBuild(XMLEvent event, XMLEventReader eventReader, Build build) throws XMLStreamException {
         ParameterizedBuild paramBuild = null;
 
         while (eventReader.hasNext()) {
             event = eventReader.nextEvent();
 
             if (event.asStartElement().getName().getLocalPart().equals("number")) {
+
+                String paramBuildNumber = eventReader.getElementText();
+
+                if (!paramBuildNumber.equals(build.getName())) {
+                    return null;
+                }
                 paramBuild = new ParameterizedBuild();
-                paramBuild.setName(eventReader.getElementText());
+                paramBuild.setName(paramBuildNumber);
             }
 
             if (event.asStartElement().getName().getLocalPart().equals("url")) {
                 paramBuild.setUrl(eventReader.getElementText());
-                LOGGER.log(Level.INFO, "Downloaded build with url: " + paramBuild.getUrl());
+                LOGGER.log(Level.FINER, "Downloaded parameterized build with url: " + paramBuild.getUrl());
                 return paramBuild;
             }
         }
@@ -226,7 +235,7 @@ public class JenkinsDownloader {
             return testResults;
 
         } catch (IOException | XMLStreamException ex) {
-            Logger.getLogger(JenkinsDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.WARNING, "Results of parameterized build " + paramBuild.getUrl() + " were not found");
         }
 
         return null;
