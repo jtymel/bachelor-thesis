@@ -222,7 +222,8 @@ public class JobDetail extends Composite {
 
     private void getParameterizations() {
         if (editedJob == null) {
-            dataProvider.getList().clear();
+            dataProvider = new ListDataProvider<LabelDto>();
+            dataProvider.addDataDisplay(dataGrid);
         } else {
             labelService.getLabels(editedJob, new AsyncCallback<List<LabelDto>>() {
 
