@@ -34,6 +34,15 @@ public class TestDto implements Serializable {
     private String result;
     private String machine;
     private float duration;
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getName() {
         return name;

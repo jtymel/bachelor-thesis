@@ -135,10 +135,18 @@ public class TestDetail extends Composite {
             }
         };
 
+        TextColumn<TestDto> urlColumn = new TextColumn<TestDto>() {
+            @Override
+            public String getValue(TestDto object) {
+                return object.getUrl();
+            }
+        };
+
         dataGrid.addColumn(dateColumn, "Date");
         dataGrid.addColumn(resultColumn, "Result");
         dataGrid.addColumn(machineColumn, "Machine");
         dataGrid.addColumn(durationColumn, "Duration [sec]");
+        dataGrid.addColumn(urlColumn, "URL");
     }
 
     private void initPager() {

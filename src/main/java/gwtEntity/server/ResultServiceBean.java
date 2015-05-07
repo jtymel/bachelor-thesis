@@ -50,6 +50,17 @@ public class ResultServiceBean {
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
 
+    private static final int QUERY_TEST_DTO_POSITION_DATE = 0;
+    private static final int QUERY_TEST_DTO_POSITION_RESULT = 1;
+    private static final int QUERY_TEST_DTO_POSITION_MACHINE = 2;
+    private static final int QUERY_TEST_DTO_POSITION_DURATION = 3;
+    private static final int QUERY_TEST_DTO_POSITION_URL = 4;
+
+    private static final int QUERY_RESULT_DTO_POSITION_TEST_NAME = 0;
+    private static final int QUERY_RESULT_DTO_POSITION_TEST_CASE_NAME = 1;
+    private static final int QUERY_RESULT_DTO_POSITION_POSSIBLE_RESULT = 2;
+    private static final int QUERY_RESULT_DTO_POSITION_COUNT_OF_RESULTS = 3;
+
     public List<PossibleResultDto> getPossibleResults() {
         List<PossibleResult> possibleResults = getPlainPossibleResults();
         List<PossibleResultDto> possibleResultDtos = new ArrayList<PossibleResultDto>(possibleResults.size());
@@ -173,18 +184,18 @@ public class ResultServiceBean {
 
     private ResultDto createResultDto(Object[] result) {
         ResultDto resultDto = new ResultDto();
-        resultDto.setTest(result[0].toString());
-        resultDto.setTestCase(result[1].toString());
+        resultDto.setTest(result[QUERY_RESULT_DTO_POSITION_TEST_NAME].toString());
+        resultDto.setTestCase(result[QUERY_RESULT_DTO_POSITION_TEST_CASE_NAME].toString());
 
         Map<Long, Integer> testResults = new HashMap<Long, Integer>();
-        testResults.put(Long.parseLong(result[2].toString()), Integer.parseInt(result[3].toString()));
+        testResults.put(Long.parseLong(result[QUERY_RESULT_DTO_POSITION_POSSIBLE_RESULT].toString()), Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_COUNT_OF_RESULTS].toString()));
 
         resultDto.setResults(testResults);
         return resultDto;
     }
 
     private String getTestHistoryQuery() {
-        return "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration"
+        return "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
                 + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
                 + " WHERE"
                 + "	r.possibleresult_id = pr.id"
@@ -261,10 +272,11 @@ public class ResultServiceBean {
 
     private TestDto createTestDto(Object[] test) {
         TestDto testDto = new TestDto();
-        testDto.setDate((Date) test[0]);
-        testDto.setResult(test[1].toString());
-        testDto.setMachine(test[2].toString());
-        testDto.setDuration(Float.parseFloat(test[3].toString()));
+        testDto.setDate((Date) test[QUERY_TEST_DTO_POSITION_DATE]);
+        testDto.setResult(test[QUERY_TEST_DTO_POSITION_RESULT].toString());
+        testDto.setMachine(test[QUERY_TEST_DTO_POSITION_MACHINE].toString());
+        testDto.setDuration(Float.parseFloat(test[QUERY_TEST_DTO_POSITION_DURATION].toString()));
+        testDto.setUrl(test[QUERY_TEST_DTO_POSITION_URL].toString());
 
         return testDto;
     }
