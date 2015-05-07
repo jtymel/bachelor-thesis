@@ -102,7 +102,6 @@ public class TestDetail extends Composite {
     }
 
     private void initDatagrid() {
-        selectionModel = new SingleSelectionModel<TestDto>(keyProvider);
         dataGrid.setSelectionModel(selectionModel);
 
         TextColumn<TestDto> dateColumn = new TextColumn<TestDto>() {
@@ -234,13 +233,6 @@ public class TestDetail extends Composite {
             }
         });
     }
-
-    ProvidesKey<TestDto> keyProvider = new ProvidesKey<TestDto>() {
-        @Override
-        public Object getKey(TestDto test) {
-            return (test == null) ? null : test.hashCode();
-        }
-    };
 
     private void refreshPossibleResultListBox(List<PossibleResultDto> possibleResults) {
         possibleResultListBox.clear();
