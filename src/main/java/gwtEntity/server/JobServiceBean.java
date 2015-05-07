@@ -37,9 +37,7 @@ public class JobServiceBean {
     }
 
     public List<JobDto> getJobs() {
-        Session session = (Session) em.getDelegate();
-
-        List<Job> jobs = new ArrayList<Job>(session.createQuery("from Job").list());
+        List<Job> jobs = getPlainJobs();
         List<JobDto> jobDTOs = new ArrayList<JobDto>(jobs != null ? jobs.size() : 0);
 
         for (Job job : jobs) {
@@ -130,6 +128,11 @@ public class JobServiceBean {
             session.saveOrUpdate(category);
         }
 
+    }
+
+    public List<Job> getPlainJobs() {
+        Session session = (Session) em.getDelegate();
+        return new ArrayList<Job>(session.createQuery("from Job").list());
     }
 
 }

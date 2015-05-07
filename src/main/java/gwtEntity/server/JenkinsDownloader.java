@@ -50,17 +50,18 @@ public class JenkinsDownloader {
     private EntityManager em;
 
     public void downloadBuilds(final List<JobDto> jobs) {
-        for (JobDto job : jobs) {
+        for (JobDto jobDto : jobs) {
+            Job job = jobServiceBean.getPlainJob(jobDto);
             List<Build> builds = downloadBuilds(job);
-            jobServiceBean.addCategoriesToParamBuild(job);
+            jobServiceBean.addCategoriesToParamBuild(jobDto);
         }
 
     }
 
-    public List<Build> downloadBuilds(final JobDto jobDto) {
+    public List<Build> downloadBuilds(final Job job) {
         List<Build> builds = null;
         try {
-            builds = findBuilds(jobDto);
+            builds = findBuilds(job);
             List<ParameterizedBuild> paramBuilds = downloadParameterizedBuilds(builds);
         } catch (IOException | XMLStreamException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
@@ -69,8 +70,8 @@ public class JenkinsDownloader {
         return builds;
     }
 
-    public List<Build> findBuilds(JobDto jobDto) throws MalformedURLException, IOException, XMLStreamException {
-        XMLEventReader eventReader = getEventReader(jobDto.getUrl() + "/api/xml");
+    public List<Build> findBuilds(Job job) throws MalformedURLException, IOException, XMLStreamException {
+        XMLEventReader eventReader = getEventReader(job.getUrl() + "/api/xml");
 
         List<Build> builds = new ArrayList<Build>();
         while (eventReader.hasNext()) {
@@ -81,10 +82,10 @@ public class JenkinsDownloader {
 
                 if (startElement.getName().getLocalPart().equals("build")) {
                     Build build = getBuild(event, eventReader);
-                    Job aux = jobServiceBean.getPlainJob(jobDto);
+//                    Job aux = jobServiceBean.getPlainJob(jobDto);
 
-                    if (!aux.getBuilds().contains(build)) {
-                        build.setJob(aux);
+                    if (!job.getBuilds().contains(build)) {
+                        build.setJob(job);
                         LOGGER.log(Level.SEVERE, "Build: " + build.getName() + build.getUrl());
                         buildServiceBean.saveBuild(build);
                         builds.add(build);
