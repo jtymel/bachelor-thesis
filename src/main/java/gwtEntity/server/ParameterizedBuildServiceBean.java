@@ -22,9 +22,9 @@
 package gwtEntity.server;
 
 import gwtEntity.server.entity.ParameterizedBuild;
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.JobDto;
-import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.common.objects.BuildDto;
+import gwtEntity.common.objects.JobDto;
+import gwtEntity.common.objects.ParameterizedBuildDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;

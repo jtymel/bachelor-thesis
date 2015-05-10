@@ -1,4 +1,4 @@
-package gwtEntity.client;
+package gwtEntity.common.objects;
 
 import gwtEntity.server.entity.Job;
 import gwtEntity.server.entity.ParameterizedBuild;

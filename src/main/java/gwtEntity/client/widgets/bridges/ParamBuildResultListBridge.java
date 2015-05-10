@@ -21,7 +21,7 @@
  */
 package gwtEntity.client.widgets.bridges;
 
-import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.common.objects.ParameterizedBuildDto;
 
 /**
  *

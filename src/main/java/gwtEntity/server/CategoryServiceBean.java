@@ -2,8 +2,8 @@ package gwtEntity.server;
 
 import gwtEntity.server.entity.Category;
 import gwtEntity.server.entity.Categorization;
-import gwtEntity.client.CategorizationDto;
-import gwtEntity.client.CategoryDto;
+import gwtEntity.common.objects.CategorizationDto;
+import gwtEntity.common.objects.CategoryDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;

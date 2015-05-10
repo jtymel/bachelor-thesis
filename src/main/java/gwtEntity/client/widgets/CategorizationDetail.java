@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import gwtEntity.client.CategorizationDto;
+import gwtEntity.common.objects.CategorizationDto;
 import gwtEntity.common.services.CategorizationService;
 import gwtEntity.common.services.CategorizationServiceAsync;
 

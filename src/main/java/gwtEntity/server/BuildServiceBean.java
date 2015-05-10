@@ -22,8 +22,8 @@
 package gwtEntity.server;
 
 import gwtEntity.server.entity.Build;
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.JobDto;
+import gwtEntity.common.objects.BuildDto;
+import gwtEntity.common.objects.JobDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;

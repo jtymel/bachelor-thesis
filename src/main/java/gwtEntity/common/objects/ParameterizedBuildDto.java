@@ -1,5 +1,6 @@
-package gwtEntity.client;
+package gwtEntity.common.objects;
 
+import gwtEntity.common.objects.BuildDto;
 import gwtEntity.server.entity.Build;
 import gwtEntity.server.entity.Category;
 import gwtEntity.server.entity.Result;

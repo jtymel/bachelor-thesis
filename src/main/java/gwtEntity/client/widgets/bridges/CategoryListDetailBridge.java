@@ -1,6 +1,6 @@
 package gwtEntity.client.widgets.bridges;
 
-import gwtEntity.client.CategoryDto;
+import gwtEntity.common.objects.CategoryDto;
 
 /**
  *

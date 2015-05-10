@@ -2,7 +2,7 @@ package gwtEntity.server.entity;
 
 import gwtEntity.server.entity.Category;
 import gwtEntity.server.entity.Build;
-import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.common.objects.ParameterizedBuildDto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

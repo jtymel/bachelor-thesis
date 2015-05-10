@@ -22,10 +22,10 @@
 package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gwtEntity.client.BuildDto;
+import gwtEntity.common.objects.BuildDto;
 import gwtEntity.common.services.JenkinsService;
-import gwtEntity.client.JobDto;
-import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.common.objects.JobDto;
+import gwtEntity.common.objects.ParameterizedBuildDto;
 import java.util.List;
 import javax.ejb.EJB;
 

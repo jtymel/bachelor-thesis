@@ -1,4 +1,4 @@
-package gwtEntity.client;
+package gwtEntity.common.objects;
 
 import java.io.Serializable;
 
@@ -6,15 +6,14 @@ import java.io.Serializable;
  *
  * @author jtymel
  */
-public class CategoryDto implements Serializable {
+public class CategorizationDto implements Serializable {
     private Long id;
     private String name;
-    private String categorization;
 
-    public CategoryDto() {
+    public CategorizationDto() {
     }
 
-    public CategoryDto(Long id, String name) {
+    public CategorizationDto(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -26,6 +25,7 @@ public class CategoryDto implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+    
 
     public String getName() {
         return name;
@@ -34,13 +34,7 @@ public class CategoryDto implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getCategorization() {
-        return categorization;
-    }
-
-    public void setCategorization(String categorization) {
-        this.categorization = categorization;
-    }
-
+    
+    
+    
 }

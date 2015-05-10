@@ -23,8 +23,8 @@ package gwtEntity.common.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.common.objects.BuildDto;
+import gwtEntity.common.objects.ParameterizedBuildDto;
 import java.util.List;
 
 /**

@@ -23,7 +23,7 @@ package gwtEntity.server.entity;
 
 import gwtEntity.server.entity.Category;
 import gwtEntity.server.entity.Build;
-import gwtEntity.client.JobDto;
+import gwtEntity.common.objects.JobDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;

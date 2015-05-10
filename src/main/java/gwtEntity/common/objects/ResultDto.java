@@ -1,5 +1,6 @@
-package gwtEntity.client;
+package gwtEntity.common.objects;
 
+import gwtEntity.common.objects.PossibleResultDto;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

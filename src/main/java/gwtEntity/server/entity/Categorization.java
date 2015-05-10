@@ -1,6 +1,6 @@
 package gwtEntity.server.entity;
 
-import gwtEntity.client.CategorizationDto;
+import gwtEntity.common.objects.CategorizationDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;

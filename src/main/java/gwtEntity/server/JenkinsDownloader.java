@@ -4,7 +4,7 @@ import gwtEntity.server.entity.ParameterizedBuild;
 import gwtEntity.server.entity.Label;
 import gwtEntity.server.entity.Job;
 import gwtEntity.server.entity.Build;
-import gwtEntity.client.JobDto;
+import gwtEntity.common.objects.JobDto;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

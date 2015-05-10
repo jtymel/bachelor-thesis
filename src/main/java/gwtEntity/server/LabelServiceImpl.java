@@ -1,9 +1,9 @@
 package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gwtEntity.client.CategoryDto;
-import gwtEntity.client.JobDto;
-import gwtEntity.client.LabelDto;
+import gwtEntity.common.objects.CategoryDto;
+import gwtEntity.common.objects.JobDto;
+import gwtEntity.common.objects.LabelDto;
 import gwtEntity.common.services.LabelService;
 import java.util.List;
 import javax.ejb.EJB;

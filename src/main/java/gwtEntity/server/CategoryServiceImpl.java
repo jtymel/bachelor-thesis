@@ -1,8 +1,8 @@
 package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gwtEntity.client.CategorizationDto;
-import gwtEntity.client.CategoryDto;
+import gwtEntity.common.objects.CategorizationDto;
+import gwtEntity.common.objects.CategoryDto;
 import gwtEntity.common.services.CategoryService;
 import java.util.List;
 import javax.ejb.EJB;

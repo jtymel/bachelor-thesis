@@ -23,7 +23,7 @@ package gwtEntity.common.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import gwtEntity.client.CategorizationDto;
+import gwtEntity.common.objects.CategorizationDto;
 import java.util.List;
 
 /**

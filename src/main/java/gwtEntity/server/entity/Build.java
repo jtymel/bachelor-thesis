@@ -1,6 +1,6 @@
 package gwtEntity.server.entity;
 
-import gwtEntity.client.BuildDto;
+import gwtEntity.common.objects.BuildDto;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;

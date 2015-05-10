@@ -22,9 +22,9 @@
 package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import gwtEntity.client.BuildDto;
+import gwtEntity.common.objects.BuildDto;
 import gwtEntity.common.services.BuildService;
-import gwtEntity.client.JobDto;
+import gwtEntity.common.objects.JobDto;
 import java.util.List;
 import javax.ejb.EJB;
 

@@ -2,7 +2,7 @@ package gwtEntity.server.entity;
 
 import gwtEntity.server.entity.Job;
 import gwtEntity.server.entity.Category;
-import gwtEntity.client.LabelDto;
+import gwtEntity.common.objects.LabelDto;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;

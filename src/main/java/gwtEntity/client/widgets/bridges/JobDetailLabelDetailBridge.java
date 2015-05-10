@@ -1,7 +1,7 @@
 package gwtEntity.client.widgets.bridges;
 
-import gwtEntity.client.JobDto;
-import gwtEntity.client.LabelDto;
+import gwtEntity.common.objects.JobDto;
+import gwtEntity.common.objects.LabelDto;
 
 /**
  *

@@ -50,7 +50,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.common.services.JenkinsService;
 import gwtEntity.common.services.JenkinsServiceAsync;
-import gwtEntity.client.JobDto;
+import gwtEntity.common.objects.JobDto;
 import gwtEntity.common.services.JobService;
 import gwtEntity.common.services.JobServiceAsync;
 import java.util.ArrayList;

@@ -21,11 +21,11 @@
  */
 package gwtEntity.client.widgets.bridges;
 
-import gwtEntity.client.BuildDto;
-import gwtEntity.client.JobDto;
-import gwtEntity.client.ParameterizedBuildDto;
-import gwtEntity.client.PossibleResultDto;
-import gwtEntity.client.ResultDto;
+import gwtEntity.common.objects.BuildDto;
+import gwtEntity.common.objects.JobDto;
+import gwtEntity.common.objects.ParameterizedBuildDto;
+import gwtEntity.common.objects.PossibleResultDto;
+import gwtEntity.common.objects.ResultDto;
 import java.util.List;
 
 /**

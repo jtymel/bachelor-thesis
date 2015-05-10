@@ -20,7 +20,7 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
-import gwtEntity.client.CategoryDto;
+import gwtEntity.common.objects.CategoryDto;
 import gwtEntity.common.services.CategoryService;
 import gwtEntity.common.services.CategoryServiceAsync;
 import java.util.ArrayList;
