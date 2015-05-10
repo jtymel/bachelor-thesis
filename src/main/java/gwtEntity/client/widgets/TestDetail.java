@@ -22,11 +22,17 @@
 package gwtEntity.client.widgets;
 
 import com.google.gwt.cell.client.NumberCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -40,9 +46,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
-import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.BuildDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
@@ -92,6 +96,14 @@ public class TestDetail extends Composite {
         initListBox();
     }
 
+    public interface SimpleCellTemplates extends SafeHtmlTemplates {
+
+        @Template("<a href=\"{0}\" target=\"_blank\">{1}</a>")
+        SafeHtml anchor(SafeUri href, String name);
+    }
+
+    static final SimpleCellTemplates cell = GWT.create(SimpleCellTemplates.class);
+
     @UiHandler("cancelButton")
     void onCancelButtonClick(ClickEvent event) {
         resultListTestDetailBridge.cancelTestDetailAndDisplayResultList();
@@ -134,10 +146,11 @@ public class TestDetail extends Composite {
             }
         };
 
-        TextColumn<TestDto> urlColumn = new TextColumn<TestDto>() {
+        Column urlColumn = new Column<TestDto, SafeHtml>(new SafeHtmlCell()) {
             @Override
-            public String getValue(TestDto object) {
-                return object.getUrl();
+            public SafeHtml getValue(TestDto object) {
+                SafeUri href = UriUtils.fromSafeConstant(object.getUrl() + "testReport");
+                return cell.anchor(href, object.getUrl());
             }
         };
 
