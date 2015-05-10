@@ -79,6 +79,9 @@ public class ResultList extends Composite {
     @UiField
     ListBox possibleResultListBox;
 
+    @UiField
+    ListBox categoryListBox;
+
     private SelectionModel<ResultDto> selectionModel;
     private ListDataProvider<ResultDto> dataProvider;
     private ParameterizedBuildDto paramBuild;
@@ -91,7 +94,8 @@ public class ResultList extends Composite {
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
-        initListBox();
+        initResultsListBox();
+        initCategoryListBox();
     }
 
     @UiHandler("cancelButton")
@@ -162,7 +166,7 @@ public class ResultList extends Composite {
         pager.setDisplay(dataGrid);
     }
 
-    private void initListBox() {
+    private void initResultsListBox() {
         possibleResultListBox.addItem("All");
 
         possibleResultListBox.addChangeHandler(new ChangeHandler() {
@@ -170,6 +174,21 @@ public class ResultList extends Composite {
             @Override
             public void onChange(ChangeEvent event) {
                 filterSelectedResults(possibleResultListBox.getSelectedItemText());
+
+            }
+        });
+    }
+
+    private void initCategoryListBox() {
+        categoryListBox.addItem("All");
+
+        loadCategories();
+
+        categoryListBox.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                filterSelectedResults(categoryListBox.getSelectedItemText());
 
             }
         });
@@ -359,6 +378,10 @@ public class ResultList extends Composite {
         this.paramBuild = null;
         this.build = null;
         this.job = job;
+    }
+
+    private void loadCategories() {
+
     }
 
     ProvidesKey<ResultDto> keyProvider = new ProvidesKey<ResultDto>() {
