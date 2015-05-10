@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2014, Red Hat, Inc., and individual contributors
+ * Copyright 2015, Red Hat, Inc., and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  * 
@@ -19,11 +19,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.common.service;
+package gwtEntity.common.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import gwtEntity.client.CategoryDto;
+import gwtEntity.client.BuildDto;
 import gwtEntity.client.JobDto;
 import java.util.List;
 
@@ -31,11 +31,8 @@ import java.util.List;
  *
  * @author jtymel
  */
-@RemoteServiceRelativePath("jobservice")
-public interface JobService extends RemoteService {
-    public List<JobDto> getJobs();
-    public Long saveJob(JobDto jobDTO);
-    public void deleteJob(JobDto jobDTO);
-    public void addCategoriesToLabel(JobDto job, List<CategoryDto> categories);
-    public void addCategoriesToParamBuild(JobDto job);
+@RemoteServiceRelativePath("buildservice")
+public interface BuildService extends RemoteService {
+    public List<BuildDto> getBuilds(JobDto jobDto);
+    public Long saveBuild(BuildDto BuildDto);
 }

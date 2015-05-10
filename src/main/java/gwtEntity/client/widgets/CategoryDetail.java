@@ -15,13 +15,13 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import gwtEntity.client.CategorizationDto;
-import gwtEntity.common.service.CategorizationService;
-import gwtEntity.common.service.CategorizationServiceAsync;
+import gwtEntity.common.services.CategorizationService;
+import gwtEntity.common.services.CategorizationServiceAsync;
 import gwtEntity.client.CategoryDto;
-import gwtEntity.common.service.CategoryService;
-import gwtEntity.common.service.CategoryServiceAsync;
-import gwtEntity.common.service.CategorizationServiceAsync;
-import gwtEntity.common.service.CategoryServiceAsync;
+import gwtEntity.common.services.CategoryService;
+import gwtEntity.common.services.CategoryServiceAsync;
+import gwtEntity.common.services.CategorizationServiceAsync;
+import gwtEntity.common.services.CategoryServiceAsync;
 import java.util.List;
 
 /**

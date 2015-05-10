@@ -22,7 +22,7 @@
 package gwtEntity.server;
 
 
-import gwtEntity.common.service.JobService;
+import gwtEntity.common.services.JobService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;

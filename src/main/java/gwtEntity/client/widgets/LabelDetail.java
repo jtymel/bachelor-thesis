@@ -23,12 +23,12 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import gwtEntity.client.CategoryDto;
-import gwtEntity.common.service.CategoryService;
-import gwtEntity.common.service.CategoryServiceAsync;
+import gwtEntity.common.services.CategoryService;
+import gwtEntity.common.services.CategoryServiceAsync;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
-import gwtEntity.common.service.LabelService;
-import gwtEntity.common.service.LabelServiceAsync;
+import gwtEntity.common.services.LabelService;
+import gwtEntity.common.services.LabelServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 

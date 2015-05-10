@@ -42,8 +42,8 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.CategorizationDto;
-import gwtEntity.common.service.CategorizationService;
-import gwtEntity.common.service.CategorizationServiceAsync;
+import gwtEntity.common.services.CategorizationService;
+import gwtEntity.common.services.CategorizationServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 

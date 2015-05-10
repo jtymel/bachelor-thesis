@@ -48,11 +48,11 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.JobDto;
-import gwtEntity.common.service.JobService;
-import gwtEntity.common.service.JobServiceAsync;
+import gwtEntity.common.services.JobService;
+import gwtEntity.common.services.JobServiceAsync;
 import gwtEntity.client.LabelDto;
-import gwtEntity.common.service.LabelService;
-import gwtEntity.common.service.LabelServiceAsync;
+import gwtEntity.common.services.LabelService;
+import gwtEntity.common.services.LabelServiceAsync;
 import java.util.List;
 
 /**

@@ -23,9 +23,9 @@ package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.BuildDto;
-import gwtEntity.common.service.BuildService;
+import gwtEntity.common.services.BuildService;
 import gwtEntity.client.ParameterizedBuildDto;
-import gwtEntity.common.service.ParameterizedBuildService;
+import gwtEntity.common.services.ParameterizedBuildService;
 import java.util.List;
 import javax.ejb.EJB;
 

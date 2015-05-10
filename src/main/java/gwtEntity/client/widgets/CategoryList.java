@@ -21,8 +21,8 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.CategoryDto;
-import gwtEntity.common.service.CategoryService;
-import gwtEntity.common.service.CategoryServiceAsync;
+import gwtEntity.common.services.CategoryService;
+import gwtEntity.common.services.CategoryServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 

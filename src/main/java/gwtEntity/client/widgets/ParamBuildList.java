@@ -44,8 +44,8 @@ import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.BuildDto;
 import gwtEntity.client.ParameterizedBuildDto;
-import gwtEntity.common.service.ParameterizedBuildService;
-import gwtEntity.common.service.ParameterizedBuildServiceAsync;
+import gwtEntity.common.services.ParameterizedBuildService;
+import gwtEntity.common.services.ParameterizedBuildServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 

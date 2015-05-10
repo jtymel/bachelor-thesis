@@ -4,7 +4,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.LabelDto;
-import gwtEntity.common.service.LabelService;
+import gwtEntity.common.services.LabelService;
 import java.util.List;
 import javax.ejb.EJB;
 

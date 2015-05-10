@@ -44,11 +44,11 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.BuildDto;
-import gwtEntity.common.service.BuildService;
+import gwtEntity.common.services.BuildService;
 import gwtEntity.client.JobDto;
-import gwtEntity.common.service.ResultService;
-import gwtEntity.common.service.BuildServiceAsync;
-import gwtEntity.common.service.ResultServiceAsync;
+import gwtEntity.common.services.ResultService;
+import gwtEntity.common.services.BuildServiceAsync;
+import gwtEntity.common.services.ResultServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 
