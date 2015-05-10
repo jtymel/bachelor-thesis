@@ -19,19 +19,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.client;
+package gwtEntity.common.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import gwtEntity.client.BuildDto;
+import gwtEntity.client.JobDto;
 import java.util.List;
 
 /**
  *
  * @author jtymel
  */
-@RemoteServiceRelativePath("categorizationservice")
-public interface CategorizationService extends RemoteService {
-    public List<CategorizationDto> getCategorizations();
-    public Long saveCategorization(CategorizationDto categorization);
-    public void deleteCategorization(CategorizationDto categorization);
+@RemoteServiceRelativePath("buildservice")
+public interface BuildService extends RemoteService {
+    public List<BuildDto> getBuilds(JobDto jobDto);
+    public Long saveBuild(BuildDto BuildDto);
 }

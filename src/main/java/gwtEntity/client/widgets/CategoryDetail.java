@@ -7,21 +7,20 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.ListDataProvider;
 import gwtEntity.client.CategorizationDto;
-import gwtEntity.client.CategorizationService;
-import gwtEntity.client.CategorizationServiceAsync;
+import gwtEntity.common.service.CategorizationService;
+import gwtEntity.common.service.CategorizationServiceAsync;
 import gwtEntity.client.CategoryDto;
-import gwtEntity.client.CategoryService;
-import gwtEntity.client.CategoryServiceAsync;
-import java.util.ArrayList;
+import gwtEntity.common.service.CategoryService;
+import gwtEntity.common.service.CategoryServiceAsync;
+import gwtEntity.common.service.CategorizationServiceAsync;
+import gwtEntity.common.service.CategoryServiceAsync;
 import java.util.List;
 
 /**

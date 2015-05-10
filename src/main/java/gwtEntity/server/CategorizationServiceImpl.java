@@ -23,7 +23,7 @@ package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.CategorizationDto;
-import gwtEntity.client.CategorizationService;
+import gwtEntity.common.service.CategorizationService;
 import java.util.List;
 import javax.ejb.EJB;
 

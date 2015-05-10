@@ -23,7 +23,7 @@ package gwtEntity.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.BuildDto;
-import gwtEntity.client.JenkinsService;
+import gwtEntity.common.service.JenkinsService;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
 import java.util.List;

@@ -1,7 +1,10 @@
-package gwtEntity.client;
+package gwtEntity.common.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import gwtEntity.client.CategoryDto;
+import gwtEntity.client.JobDto;
+import gwtEntity.client.LabelDto;
 import java.util.List;
 
 /**

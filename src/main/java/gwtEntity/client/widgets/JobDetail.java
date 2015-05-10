@@ -35,7 +35,6 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -46,11 +45,11 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import gwtEntity.client.JobDto;
-import gwtEntity.client.JobService;
-import gwtEntity.client.JobServiceAsync;
+import gwtEntity.common.service.JobService;
+import gwtEntity.common.service.JobServiceAsync;
 import gwtEntity.client.LabelDto;
-import gwtEntity.client.LabelService;
-import gwtEntity.client.LabelServiceAsync;
+import gwtEntity.common.service.LabelService;
+import gwtEntity.common.service.LabelServiceAsync;
 import java.util.List;
 
 /**

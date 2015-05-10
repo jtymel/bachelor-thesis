@@ -3,7 +3,7 @@ package gwtEntity.server;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
-import gwtEntity.client.CategoryService;
+import gwtEntity.common.service.CategoryService;
 import java.util.List;
 import javax.ejb.EJB;
 

@@ -27,7 +27,7 @@ import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;
 import gwtEntity.client.PossibleResultDto;
 import gwtEntity.client.ResultDto;
-import gwtEntity.client.ResultService;
+import gwtEntity.common.service.ResultService;
 import gwtEntity.client.TestDto;
 import java.util.List;
 import javax.ejb.EJB;
