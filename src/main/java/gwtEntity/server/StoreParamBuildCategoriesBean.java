@@ -21,6 +21,7 @@
  */
 package gwtEntity.server;
 
+import gwtEntity.server.entity.ParameterizedBuild;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

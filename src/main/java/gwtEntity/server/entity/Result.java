@@ -1,5 +1,8 @@
-package gwtEntity.server;
+package gwtEntity.server.entity;
 
+import gwtEntity.server.entity.ParameterizedBuild;
+import gwtEntity.server.entity.Test;
+import gwtEntity.server.entity.PossibleResult;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Embeddable;

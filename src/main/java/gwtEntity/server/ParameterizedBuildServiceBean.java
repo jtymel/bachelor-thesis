@@ -21,6 +21,7 @@
  */
 package gwtEntity.server;
 
+import gwtEntity.server.entity.ParameterizedBuild;
 import gwtEntity.client.BuildDto;
 import gwtEntity.client.JobDto;
 import gwtEntity.client.ParameterizedBuildDto;

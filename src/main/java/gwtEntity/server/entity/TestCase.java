@@ -1,5 +1,6 @@
-package gwtEntity.server;
+package gwtEntity.server.entity;
 
+import gwtEntity.server.entity.Test;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;

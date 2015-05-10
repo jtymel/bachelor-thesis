@@ -1,7 +1,7 @@
 package gwtEntity.client;
 
-import gwtEntity.server.Job;
-import gwtEntity.server.ParameterizedBuild;
+import gwtEntity.server.entity.Job;
+import gwtEntity.server.entity.ParameterizedBuild;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.ManyToOne;

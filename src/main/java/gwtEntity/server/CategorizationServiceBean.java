@@ -1,5 +1,6 @@
 package gwtEntity.server;
 
+import gwtEntity.server.entity.Categorization;
 import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.JobDto;
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 package gwtEntity.client;
 
-import gwtEntity.server.Build;
-import gwtEntity.server.Category;
-import gwtEntity.server.Result;
+import gwtEntity.server.entity.Build;
+import gwtEntity.server.entity.Category;
+import gwtEntity.server.entity.Result;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

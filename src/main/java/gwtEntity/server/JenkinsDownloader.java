@@ -1,5 +1,9 @@
 package gwtEntity.server;
 
+import gwtEntity.server.entity.ParameterizedBuild;
+import gwtEntity.server.entity.Label;
+import gwtEntity.server.entity.Job;
+import gwtEntity.server.entity.Build;
 import gwtEntity.client.JobDto;
 import java.io.BufferedReader;
 import java.io.IOException;

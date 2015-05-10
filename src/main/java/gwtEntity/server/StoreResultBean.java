@@ -1,5 +1,6 @@
 package gwtEntity.server;
 
+import gwtEntity.server.entity.ParameterizedBuild;
 import gwtEntity.client.ParameterizedBuildDto;
 import java.util.List;
 import javax.ejb.Stateless;

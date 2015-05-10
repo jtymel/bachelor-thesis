@@ -1,4 +1,4 @@
-package gwtEntity.server;
+package gwtEntity.server.entity;
 
 import gwtEntity.client.CategorizationDto;
 import java.io.Serializable;

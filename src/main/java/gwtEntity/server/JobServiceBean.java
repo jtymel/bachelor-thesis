@@ -5,6 +5,10 @@
  */
 package gwtEntity.server;
 
+import gwtEntity.server.entity.ParameterizedBuild;
+import gwtEntity.server.entity.Job;
+import gwtEntity.server.entity.Category;
+import gwtEntity.server.entity.Build;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;
 import java.util.ArrayList;

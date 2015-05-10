@@ -1,5 +1,6 @@
-package gwtEntity.server;
+package gwtEntity.server.entity;
 
+import gwtEntity.server.entity.Categorization;
 import gwtEntity.client.CategoryDto;
 import java.io.Serializable;
 import java.util.ArrayList;

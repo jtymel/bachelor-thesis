@@ -1,5 +1,8 @@
 package gwtEntity.server;
 
+import gwtEntity.server.entity.Label;
+import gwtEntity.server.entity.Job;
+import gwtEntity.server.entity.Category;
 import gwtEntity.client.CategorizationDto;
 import gwtEntity.client.CategoryDto;
 import gwtEntity.client.JobDto;

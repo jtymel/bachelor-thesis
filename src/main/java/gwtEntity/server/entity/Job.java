@@ -19,8 +19,10 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.server;
+package gwtEntity.server.entity;
 
+import gwtEntity.server.entity.Category;
+import gwtEntity.server.entity.Build;
 import gwtEntity.client.JobDto;
 import java.io.Serializable;
 import java.util.List;
