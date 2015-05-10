@@ -21,6 +21,8 @@
  */
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.ParamBuildResultListBridge;
+import gwtEntity.client.widgets.bridges.BuildListParamBuildListBridge;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;

@@ -19,27 +19,17 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.client.widgets;
+package gwtEntity.client.widgets.bridges;
 
 import gwtEntity.client.BuildDto;
-import gwtEntity.client.JobDto;
-import gwtEntity.client.ParameterizedBuildDto;
-import gwtEntity.client.PossibleResultDto;
-import gwtEntity.client.ResultDto;
-import java.util.List;
 
 /**
  *
  * @author jtymel
  */
-public interface ResultListTestDetailBridge {
+public interface BuildListResultListBridge {
 
-    public void setTestAndDisplayHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults);
+    public void setBuildAndDisplayResults(BuildDto build);
 
-    public void setTestAndDisplayHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults);
-
-    public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults);
-
-    public void cancelTestDetailAndDisplayResultList();
-
+    public void cancelResultListAndDisplayBuildList();
 }

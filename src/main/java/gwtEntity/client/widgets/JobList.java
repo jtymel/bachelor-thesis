@@ -21,6 +21,9 @@
  */
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.JobListResultListBridge;
+import gwtEntity.client.widgets.bridges.JobListDetailBridge;
+import gwtEntity.client.widgets.bridges.JobListBuildListBridge;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;

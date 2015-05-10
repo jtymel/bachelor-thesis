@@ -19,17 +19,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package gwtEntity.client.widgets;
+package gwtEntity.client.widgets.bridges;
 
-import gwtEntity.client.ParameterizedBuildDto;
+import gwtEntity.client.JobDto;
 
 /**
  *
  * @author jtymel
  */
-public interface ParamBuildResultListBridge {
-
-    public void setParamBuildAndDisplayResults(ParameterizedBuildDto paramBuild);
-
-    public void cancelResultListAndDisplayParamBuildList();
+public interface JobListBuildListBridge {
+    public void setJobAndDisplayBuilds(JobDto job);
+    public void cancelBuildListAndDisplayJobList();
 }

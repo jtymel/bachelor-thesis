@@ -21,6 +21,10 @@
  */
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.ResultListTestDetailBridge;
+import gwtEntity.client.widgets.bridges.ParamBuildResultListBridge;
+import gwtEntity.client.widgets.bridges.JobListResultListBridge;
+import gwtEntity.client.widgets.bridges.BuildListResultListBridge;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ChangeEvent;

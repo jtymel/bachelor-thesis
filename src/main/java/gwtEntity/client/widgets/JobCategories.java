@@ -1,5 +1,6 @@
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.JobDetailCategoriesBridge;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;

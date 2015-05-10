@@ -1,5 +1,16 @@
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.ResultListTestDetailBridge;
+import gwtEntity.client.widgets.bridges.ParamBuildResultListBridge;
+import gwtEntity.client.widgets.bridges.JobListResultListBridge;
+import gwtEntity.client.widgets.bridges.JobListDetailBridge;
+import gwtEntity.client.widgets.bridges.JobListBuildListBridge;
+import gwtEntity.client.widgets.bridges.JobDetailLabelDetailBridge;
+import gwtEntity.client.widgets.bridges.JobDetailCategoriesBridge;
+import gwtEntity.client.widgets.bridges.CategoryListDetailBridge;
+import gwtEntity.client.widgets.bridges.CategorizationListDetailBridge;
+import gwtEntity.client.widgets.bridges.BuildListResultListBridge;
+import gwtEntity.client.widgets.bridges.BuildListParamBuildListBridge;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.uibinder.client.UiBinder;

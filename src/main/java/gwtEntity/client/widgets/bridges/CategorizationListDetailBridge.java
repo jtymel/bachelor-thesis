@@ -1,4 +1,4 @@
-package gwtEntity.client.widgets;
+package gwtEntity.client.widgets.bridges;
 
 import gwtEntity.client.CategorizationDto;
 

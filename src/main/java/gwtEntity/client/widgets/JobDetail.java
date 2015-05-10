@@ -21,6 +21,9 @@
  */
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.JobListDetailBridge;
+import gwtEntity.client.widgets.bridges.JobDetailLabelDetailBridge;
+import gwtEntity.client.widgets.bridges.JobDetailCategoriesBridge;
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;

@@ -21,6 +21,7 @@
  */
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.CategorizationListDetailBridge;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;

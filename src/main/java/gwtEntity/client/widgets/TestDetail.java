@@ -21,6 +21,7 @@
  */
 package gwtEntity.client.widgets;
 
+import gwtEntity.client.widgets.bridges.ResultListTestDetailBridge;
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
