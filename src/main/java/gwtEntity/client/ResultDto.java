@@ -12,6 +12,15 @@ public class ResultDto extends PossibleResultDto {
     private String test;
     private String testCase;
     private Map<Long, Integer> results = new HashMap<Long, Integer>();
+    private Long testId;
+
+    public Long getTestId() {
+        return testId;
+    }
+
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
 
     public String getTest() {
         return test;
