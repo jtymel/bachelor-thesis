@@ -2,22 +2,20 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:thesui="urn:import:gwtEntity.client.widgets"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
-    <ui:style>
-
-    </ui:style>
+    <ui:style src="style.css" />
     
     <g:DockLayoutPanel unit="EM">
-               
+        
+        <g:north size="2.0">
+            <g:FlowPanel>
+                <g:Button ui:field="showResultsButton" styleName='{style.button}'>Show results</g:Button>
+                <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Close</g:Button>
+            </g:FlowPanel>
+        </g:north>
+
         <g:center>
             <c:DataGrid ui:field='dataGrid' />
         </g:center>
-        
-        <g:south size="2.0">
-            <g:FlowPanel>
-                <g:Button ui:field="showResultsButton">Show results</g:Button>
-                <g:Button ui:field="cancelButton">Close</g:Button>
-            </g:FlowPanel>
-        </g:south>
 
         <g:south size="3.0">
             <g:HTMLPanel>

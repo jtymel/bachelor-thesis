@@ -80,7 +80,7 @@ public class ParamBuildList extends Composite {
     private ListDataProvider<ParameterizedBuildDto> dataProvider;
 
     public ParamBuildList() {
-        dataGrid = new DataGrid<ParameterizedBuildDto>(20);
+        dataGrid = new DataGrid<ParameterizedBuildDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));

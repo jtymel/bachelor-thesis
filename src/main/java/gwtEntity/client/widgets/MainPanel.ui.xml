@@ -6,9 +6,7 @@ Uncomment this for XHTML entities
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:thesui="urn:import:gwtEntity.client.widgets"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
-    <ui:style>
-
-    </ui:style>
+    <ui:style src="style.css" />
     
 <!--    <g:DockLayoutPanel unit="EM">
         <g:north size="75.0">-->

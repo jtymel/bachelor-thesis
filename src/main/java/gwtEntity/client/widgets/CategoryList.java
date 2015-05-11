@@ -60,7 +60,7 @@ public class CategoryList extends Composite {
     private ListDataProvider<CategoryDto> dataProvider;
 
     public CategoryList() {
-        dataGrid = new DataGrid<CategoryDto>(20);
+        dataGrid = new DataGrid<CategoryDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));

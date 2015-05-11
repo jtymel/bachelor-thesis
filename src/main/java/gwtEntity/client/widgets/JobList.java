@@ -103,7 +103,7 @@ public class JobList extends Composite {
     private ListDataProvider<JobDto> dataProvider;
 
     public JobList() {
-        dataGrid = new DataGrid<JobDto>(20);
+        dataGrid = new DataGrid<JobDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));

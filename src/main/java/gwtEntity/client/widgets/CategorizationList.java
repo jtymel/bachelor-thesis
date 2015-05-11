@@ -85,7 +85,7 @@ public class CategorizationList extends Composite {
     private ListDataProvider<CategorizationDto> dataProvider;
 
     public CategorizationList() {
-        dataGrid = new DataGrid<CategorizationDto>(20);
+        dataGrid = new DataGrid<CategorizationDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));

@@ -69,7 +69,7 @@ public class LabelDetail extends Composite {
     private ListDataProvider<CategoryDto> dataProvider;
 
     public LabelDetail() {
-        dataGrid = new DataGrid<CategoryDto>(20);
+        dataGrid = new DataGrid<CategoryDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));

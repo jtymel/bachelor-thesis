@@ -88,7 +88,7 @@ public class BuildList extends Composite {
     private ListDataProvider<BuildDto> dataProvider;
 
     public BuildList() {
-        dataGrid = new DataGrid<BuildDto>(20);
+        dataGrid = new DataGrid<BuildDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
