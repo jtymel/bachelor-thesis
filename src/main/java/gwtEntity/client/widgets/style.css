@@ -5,3 +5,7 @@
 .closeButton {
     float: right; 
 }
+
+.listBox {
+    margin-left: 10px;
+}

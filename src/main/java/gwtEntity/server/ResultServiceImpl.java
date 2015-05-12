@@ -47,18 +47,18 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
     }
 
     @Override
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto) {
-        return resultServiceBean.getResults(paramBuildDto);
+    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, Long possibleResultId, Long categoryId) {
+        return resultServiceBean.getResults(paramBuildDto, possibleResultId, categoryId);
     }
 
     @Override
-    public List<ResultDto> getResults(BuildDto buildDto) {
-        return resultServiceBean.getResults(buildDto);
+    public List<ResultDto> getResults(BuildDto buildDto, Long possibleResultId, Long categoryId) {
+        return resultServiceBean.getResults(buildDto, possibleResultId, categoryId);
     }
 
     @Override
-    public List<ResultDto> getResults(JobDto jobDto) {
-        return resultServiceBean.getResults(jobDto);
+    public List<ResultDto> getResults(JobDto jobDto, Long possibleResultId, Long categoryId) {
+        return resultServiceBean.getResults(jobDto, possibleResultId, categoryId);
     }
 
     @Override

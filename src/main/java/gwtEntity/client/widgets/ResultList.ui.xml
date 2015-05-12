@@ -8,7 +8,7 @@
                
         <g:north size="2.0">
             <g:FlowPanel>
-                <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Close</g:Button>
+                <g:Button ui:field="cancelButton" addStyleNames='{style.closeButton}'>Close</g:Button>
             </g:FlowPanel>
         </g:north>
         
@@ -30,9 +30,9 @@
 
         <g:south size="5.0">
             <g:FlowPanel>
-                <g:Label>Show only tests with result </g:Label>
-                <g:ListBox ui:field="possibleResultListBox"></g:ListBox>
-                <g:ListBox ui:field="categoryListBox"></g:ListBox>
+                <g:InlineHTML>Show only tests with result</g:InlineHTML>
+                <g:ListBox ui:field="possibleResultListBox" addStyleNames='{style.listBox}'></g:ListBox>
+                <g:ListBox ui:field="categoryListBox" addStyleNames='{style.listBox}'></g:ListBox>
             </g:FlowPanel>
         </g:south>
     </g:DockLayoutPanel>
