@@ -18,7 +18,6 @@ package org.jboss.ci.tracker.server;
 
 import org.jboss.ci.tracker.server.entity.ParameterizedBuild;
 import org.jboss.ci.tracker.server.entity.PossibleResult;
-import org.jboss.ci.tracker.server.entity.Job;
 import org.jboss.ci.tracker.server.entity.Build;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
@@ -392,8 +391,7 @@ public class ResultServiceBean {
             = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
             + " WHERE"
-            + "     r.possibleresult_id = pr.id"
-            + "     AND r.test_id = t.id"
+            + "     r.test_id = t.id"
             + "     AND t.testcase_id = tc.id"
             + "     AND r.parameterizedbuild_id = pb.id"
             + "     AND pb.build_id = b.id"

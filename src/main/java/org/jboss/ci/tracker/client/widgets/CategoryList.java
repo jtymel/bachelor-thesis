@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class CategoryList extends Composite {
 
-    private static CategoryListUiBinder uiBinder = GWT.create(CategoryListUiBinder.class);
+    private static final CategoryListUiBinder uiBinder = GWT.create(CategoryListUiBinder.class);
 
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
 

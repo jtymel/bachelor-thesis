@@ -16,16 +16,9 @@
  */
 package org.jboss.ci.tracker.server.entity;
 
-import org.jboss.ci.tracker.server.entity.ParameterizedBuild;
-import org.jboss.ci.tracker.server.entity.Test;
-import org.jboss.ci.tracker.server.entity.PossibleResult;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
@@ -45,8 +38,6 @@ import javax.persistence.NamedNativeQuery;
 @Entity
 @IdClass(Result.ResultId.class)
 public class Result implements Serializable {
-//    @EmbeddedId
-//    private ResultID resultID;
 
     @Id
     @ManyToOne
@@ -97,7 +88,6 @@ public class Result implements Serializable {
         this.duration = duration;
     }
 
-//@Embeddable
     public static class ResultId implements Serializable {
 
         private PossibleResult possibleResult;

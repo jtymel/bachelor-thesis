@@ -61,8 +61,7 @@ public class CategorizationList extends Composite {
     DataGrid<CategorizationDto> dataGrid;
 
     /*
-     SimplePager has strange behaviour when the last page is reached. See https://code.google.com/p/google-web-toolkit/issues/detail?id=6163
-     Steps to reproduce: Hold "Enter" for a while, click on the 'last page icon', click on the 'previous icon' and click on the 'next icon'
+     SimplePager has strange behaviour when the last page is reached. See https://code.google.com/p/google-web-toolkit/issues/detail?id=6163     
      */
     @UiField(provided = true)
     SimplePager pager;
@@ -195,13 +194,10 @@ public class CategorizationList extends Composite {
         List<CategorizationDto> categorizationList = (List<CategorizationDto>) dataProvider.getList();
         List<CategorizationDto> selectedCategorizations = new ArrayList<CategorizationDto>();
 
-        Long i = 0L;
-
         for (CategorizationDto categorizationDto : categorizationList) {
             if (selectionModel.isSelected(categorizationDto)) {
                 selectedCategorizations.add(categorizationDto);
             }
-            i++;
         }
 
         return selectedCategorizations;

@@ -39,15 +39,6 @@ public class BuildServiceBean {
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
 
-    public Long saveBuild(BuildDto buildDto) {
-        Session session = (Session) em.getDelegate();
-        Build build = new Build(buildDto);
-
-        session.saveOrUpdate(build);
-
-        return build.getId();
-    }
-
     public Long saveBuild(Build build) {
         Session session = (Session) em.getDelegate();
 

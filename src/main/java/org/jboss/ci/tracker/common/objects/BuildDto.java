@@ -16,12 +16,8 @@
  */
 package org.jboss.ci.tracker.common.objects;
 
-import org.jboss.ci.tracker.server.entity.Job;
-import org.jboss.ci.tracker.server.entity.ParameterizedBuild;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  *
@@ -30,8 +26,6 @@ import javax.persistence.OneToMany;
 public class BuildDto implements Serializable {
 
     private Long id;
-    private List<ParameterizedBuildDto> parameterizedBuilds;
-    private JobDto job;
     private String name;
     private String url;
 
@@ -41,22 +35,6 @@ public class BuildDto implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<ParameterizedBuildDto> getParameterizedBuilds() {
-        return parameterizedBuilds;
-    }
-
-    public void setParameterizedBuilds(List<ParameterizedBuildDto> parameterizedBuilds) {
-        this.parameterizedBuilds = parameterizedBuilds;
-    }
-
-    public JobDto getJob() {
-        return job;
-    }
-
-    public void setJob(JobDto job) {
-        this.job = job;
     }
 
     public String getName() {

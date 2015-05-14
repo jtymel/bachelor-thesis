@@ -31,8 +31,4 @@ import java.util.List;
 public interface JenkinsService extends RemoteService {
 
     public void downloadBuilds(List<JobDto> jobs);
-
-    public List<BuildDto> downloadBuilds(JobDto jobDto);
-
-    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto);
 }

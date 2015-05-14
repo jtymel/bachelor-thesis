@@ -16,7 +16,6 @@
  */
 package org.jboss.ci.tracker.server.entity;
 
-import org.jboss.ci.tracker.server.entity.Categorization;
 import org.jboss.ci.tracker.common.objects.CategoryDto;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
  * Created by jtymel on 12/15/14.

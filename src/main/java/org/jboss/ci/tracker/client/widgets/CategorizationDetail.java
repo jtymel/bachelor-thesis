@@ -45,7 +45,7 @@ public class CategorizationDetail extends Composite {
 
     private CategorizationListDetailBridge categorizationListDetailBridge;
 
-    void setCategorization(CategorizationDto categorizationDto) {
+    public void setCategorization(CategorizationDto categorizationDto) {
         if (categorizationDto != null) {
             categorizationNameField.setText(categorizationDto.getName());
         } else {
@@ -55,7 +55,7 @@ public class CategorizationDetail extends Composite {
         editedCategorization = categorizationDto;
     }
 
-    interface CategorizationDetailUiBinder extends UiBinder<Widget, CategorizationDetail> {
+    public interface CategorizationDetailUiBinder extends UiBinder<Widget, CategorizationDetail> {
     }
 
     public CategorizationDetail() {

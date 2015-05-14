@@ -17,10 +17,8 @@
 package org.jboss.ci.tracker.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.services.JenkinsService;
 import org.jboss.ci.tracker.common.objects.JobDto;
-import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
 import java.util.List;
 import javax.ejb.EJB;
 
@@ -32,18 +30,6 @@ public class JenkinsServiceImpl extends RemoteServiceServlet implements JenkinsS
 
     @EJB
     JenkinsDownloader jenkinsDownloader;
-
-    @Override
-    public List<BuildDto> downloadBuilds(JobDto jobDto) {
-//        return jenkinsDownloader.downloadBuilds(jobDto);
-        return null;
-    }
-
-    @Override
-    public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
-//        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
-        return null;
-    }
 
     @Override
     public void downloadBuilds(List<JobDto> jobs) {

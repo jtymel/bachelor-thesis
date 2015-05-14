@@ -18,7 +18,6 @@ package org.jboss.ci.tracker.server;
 
 import org.jboss.ci.tracker.server.entity.Categorization;
 import org.jboss.ci.tracker.common.objects.CategorizationDto;
-import org.jboss.ci.tracker.common.objects.JobDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -72,16 +71,5 @@ public class CategorizationServiceBean {
         Categorization categorization = (Categorization) query.uniqueResult();
 
         session.delete(categorization);
-
-        // Not running cascade deletion
-//        Session session = (Session) em.getDelegate();
-//        
-//        Categorization categorization = new Categorization(categorizationDto);
-//        em.remove(em.contains(categorization) ? categorization : em.merge(categorization));
-        // Not running cascade deletion
-//        Session session = (Session) em.getDelegate();
-//        Query query = session.createQuery("DELETE Categorization WHERE id = :categorizationId")
-//                .setParameter("categorizationId", categorizationDto.getId()); 
-//        query.executeUpdate();
     }
 }

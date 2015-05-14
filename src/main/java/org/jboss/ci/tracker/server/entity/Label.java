@@ -16,8 +16,6 @@
  */
 package org.jboss.ci.tracker.server.entity;
 
-import org.jboss.ci.tracker.server.entity.Job;
-import org.jboss.ci.tracker.server.entity.Category;
 import org.jboss.ci.tracker.common.objects.LabelDto;
 import java.io.Serializable;
 import java.util.List;

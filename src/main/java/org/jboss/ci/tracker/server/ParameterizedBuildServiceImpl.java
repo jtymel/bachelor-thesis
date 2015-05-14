@@ -18,7 +18,6 @@ package org.jboss.ci.tracker.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.jboss.ci.tracker.common.objects.BuildDto;
-import org.jboss.ci.tracker.common.services.BuildService;
 import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
 import org.jboss.ci.tracker.common.services.ParameterizedBuildService;
 import java.util.List;

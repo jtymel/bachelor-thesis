@@ -4,8 +4,6 @@
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <ui:style src="style.css" />
     
-    <!--    <g:DockLayoutPanel unit="EM">
-    <g:north size="75.0">-->
     <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="30">
         <g:tab>
             <g:header>
@@ -80,6 +78,4 @@
             <thesui:TestDetail ui:field="testDetail" />
         </g:tab>
     </g:TabLayoutPanel>
-    <!--        </g:north>
-    </g:DockLayoutPanel>-->
 </ui:UiBinder>

@@ -56,7 +56,7 @@ import java.util.List;
  */
 public class JobDetail extends Composite {
 
-    private static JobDetailUiBinder uiBinder = GWT.create(JobDetailUiBinder.class);
+    private static final JobDetailUiBinder uiBinder = GWT.create(JobDetailUiBinder.class);
 
     private final JobServiceAsync jobService = GWT.create(JobService.class);
 
@@ -109,7 +109,7 @@ public class JobDetail extends Composite {
     private SelectionModel<LabelDto> selectionModel;
     private ListDataProvider<LabelDto> dataProvider;
 
-    JobDto editedJob = null;
+    private JobDto editedJob = null;
 
     @UiHandler("saveButton")
     void onSaveClick(ClickEvent event) {
@@ -154,7 +154,6 @@ public class JobDetail extends Composite {
             editedJob = null;
         }
 
-//        Window.alert("JobDetail got: " + jobDTO.getId() + " | " + jobDTO.getName() + ", " + jobDTO.getUrl());                        
         jobService.saveJob(jobDTO, new AsyncCallback<Long>() {
 
             @Override

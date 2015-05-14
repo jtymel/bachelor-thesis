@@ -17,7 +17,6 @@
 package org.jboss.ci.tracker.server;
 
 import org.jboss.ci.tracker.server.entity.ParameterizedBuild;
-import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

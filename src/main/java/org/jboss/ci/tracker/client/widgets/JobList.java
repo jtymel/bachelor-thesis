@@ -76,10 +76,6 @@ public class JobList extends Composite {
     @UiField(provided = true)
     DataGrid<JobDto> dataGrid;
 
-    /*
-     SimplePager has strange behaviour when the last page is reached. See https://code.google.com/p/google-web-toolkit/issues/detail?id=6163
-     Steps to reproduce: Hold "Enter" for a while, click on the 'last page icon', click on the 'previous icon' and click on the 'next icon'
-     */
     @UiField(provided = true)
     SimplePager pager;
 
@@ -126,7 +122,7 @@ public class JobList extends Composite {
         SafeHtml anchor(SafeUri href, String name);
     }
 
-    static final SimpleCellTemplates cell = GWT.create(SimpleCellTemplates.class);
+    private static final SimpleCellTemplates cell = GWT.create(SimpleCellTemplates.class);
 
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
@@ -285,29 +281,6 @@ public class JobList extends Composite {
 
         dataGrid.setSelectionModel(selectionModel);
 
-        /* Not running yet */
-//        nameColumn.setSortable(true);
-//        ListHandler<JobDto> sortHandler = new ListHandler<JobDto>(dataProvider.getList());
-//
-//        sortHandler.setComparator(nameColumn, new Comparator<JobDto>() {
-//
-//            @Override
-//            public int compare(JobDto o1, JobDto o2) {
-////                return o1.getName().compareTo(o2.getName());
-//                if (o1 == o2) {
-//                    return 0;
-//                }
-//
-//                // Compare the name columns.
-//                if (o1 != null) {
-//                    return (o2 != null) ? o1.getName().compareTo(o2.getName()) : 1;
-//                }
-//                return -1;
-//            }
-//        });
-//
-//        dataGrid.addColumnSortHandler(sortHandler);
-//        dataGrid.getColumnSortList().push(nameColumn);
         updateDataGrid();
     }
 

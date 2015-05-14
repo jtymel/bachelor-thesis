@@ -38,11 +38,6 @@ public class CategoryServiceImpl extends RemoteServiceServlet implements Categor
     }
 
     @Override
-    public Long saveCategory(CategoryDto category) {
-        return categoryServiceBean.saveCategory(category);
-    }
-
-    @Override
     public void deleteCategory(CategoryDto category) {
         categoryServiceBean.deleteCategory(category);
     }

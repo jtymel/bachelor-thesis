@@ -102,7 +102,6 @@ public class JenkinsDownloader {
 
                 if (startElement.getName().getLocalPart().equals("build")) {
                     Build build = getBuild(event, eventReader);
-//                    Job aux = jobServiceBean.getPlainJob(jobDto);
 
                     if (!job.getBuilds().contains(build)) {
                         build.setJob(job);
@@ -140,7 +139,6 @@ public class JenkinsDownloader {
             }
 
             if (event.asStartElement().getName().getLocalPart().equals("url")) {
-//                event.asCharacters().getData()
                 build.setUrl(eventReader.getElementText());
                 return build;
             }

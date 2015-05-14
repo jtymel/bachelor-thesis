@@ -18,7 +18,6 @@ package org.jboss.ci.tracker.server;
 
 import org.jboss.ci.tracker.server.entity.ParameterizedBuild;
 import org.jboss.ci.tracker.common.objects.BuildDto;
-import org.jboss.ci.tracker.common.objects.JobDto;
 import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +38,6 @@ public class ParameterizedBuildServiceBean {
 
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
-
-    public Long saveParamBuild(ParameterizedBuildDto paramBuildDto) {
-        Session session = (Session) em.getDelegate();
-        ParameterizedBuild paramBuild = new ParameterizedBuild(paramBuildDto);
-
-        session.saveOrUpdate(paramBuild);
-
-        return paramBuild.getId();
-    }
 
     public Long saveParamBuild(ParameterizedBuild paramBuild) {
         Session session = (Session) em.getDelegate();
@@ -70,13 +60,12 @@ public class ParameterizedBuildServiceBean {
         List<ParameterizedBuildDto> paramBuildDtos = new ArrayList<ParameterizedBuildDto>(paramBuilds != null ? paramBuilds.size() : 0);
 
         for (ParameterizedBuild paramBuild : paramBuilds) {
-            paramBuildDtos.add(createBuildDto(paramBuild));
+            paramBuildDtos.add(createParamBuildDto(paramBuild));
         }
-//        session.getTransaction().commit();
         return paramBuildDtos;
     }
 
-    private ParameterizedBuildDto createBuildDto(ParameterizedBuild paramBuild) {
+    private ParameterizedBuildDto createParamBuildDto(ParameterizedBuild paramBuild) {
         ParameterizedBuildDto paramBuildDto = new ParameterizedBuildDto();
 
         paramBuildDto.setId(paramBuild.getId());

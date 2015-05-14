@@ -34,21 +34,6 @@ public class LabelServiceImpl extends RemoteServiceServlet implements LabelServi
     private LabelServiceBean labelServiceBean;
 
     @Override
-    public List<LabelDto> getLabels() {
-        return labelServiceBean.getLabels();
-    }
-
-    @Override
-    public Long saveLabel(LabelDto label, JobDto job) {
-        return labelServiceBean.saveLabel(label, job);
-    }
-
-    @Override
-    public void deleteLabel(LabelDto label) {
-        labelServiceBean.deleteLabel(label);
-    }
-
-    @Override
     public void addCategoriesToLabel(LabelDto label, List<CategoryDto> categories) {
         labelServiceBean.addCategoriesToLabel(label, categories);
     }

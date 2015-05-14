@@ -31,8 +31,6 @@ public interface CategoryService extends RemoteService {
 
     public List<CategoryDto> getCategories();
 
-    public Long saveCategory(CategoryDto category);
-
     public Long saveCategory(CategoryDto category, CategorizationDto categorizationDto);
 
     public void deleteCategory(CategoryDto category);

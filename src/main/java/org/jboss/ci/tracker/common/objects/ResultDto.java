@@ -16,7 +16,6 @@
  */
 package org.jboss.ci.tracker.common.objects;
 
-import org.jboss.ci.tracker.common.objects.PossibleResultDto;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

@@ -30,6 +30,4 @@ import java.util.List;
 public interface BuildService extends RemoteService {
 
     public List<BuildDto> getBuilds(JobDto jobDto);
-
-    public Long saveBuild(BuildDto BuildDto);
 }

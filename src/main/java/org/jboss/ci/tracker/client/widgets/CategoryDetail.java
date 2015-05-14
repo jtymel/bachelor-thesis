@@ -44,7 +44,7 @@ import java.util.List;
  */
 public class CategoryDetail extends Composite {
 
-    private static CategoryDetailUiBinder uiBinder = GWT.create(CategoryDetailUiBinder.class);
+    private static final CategoryDetailUiBinder uiBinder = GWT.create(CategoryDetailUiBinder.class);
 
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
     private final CategorizationServiceAsync categorizationService = GWT.create(CategorizationService.class);
@@ -77,7 +77,6 @@ public class CategoryDetail extends Composite {
         }
 
         editedCategory = categoryDto;
-//        getCategorizations();
     }
 
     public CategoryDetail() {
@@ -140,8 +139,6 @@ public class CategoryDetail extends Composite {
 
             @Override
             public void onSuccess(List<CategorizationDto> result) {
-                //        This needs to be reviewed and done better!
-//                if (categorizations != null) categorizations.clear();
 
                 categorizationListField.clear();
 
@@ -152,10 +149,6 @@ public class CategoryDetail extends Composite {
             }
         });
 
-//        categorizationListField.clear();
-//        for (CategorizationDto categorization : categorizations) {
-//            categorizationListField.addItem(categorization.getName());
-//        }
     }
 
 }

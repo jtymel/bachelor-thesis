@@ -16,8 +16,6 @@
  */
 package org.jboss.ci.tracker.server.entity;
 
-import org.jboss.ci.tracker.server.entity.Category;
-import org.jboss.ci.tracker.server.entity.Build;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import java.io.Serializable;
 import java.util.List;
@@ -54,8 +52,6 @@ public class Job implements Serializable {
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Label> labels;
 
-//    org.hibernate.exception.SQLGrammarException: could not extract ResultSet
-//    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "job_category", joinColumns = {
         @JoinColumn(name = "JOB_ID", nullable = false, updatable = false)},

@@ -59,15 +59,6 @@ public class CategoryServiceBean {
         return categoryDto;
     }
 
-    public Long saveCategory(CategoryDto categoryDto) {
-        Session session = (Session) em.getDelegate();
-        Category category = new Category(categoryDto);
-
-        session.saveOrUpdate(category);
-
-        return category.getId();
-    }
-
     public Long saveCategory(CategoryDto categoryDto, CategorizationDto categorizationDto) {
         Session session = (Session) em.getDelegate();
         Category category = new Category(categoryDto);
@@ -80,8 +71,6 @@ public class CategoryServiceBean {
     }
 
     public void deleteCategory(CategoryDto categoryDto) {
-        Session session = (Session) em.getDelegate();
-
         Category category = new Category(categoryDto);
         em.remove(em.contains(category) ? category : em.merge(category));
     }

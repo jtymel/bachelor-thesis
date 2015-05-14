@@ -53,7 +53,7 @@ import java.util.List;
  */
 public class JobCategories extends Composite {
 
-    private static JobCategories.JobCategoriesUiBinder uiBinder = GWT.create(JobCategories.JobCategoriesUiBinder.class);
+    private static final JobCategories.JobCategoriesUiBinder uiBinder = GWT.create(JobCategories.JobCategoriesUiBinder.class);
 
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
     private final JobServiceAsync jobService = GWT.create(JobService.class);
@@ -90,9 +90,6 @@ public class JobCategories extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-//    public void setLabelListDetailBridge(LabelListDetailBridge bridge) {       
-//        categorizationListDetailBridge = bridge;
-//    }
     @UiHandler("addButton")
     void onAddButtonClick(ClickEvent event) {
         final List<CategoryDto> categories = getSelectedCategories();
@@ -197,13 +194,10 @@ public class JobCategories extends Composite {
         List<CategoryDto> categories = (List<CategoryDto>) dataProvider.getList();
         List<CategoryDto> selectedCategories = new ArrayList<CategoryDto>();
 
-        Long i = 0L;
-
         for (CategoryDto categoryDto : categories) {
             if (selectionModel.isSelected(categoryDto)) {
                 selectedCategories.add(categoryDto);
             }
-            i++;
         }
 
         return selectedCategories;

@@ -33,11 +33,6 @@ public class BuildServiceImpl extends RemoteServiceServlet implements BuildServi
     BuildServiceBean buildServiceBean;
 
     @Override
-    public Long saveBuild(BuildDto buildDto) {
-        return buildServiceBean.saveBuild(buildDto);
-    }
-
-    @Override
     public List<BuildDto> getBuilds(JobDto jobDto) {
         return buildServiceBean.getBuilds(jobDto);
     }

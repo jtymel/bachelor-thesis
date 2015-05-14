@@ -23,14 +23,10 @@ import org.jboss.ci.tracker.server.entity.Build;
 import org.jboss.ci.tracker.common.objects.CategoryDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.hibernate.Query;
@@ -79,7 +75,6 @@ public class JobServiceBean {
         job.getCategories().clear();
 
         session.delete(job);
-//        em.remove(em.contains(job) ? job : em.merge(job));
     }
 
     public void addCategoriesToLabel(JobDto jobDto, List<CategoryDto> categoriesDto) {
@@ -131,16 +126,6 @@ public class JobServiceBean {
 
         for (ParameterizedBuild paramBuild : paramBuilds) {
             storeParamBuildCategoriesBean.addCategoriesToParamBuild(paramBuild);
-        }
-
-    }
-
-    private void addParamBuildToCategory(ParameterizedBuild pb, List<Category> categories) {
-        Session session = (Session) em.getDelegate();
-
-        for (Category category : categories) {
-            category.addParamBuild(pb);
-            session.saveOrUpdate(category);
         }
 
     }

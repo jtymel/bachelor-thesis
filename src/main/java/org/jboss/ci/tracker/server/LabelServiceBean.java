@@ -19,7 +19,6 @@ package org.jboss.ci.tracker.server;
 import org.jboss.ci.tracker.server.entity.Label;
 import org.jboss.ci.tracker.server.entity.Job;
 import org.jboss.ci.tracker.server.entity.Category;
-import org.jboss.ci.tracker.common.objects.CategorizationDto;
 import org.jboss.ci.tracker.common.objects.CategoryDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import org.jboss.ci.tracker.common.objects.LabelDto;
@@ -42,19 +41,6 @@ public class LabelServiceBean {
 
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
-
-    public List<LabelDto> getLabels() {
-        Session session = (Session) em.getDelegate();
-
-        List<Label> labels = new ArrayList<Label>(session.createQuery("from Label").list());
-        List<LabelDto> labelDtos = new ArrayList<LabelDto>(labels != null ? labels.size() : 0);
-
-        for (Label label : labels) {
-            labelDtos.add(createLabelDto(label));
-        }
-
-        return labelDtos;
-    }
 
     public List<LabelDto> getLabels(JobDto job) {
         if (job == null) {
@@ -83,21 +69,6 @@ public class LabelServiceBean {
         return categoryDto;
     }
 
-    public Long saveLabel(LabelDto labelDto, JobDto jobDto) {
-        Session session = (Session) em.getDelegate();
-        Label label = new Label(labelDto);
-
-        Query query = session.createQuery("FROM Job WHERE url = :jobUrl")
-                .setParameter("jobUrl", jobDto.getUrl());
-// !!!!!!! NPE !!!!!!!!!!
-        Job job = (Job) query.uniqueResult();
-        label.setJob(job);
-
-        session.saveOrUpdate(label);
-
-        return label.getId();
-    }
-
     public Long saveLabel(Label label) {
         Session session = (Session) em.getDelegate();
 
@@ -114,16 +85,8 @@ public class LabelServiceBean {
         return storedLabel.getId();
     }
 
-    public void deleteLabel(LabelDto labelDto) {
-        Session session = (Session) em.getDelegate();
-
-        Label label = new Label(labelDto);
-        em.remove(em.contains(label) ? label : em.merge(label));
-    }
-
     public void addCategoriesToLabel(LabelDto labelDto, List<CategoryDto> categoriesDto) {
         Session session = (Session) em.getDelegate();
-// No label is in the table
         Query query = session.createQuery("from Label WHERE id = :labelid")
                 .setParameter("labelid", labelDto.getId());
         Label label = (Label) query.uniqueResult();

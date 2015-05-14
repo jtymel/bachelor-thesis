@@ -62,7 +62,6 @@ public class BuildList extends Composite {
     private static BuildListUiBinder uiBinder = GWT.create(BuildListUiBinder.class);
 
     private final BuildServiceAsync buildService = GWT.create(BuildService.class);
-    private final ResultServiceAsync resultService = GWT.create(ResultService.class);
 
     private JobListBuildListBridge jobListBuildListBridge;
     private BuildListParamBuildListBridge buildListParamBuildListBridge;
@@ -221,13 +220,10 @@ public class BuildList extends Composite {
         List<BuildDto> buildList = (List<BuildDto>) dataProvider.getList();
         List<BuildDto> selectedBuilds = new ArrayList<BuildDto>();
 
-        Long i = 0L;
-
         for (BuildDto buildDto : buildList) {
             if (selectionModel.isSelected(buildDto)) {
                 selectedBuilds.add(buildDto);
             }
-            i++;
         }
 
         return selectedBuilds;

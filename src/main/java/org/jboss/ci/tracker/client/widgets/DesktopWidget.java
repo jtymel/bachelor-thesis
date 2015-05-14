@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class DesktopWidget extends Composite {
 
-    private static DesktopWidgetUiBinder uiBinder = GWT.create(DesktopWidgetUiBinder.class);
+    private static final DesktopWidgetUiBinder uiBinder = GWT.create(DesktopWidgetUiBinder.class);
 
     interface DesktopWidgetUiBinder extends UiBinder<Widget, DesktopWidget> {
     }

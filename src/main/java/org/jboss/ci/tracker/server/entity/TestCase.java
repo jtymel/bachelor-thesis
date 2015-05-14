@@ -16,7 +16,6 @@
  */
 package org.jboss.ci.tracker.server.entity;
 
-import org.jboss.ci.tracker.server.entity.Test;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;

@@ -44,7 +44,6 @@ import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
 import org.jboss.ci.tracker.common.objects.PossibleResultDto;
 import org.jboss.ci.tracker.common.objects.ResultDto;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  *

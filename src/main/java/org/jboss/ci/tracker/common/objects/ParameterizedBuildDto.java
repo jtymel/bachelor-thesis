@@ -16,13 +16,8 @@
  */
 package org.jboss.ci.tracker.common.objects;
 
-import org.jboss.ci.tracker.common.objects.BuildDto;
-import org.jboss.ci.tracker.server.entity.Build;
-import org.jboss.ci.tracker.server.entity.Category;
-import org.jboss.ci.tracker.server.entity.Result;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -31,7 +26,6 @@ import java.util.List;
 public class ParameterizedBuildDto implements Serializable {
 
     private Long id;
-    private BuildDto build;
     private java.util.Date datetime;
     private String name;
     private String url;
@@ -51,14 +45,6 @@ public class ParameterizedBuildDto implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public BuildDto getBuild() {
-        return build;
-    }
-
-    public void setBuild(BuildDto build) {
-        this.build = build;
     }
 
     public String getName() {
