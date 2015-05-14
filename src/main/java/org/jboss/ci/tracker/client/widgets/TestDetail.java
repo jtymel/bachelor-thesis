@@ -214,36 +214,44 @@ public class TestDetail extends Composite {
     }
 
     public void showTestHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults) {
-        this.result = result;
-        this.possibleResultList = possibleResults;
         this.paramBuild = paramBuild;
         this.build = null;
         this.job = null;
+
+        executeActionsForNewTestHistory(result, possibleResults);
 
         getTestHistory();
         prepareResultsFilter(possibleResults);
     }
 
     public void showTestHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults) {
-        this.result = result;
-        this.possibleResultList = possibleResults;
         this.paramBuild = null;
         this.build = build;
         this.job = null;
+
+        executeActionsForNewTestHistory(result, possibleResults);
 
         getTestHistory();
         prepareResultsFilter(possibleResults);
     }
 
     public void showTestHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults) {
-        this.result = result;
-        this.possibleResultList = possibleResults;
         this.paramBuild = null;
         this.build = null;
         this.job = job;
 
+        executeActionsForNewTestHistory(result, possibleResults);
+
         getTestHistory();
         prepareResultsFilter(possibleResults);
+    }
+
+    private void executeActionsForNewTestHistory(ResultDto result, List<PossibleResultDto> possibleResults) {
+        this.result = result;
+        this.possibleResultList = possibleResults;
+
+        possibleResultListBox.setSelectedIndex(0);
+        categoryListBox.setSelectedIndex(0);
     }
 
     private void fillDataGrid(List<TestDto> result) {
