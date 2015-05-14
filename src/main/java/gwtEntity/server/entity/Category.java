@@ -4,7 +4,9 @@ import gwtEntity.server.entity.Categorization;
 import gwtEntity.common.objects.CategoryDto;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,7 +34,7 @@ public class Category implements Serializable {
     private List<Job> jobs;
     
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    private List<ParameterizedBuild> parameterizedBuilds = new ArrayList<ParameterizedBuild>();
+    private Set<ParameterizedBuild> parameterizedBuilds = new HashSet<ParameterizedBuild>();
     
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private List<Label> labels = new ArrayList<Label>();
@@ -77,11 +79,11 @@ public class Category implements Serializable {
         this.jobs = jobs;
     }
 
-    public List<ParameterizedBuild> getParameterizedBuilds() {
+    public Set<ParameterizedBuild> getParameterizedBuilds() {
         return parameterizedBuilds;
     }
 
-    public void setParameterizedBuilds(List<ParameterizedBuild> parameterizedBuilds) {
+    public void setParameterizedBuilds(Set<ParameterizedBuild> parameterizedBuilds) {
         this.parameterizedBuilds = parameterizedBuilds;
     }
 

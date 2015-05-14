@@ -1,30 +1,3 @@
-INSERT INTO job (id, NAME, URL) values (1007, 'My job from import.sql without any meaning', 'www.alik.cz')^
--- job is successfully added
-
--- CREATE OR REPLACE FUNCTION addFromImport(
---     integer,
---     integer)
---   RETURNS integer AS
--- 'select $1 + $2'
---   LANGUAGE SQL VOLATILE
---   COST 100;
-
--- CREATE OR REPLACE FUNCTION my_first_imported_proc() RETURNS INTEGER AS $BODY$ DECLARE seventeen INTEGER; BEGIN SELECT 4 INTO seventeen; RETURN seventeen; END; $BODY$ LANGUAGE plpgsql VOLATILE COST 100^
-
-CREATE OR REPLACE FUNCTION my_first_imported_proc()
-  RETURNS integer AS
-$BODY$
-BEGIN
-SELECT 4;
-END;
-$BODY$
-LANGUAGE plpgsql
-COST 100^
-
-
-
-
-
 CREATE OR REPLACE FUNCTION storeTestResult(id_paramBuild BIGINT, result TEXT, p_test TEXT, p_testCase TEXT, duration REAL)
 RETURNS VOID AS
 
@@ -53,10 +26,6 @@ END IF;
 INSERT INTO RESULT(possibleresult_id, parameterizedbuild_id, test_id, duration)
 VALUES (v_posRes, id_paramBuild, v_testId, duration);
 
--- RETURNING id INTO newId;
-
--- RETURN newId;
-
 END;
 $BODY$
 LANGUAGE plpgsql VOLATILE
@@ -82,6 +51,11 @@ SELECT jc.category_id, pb.id FROM
   AND b.id=pb.build_id
   AND j.id = b.job_id
   AND jc.job_id = j.id
+  AND NOT EXISTS (
+	SELECT * FROM ParamBuild_Category pbc WHERE
+	pbc.parambuild_id = pb.id
+	AND pbc.category_id = jc.category_id
+  )
   ;
 
 INSERT INTO parambuild_category(category_id, parambuild_id)
@@ -99,6 +73,11 @@ SELECT lc.category_id, pb.id FROM
   AND j.id = l.job_id
   AND lc.label_id = l.id
   AND pb.cachedLabel = l.name
+  AND NOT EXISTS (
+	SELECT * FROM ParamBuild_Category pbc WHERE
+	pbc.parambuild_id = pb.id
+	AND pbc.category_id = lc.category_id
+  )
   ;
 
 END;

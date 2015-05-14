@@ -6,6 +6,7 @@ import gwtEntity.common.objects.ParameterizedBuildDto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,7 +48,7 @@ public class ParameterizedBuild implements Serializable {
 			@JoinColumn(name = "PARAMBUILD_ID", nullable = false, updatable = false) },
 			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
 					nullable = false, updatable = false) })
-    private List<Category> categories;
+    private Set<Category> categories;
 
     @ManyToOne
     private Build build;
@@ -109,11 +110,11 @@ public class ParameterizedBuild implements Serializable {
         this.id = id;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -137,7 +138,7 @@ public class ParameterizedBuild implements Serializable {
     public ParameterizedBuild() {
     }
 
-    public ParameterizedBuild(List<Result> results, Long id, List<Category> categories, Build build, String machine, Date datetime, String name) {
+    public ParameterizedBuild(List<Result> results, Long id, Set<Category> categories, Build build, String machine, Date datetime, String name) {
         this.results = results;
         this.id = id;
         this.categories = categories;
