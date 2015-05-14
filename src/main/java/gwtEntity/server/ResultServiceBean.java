@@ -143,7 +143,8 @@ public class ResultServiceBean {
                     + "     AND r.parameterizedbuild_id = :paramBuildId"
                     + "     AND pbc.parambuild_id = r.parameterizedbuild_id"
                     + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString)
                     .setParameter("paramBuildId", paramBuildDto.getId())
@@ -158,9 +159,11 @@ public class ResultServiceBean {
                     + "     AND r.test_id = t.id"
                     + "     AND t.testcase_id = tc.id"
                     + "     AND r.parameterizedbuild_id = :paramBuildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString).setParameter("paramBuildId", paramBuildDto.getId());
+
         } else if (possibleResultId != null && categoryId == null) {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc"
@@ -169,11 +172,13 @@ public class ResultServiceBean {
                     + "     AND r.test_id = t.id"
                     + "     AND t.testcase_id = tc.id"
                     + "     AND r.parameterizedbuild_id = :paramBuildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString)
                     .setParameter("paramBuildId", paramBuildDto.getId())
                     .setParameter("possibleResultId", possibleResultId);
+
         } else {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc, ParamBuild_Category pbc"
@@ -183,7 +188,8 @@ public class ResultServiceBean {
                     + "     AND r.parameterizedbuild_id = :paramBuildId"
                     + "     AND pbc.parambuild_id = r.parameterizedbuild_id"
                     + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString)
                     .setParameter("paramBuildId", paramBuildDto.getId())
@@ -205,7 +211,8 @@ public class ResultServiceBean {
                     + "     AND pb.build_id = :buildId"
                     + "     AND pbc.category_id = :categoryId"
                     + "     AND pbc.parambuild_id = pb.id"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString)
                     .setParameter("buildId", buildDto.getId())
@@ -221,9 +228,11 @@ public class ResultServiceBean {
                     + "     AND t.testcase_id = tc.id"
                     + "     AND r.parameterizedbuild_id = pb.id"
                     + "     AND pb.build_id = :buildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString).setParameter("buildId", buildDto.getId());
+
         } else if (possibleResultId != null && categoryId == null) {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
@@ -233,11 +242,13 @@ public class ResultServiceBean {
                     + "     AND t.testcase_id = tc.id"
                     + "     AND r.parameterizedbuild_id = pb.id"
                     + "     AND pb.build_id = :buildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString)
                     .setParameter("buildId", buildDto.getId())
                     .setParameter("possibleResultId", possibleResultId);
+
         } else {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, ParamBuild_Category pbc"
@@ -248,7 +259,8 @@ public class ResultServiceBean {
                     + "     AND pb.build_id = :buildId"
                     + "     AND pbc.category_id = :categoryId"
                     + "     AND pbc.parambuild_id = pb.id"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
 
             return session.createSQLQuery(queryString)
                     .setParameter("buildId", buildDto.getId())
@@ -271,11 +283,14 @@ public class ResultServiceBean {
                     + "     AND b.job_id = :jobId"
                     + "     AND pbc.parambuild_id = pb.id"
                     + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
+
             return session.createSQLQuery(queryString)
                     .setParameter("jobId", jobDto.getId())
                     .setParameter("possibleResultId", possibleResultId)
                     .setParameter("categoryId", categoryId);
+
         } else if (possibleResultId == null && categoryId == null) {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b"
@@ -285,9 +300,12 @@ public class ResultServiceBean {
                     + "     AND r.parameterizedbuild_id = pb.id"
                     + "     AND pb.build_id = b.id"
                     + "     AND b.job_id = :jobId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
+
             return session.createSQLQuery(queryString)
                     .setParameter("jobId", jobDto.getId());
+
         } else if (possibleResultId != null && categoryId == null) {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b"
@@ -298,10 +316,13 @@ public class ResultServiceBean {
                     + "     AND r.parameterizedbuild_id = pb.id"
                     + "     AND pb.build_id = b.id"
                     + "     AND b.job_id = :jobId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
+
             return session.createSQLQuery(queryString)
                     .setParameter("jobId", jobDto.getId())
                     .setParameter("possibleResultId", possibleResultId);
+
         } else {
             String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                     + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b, ParamBuild_Category pbc"
@@ -313,7 +334,9 @@ public class ResultServiceBean {
                     + "     AND b.job_id = :jobId"
                     + "     AND pbc.parambuild_id = pb.id"
                     + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id";
+                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                    + " ORDER BY tc.name, t.name";
+
             return session.createSQLQuery(queryString)
                     .setParameter("jobId", jobDto.getId())
                     .setParameter("categoryId", categoryId);
