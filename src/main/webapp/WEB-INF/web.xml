@@ -8,35 +8,35 @@
     <!-- Servlets -->
     <servlet>
         <servlet-name>jobServlet</servlet-name>
-        <servlet-class>gwtEntity.server.JobServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.JobServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>buildServlet</servlet-name>
-        <servlet-class>gwtEntity.server.BuildServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.BuildServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>jenkinsServlet</servlet-name>
-        <servlet-class>gwtEntity.server.JenkinsServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.JenkinsServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>parameterizedBuildServlet</servlet-name>
-        <servlet-class>gwtEntity.server.ParameterizedBuildServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.ParameterizedBuildServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>categorizationServlet</servlet-name>
-        <servlet-class>gwtEntity.server.CategorizationServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.CategorizationServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>categoryServlet</servlet-name>
-        <servlet-class>gwtEntity.server.CategoryServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.CategoryServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>labelServlet</servlet-name>
-        <servlet-class>gwtEntity.server.LabelServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.LabelServiceImpl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>resultServlet</servlet-name>
-        <servlet-class>gwtEntity.server.ResultServiceImpl</servlet-class>
+        <servlet-class>org.jboss.ci.tracker.server.ResultServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>

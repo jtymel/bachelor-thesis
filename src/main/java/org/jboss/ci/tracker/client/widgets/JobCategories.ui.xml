@@ -1,0 +1,45 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:thesui="urn:import:org.jboss.ci.tracker.client.widgets"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+    <ui:style src="style.css" />
+    
+    <g:DockLayoutPanel unit="EM">
+
+        <g:north size="2.0">
+            <g:FlowPanel>
+                <g:Button ui:field="addButton" styleName='{style.button}'>Apply changes</g:Button>
+                <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Cancel</g:Button>
+            </g:FlowPanel>
+        </g:north>
+        
+        <g:north size="3.0">
+            <g:HTMLPanel>
+                <table style="width:50%" align="center">
+                    <tr>
+                        <td align="center">
+                            <g:Label ui:field="jobName"></g:Label>
+                        </td>
+                    </tr>
+                </table>
+            </g:HTMLPanel>
+        </g:north>
+               
+        <g:center>
+            <c:DataGrid ui:field='dataGrid' />
+        </g:center>
+
+        <g:south size="3.0">
+            <g:HTMLPanel>
+                <table style="width:100%">
+                    <tr>
+                        <td align="center">
+                            <c:SimplePager ui:field="pager" />
+                        </td>
+                    </tr>
+                </table>
+            </g:HTMLPanel>
+        </g:south>
+
+    </g:DockLayoutPanel>
+</ui:UiBinder>

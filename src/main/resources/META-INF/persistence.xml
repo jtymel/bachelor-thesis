@@ -8,7 +8,7 @@
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />
-            <property name="hibernate.hbm2ddl.import_files_sql_extractor" value="gwtEntity.server.CustomMultipleLinesSqlCommandExtractor" />
+            <property name="hibernate.hbm2ddl.import_files_sql_extractor" value="org.jboss.ci.tracker.server.CustomMultipleLinesSqlCommandExtractor" />
         </properties>
     </persistence-unit>
 </persistence>

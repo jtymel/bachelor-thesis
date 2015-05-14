@@ -1,0 +1,40 @@
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:thesui="urn:import:org.jboss.ci.tracker.client.widgets"
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+    <ui:style src="style.css" />
+    
+    <g:DockLayoutPanel unit="EM">
+        
+        <g:north size="2.0">
+            <g:FlowPanel>
+                <g:Button ui:field="saveButton" styleName='{style.button}'>Save changes</g:Button>
+                <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Cancel</g:Button>
+            </g:FlowPanel>
+        </g:north>
+        
+        <g:center>
+            <g:HTMLPanel>
+                <table style="width:50%">
+                    <tr>
+                        <td>
+                            <g:Label>Name of category</g:Label>
+                        </td>
+                        <td>
+                            <g:TextBox ui:field="categoryNameField" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <g:Label>Categorization</g:Label>
+                        </td>
+                        <td>
+                            <g:ListBox ui:field="categorizationListField" />
+                        </td>
+                    </tr>
+                </table>
+            </g:HTMLPanel>
+        </g:center>
+
+    </g:DockLayoutPanel>
+</ui:UiBinder>

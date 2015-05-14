@@ -6,10 +6,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>gwtEntity</groupId>
-    <artifactId>gwt-entity</artifactId>
+    <artifactId>ci-tracker</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>GWT Entity</name>
+    <name>CI Tracker</name>
 
     <properties>
         <!-- Convenience property to set the GWT version -->
@@ -103,7 +103,7 @@
                     <incrementalCompileWarnings>true</incrementalCompileWarnings>
                     <style>DETAILED</style>
                     <modules>
-                        <module>gwtEntity.module</module>
+                        <module>org.jboss.ci.tracker.module</module>
                     </modules>
                 </configuration>
             </plugin>
