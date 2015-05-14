@@ -16,21 +16,21 @@
 
         <g:north size="8.0">
             <g:HTMLPanel>
-                <table style="width:50%">
+                <table style="width:100%">
                     <tr>
-                        <td>
-                            <g:Label>Name of job</g:Label>
+                        <td width="10%">
+                            <g:InlineHTML>Name of job</g:InlineHTML>
                         </td>
                         <td>
-                            <g:TextBox ui:field="jobNameField" />
+                            <g:TextBox ui:field="jobNameField" addStyleNames='{style.width100}' />
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <g:Label>URL of job</g:Label>
+                        <td width="10%">
+                            <g:InlineHTML>URL of job</g:InlineHTML>
                         </td>
                         <td>
-                            <g:TextBox ui:field="jobUrlField" />
+                            <g:TextBox ui:field="jobUrlField" addStyleNames='{style.width100}' />
                         </td>
                     </tr>
                 </table>

@@ -175,7 +175,7 @@ public class ResultList extends Composite {
     }
 
     private void initResultsListBox() {
-        possibleResultListBox.addItem("All");
+        possibleResultListBox.addItem("Don't filter");
 
         possibleResultListBox.addChangeHandler(new ChangeHandler() {
 
@@ -188,7 +188,7 @@ public class ResultList extends Composite {
     }
 
     private void initCategoryListBox() {
-        categoryListBox.addItem("All");
+        categoryListBox.addItem("Don't filter");
 
         categoryListBox.addChangeHandler(new ChangeHandler() {
 
@@ -297,7 +297,7 @@ public class ResultList extends Composite {
     private void refreshPossibleResultListBox(List<PossibleResultDto> possibleResults) {
         possibleResultListBox.clear();
 
-        possibleResultListBox.addItem("All");
+        possibleResultListBox.addItem("Don't filter");
 
         for (PossibleResultDto possibleResult : possibleResults) {
             possibleResultListBox.addItem(possibleResult.getName());
@@ -393,7 +393,7 @@ public class ResultList extends Composite {
                 categoryList = categories;
                 categoryListBox.clear();
 
-                categoryListBox.addItem("All");
+                categoryListBox.addItem("Don't filter");
 
                 for (CategoryDto category : categories) {
                     categoryListBox.addItem(category.getCategorization() + " : " + category.getName());

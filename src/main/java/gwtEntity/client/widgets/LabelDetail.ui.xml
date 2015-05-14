@@ -8,24 +8,15 @@
         
         <g:north size="2.0">
             <g:FlowPanel>
-                <g:Button ui:field="addButton" styleName='{style.button}'>Apply changes</g:Button>
-                <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Cancel</g:Button>
+                <g:Button ui:field="addButton" addStyleNames='{style.button}'>Apply changes</g:Button>
+                <g:Button ui:field="cancelButton" addStyleNames='{style.closeButton}'>Cancel</g:Button>
             </g:FlowPanel>
         </g:north>
 
         <g:north size="3.0">
-            <g:HTMLPanel>
-                <table style="width:50%" align="center">
-                    <tr>
-                        <td>
-                            <g:Label>Name of label</g:Label>
-                        </td>
-                        <td>
-                            <g:TextBox ui:field="labelNameField" />
-                        </td>
-                    </tr>
-                </table>
-            </g:HTMLPanel>
+            <g:FlowPanel>
+                <g:Label ui:field="labelNameField" addStyleNames='{style.center} {style.bold}'></g:Label>
+            </g:FlowPanel>
         </g:north>
                
         <g:center>

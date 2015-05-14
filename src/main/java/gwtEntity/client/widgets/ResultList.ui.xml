@@ -28,9 +28,9 @@
             </g:HTMLPanel>
         </g:south>
 
-        <g:south size="5.0">
+        <g:south size="2.0">
             <g:FlowPanel>
-                <g:InlineHTML>Show only tests with result</g:InlineHTML>
+                <g:InlineHTML>Filter by</g:InlineHTML>
                 <g:ListBox ui:field="possibleResultListBox" addStyleNames='{style.listBox}'></g:ListBox>
                 <g:ListBox ui:field="categoryListBox" addStyleNames='{style.listBox}'></g:ListBox>
             </g:FlowPanel>

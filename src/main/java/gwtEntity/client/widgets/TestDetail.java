@@ -20,6 +20,8 @@ import gwtEntity.client.widgets.bridges.ResultListTestDetailBridge;
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -149,6 +151,12 @@ public class TestDetail extends Composite {
                 return cell.anchor(href, object.getUrl());
             }
         };
+
+        dataGrid.setColumnWidth(dateColumn, 15, Unit.PCT);
+        dataGrid.setColumnWidth(resultColumn, 15, Unit.PCT);
+        dataGrid.setColumnWidth(machineColumn, 15, Unit.PCT);
+        dataGrid.setColumnWidth(durationColumn, 10, Unit.PCT);
+        dataGrid.setColumnWidth(urlColumn, 45, Unit.PCT);
 
         dataGrid.addColumn(dateColumn, "Date");
         dataGrid.addColumn(resultColumn, "Result");
