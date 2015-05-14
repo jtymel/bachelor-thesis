@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.1">
     <deployment>
-         <dependencies>  
-              <module name="org.hibernate" />
-         </dependencies>
+        <dependencies>  
+            <module name="org.hibernate" />
+        </dependencies>
     </deployment>         
-        <!-- </sub-deployment>-->
+    <!-- </sub-deployment>-->
 </jboss-deployment-structure>

@@ -13,7 +13,10 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("jenkinsservice")
 public interface JenkinsService extends RemoteService {
+
     public void downloadBuilds(List<JobDto> jobs);
+
     public List<BuildDto> downloadBuilds(JobDto jobDto);
+
     public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto);
 }

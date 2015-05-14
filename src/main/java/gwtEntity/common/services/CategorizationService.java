@@ -32,7 +32,10 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("categorizationservice")
 public interface CategorizationService extends RemoteService {
+
     public List<CategorizationDto> getCategorizations();
+
     public Long saveCategorization(CategorizationDto categorization);
+
     public void deleteCategorization(CategorizationDto categorization);
 }

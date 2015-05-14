@@ -7,6 +7,7 @@ import java.io.Serializable;
  * @author jtymel
  */
 public class CategorizationDto implements Serializable {
+
     private Long id;
     private String name;
 
@@ -25,7 +26,6 @@ public class CategorizationDto implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
 
     public String getName() {
         return name;
@@ -34,7 +34,5 @@ public class CategorizationDto implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    
+
 }

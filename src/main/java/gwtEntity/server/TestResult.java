@@ -26,6 +26,7 @@ package gwtEntity.server;
  * @author jtymel
  */
 public class TestResult {
+
     private String result;
     private String test;
     private String testCase;
@@ -40,7 +41,6 @@ public class TestResult {
         this.testCase = testCase;
         this.duration = duration;
     }
-        
 
     public String getResult() {
         return result;
@@ -73,6 +73,5 @@ public class TestResult {
     public void setDuration(float duration) {
         this.duration = duration;
     }
-    
-    
+
 }

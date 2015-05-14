@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Label implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -29,12 +30,13 @@ public class Label implements Serializable {
 
     @ManyToOne
     private Job job;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "label_category", joinColumns = { 
-			@JoinColumn(name = "LABEL_ID", nullable = false, updatable = false) }, 
-			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
-					nullable = false, updatable = false) })
+    @JoinTable(name = "label_category", joinColumns = {
+        @JoinColumn(name = "LABEL_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                @JoinColumn(name = "CATEGORY_ID",
+                        nullable = false, updatable = false)})
     private List<Category> categories;
 
     public Label() {

@@ -21,7 +21,6 @@
  */
 package gwtEntity.server;
 
-
 import gwtEntity.common.services.JobService;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import gwtEntity.common.objects.CategoryDto;
@@ -42,7 +41,7 @@ public class JobServiceImpl extends RemoteServiceServlet implements JobService {
     public List<JobDto> getJobs() {
         return jobServiceBean.getJobs();
     }
-    
+
     @Override
     public Long saveJob(JobDto jobDTO) {
         return jobServiceBean.saveJob(jobDTO);
@@ -51,7 +50,7 @@ public class JobServiceImpl extends RemoteServiceServlet implements JobService {
     @Override
     public void deleteJob(JobDto jobDTO) {
         jobServiceBean.deleteJob(jobDTO);
-    }        
+    }
 
     @Override
     public void addCategoriesToLabel(JobDto job, List<CategoryDto> categories) {

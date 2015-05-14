@@ -8,82 +8,82 @@ Uncomment this for XHTML entities
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <ui:style src="style.css" />
     
-<!--    <g:DockLayoutPanel unit="EM">
-        <g:north size="75.0">-->
-            <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="30">
-                <g:tab>
-                    <g:header>
-                        List of jobs
-                    </g:header>
-                    <thesui:JobList ui:field="jobList" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        Job detail
-                    </g:header>
-                    <thesui:JobDetail ui:field="jobDetail" />
-                </g:tab>                
-                <g:tab>
-                    <g:header>
-                        Categorization list
-                    </g:header>
-                    <thesui:CategorizationList ui:field="categorizationList" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        Categorization detail
-                    </g:header>
-                    <thesui:CategorizationDetail ui:field="categorizationDetail" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        Category list
-                    </g:header>
-                    <thesui:CategoryList ui:field="categoryList" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        Category detail
-                    </g:header>
-                    <thesui:CategoryDetail ui:field="categoryDetail" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        Label detail
-                    </g:header>
-                    <thesui:LabelDetail ui:field="labelDetail" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        Job categories
-                    </g:header>
-                    <thesui:JobCategories ui:field="jobCategories" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        List of builds
-                    </g:header>
-                    <thesui:BuildList ui:field="buildList" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        List of parameterized builds
-                    </g:header>
-                    <thesui:ParamBuildList ui:field="paramBuildList" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        List of results
-                    </g:header>
-                    <thesui:ResultList ui:field="resultList" />
-                </g:tab>
-                <g:tab>
-                    <g:header>
-                        History of test
-                    </g:header>
-                    <thesui:TestDetail ui:field="testDetail" />
-                </g:tab>
-            </g:TabLayoutPanel>
-<!--        </g:north>
+    <!--    <g:DockLayoutPanel unit="EM">
+    <g:north size="75.0">-->
+    <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="30">
+        <g:tab>
+            <g:header>
+                List of jobs
+            </g:header>
+            <thesui:JobList ui:field="jobList" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                Job detail
+            </g:header>
+            <thesui:JobDetail ui:field="jobDetail" />
+        </g:tab>                
+        <g:tab>
+            <g:header>
+                Categorization list
+            </g:header>
+            <thesui:CategorizationList ui:field="categorizationList" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                Categorization detail
+            </g:header>
+            <thesui:CategorizationDetail ui:field="categorizationDetail" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                Category list
+            </g:header>
+            <thesui:CategoryList ui:field="categoryList" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                Category detail
+            </g:header>
+            <thesui:CategoryDetail ui:field="categoryDetail" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                Label detail
+            </g:header>
+            <thesui:LabelDetail ui:field="labelDetail" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                Job categories
+            </g:header>
+            <thesui:JobCategories ui:field="jobCategories" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                List of builds
+            </g:header>
+            <thesui:BuildList ui:field="buildList" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                List of parameterized builds
+            </g:header>
+            <thesui:ParamBuildList ui:field="paramBuildList" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                List of results
+            </g:header>
+            <thesui:ResultList ui:field="resultList" />
+        </g:tab>
+        <g:tab>
+            <g:header>
+                History of test
+            </g:header>
+            <thesui:TestDetail ui:field="testDetail" />
+        </g:tab>
+    </g:TabLayoutPanel>
+    <!--        </g:north>
     </g:DockLayoutPanel>-->
 </ui:UiBinder>

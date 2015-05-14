@@ -25,7 +25,6 @@ package gwtEntity.common.objects;
  *
  * @author jtymel
  */
-
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +34,7 @@ import javax.persistence.Id;
 public class JobDto implements Serializable {
 
     private Long id;
-    private String name;    
+    private String name;
     private String url;
 
     public JobDto() {

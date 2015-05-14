@@ -38,38 +38,39 @@ import org.hibernate.Session;
  *
  * @author jtymel
  */
-
 @Stateless
 @Transactional(Transactional.TxType.REQUIRED)
 public class ParameterizedBuildServiceBean {
+
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
-    
+
     public Long saveParamBuild(ParameterizedBuildDto paramBuildDto) {
         Session session = (Session) em.getDelegate();
         ParameterizedBuild paramBuild = new ParameterizedBuild(paramBuildDto);
 
         session.saveOrUpdate(paramBuild);
-        
-        return paramBuild.getId();    
+
+        return paramBuild.getId();
     }
-    
+
     public Long saveParamBuild(ParameterizedBuild paramBuild) {
         Session session = (Session) em.getDelegate();
 
         session.saveOrUpdate(paramBuild);
-        
-        return paramBuild.getId();    
+
+        return paramBuild.getId();
     }
-    
+
     public List<ParameterizedBuildDto> getParamBuilds(BuildDto buildDto) {
-        if(buildDto == null)
+        if (buildDto == null) {
             return null;
-        
+        }
+
         Session session = (Session) em.getDelegate();
         Query query = session.createQuery("FROM ParameterizedBuild WHERE build_id = :buildId")
-                .setParameter("buildId", buildDto.getId());                
-        
+                .setParameter("buildId", buildDto.getId());
+
         List<ParameterizedBuild> paramBuilds = new ArrayList<ParameterizedBuild>(query.list());
         List<ParameterizedBuildDto> paramBuildDtos = new ArrayList<ParameterizedBuildDto>(paramBuilds != null ? paramBuilds.size() : 0);
 
@@ -79,14 +80,14 @@ public class ParameterizedBuildServiceBean {
 //        session.getTransaction().commit();
         return paramBuildDtos;
     }
-    
-    private ParameterizedBuildDto createBuildDto(ParameterizedBuild paramBuild){
+
+    private ParameterizedBuildDto createBuildDto(ParameterizedBuild paramBuild) {
         ParameterizedBuildDto paramBuildDto = new ParameterizedBuildDto();
-        
+
         paramBuildDto.setId(paramBuild.getId());
         paramBuildDto.setName(paramBuild.getName());
         paramBuildDto.setUrl(paramBuild.getUrl());
-        
+
         return paramBuildDto;
     }
 }

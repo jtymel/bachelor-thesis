@@ -3,8 +3,8 @@
              xmlns:thesui="urn:import:gwtEntity.client.widgets"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <ui:style src="style.css" />
-<!--    <ui:style>
--->
+    <!--    <ui:style>
+    -->
     <!--</ui:style>-->
     
     <g:DockLayoutPanel unit="EM">
@@ -27,13 +27,13 @@
         <g:south size="3.0">
             <g:HTMLPanel>
                 <table style="width:100%">
-                  <tr>
-                    <td align="center">
-                      <c:SimplePager ui:field="pager" />
-                    </td>
-                  </tr>
+                    <tr>
+                        <td align="center">
+                            <c:SimplePager ui:field="pager" />
+                        </td>
+                    </tr>
                 </table>
-          </g:HTMLPanel>
+            </g:HTMLPanel>
         </g:south>
 
     </g:DockLayoutPanel>

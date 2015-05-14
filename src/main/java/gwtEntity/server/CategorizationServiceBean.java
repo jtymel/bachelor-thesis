@@ -62,7 +62,6 @@ public class CategorizationServiceBean {
 //        
 //        Categorization categorization = new Categorization(categorizationDto);
 //        em.remove(em.contains(categorization) ? categorization : em.merge(categorization));
-
         // Not running cascade deletion
 //        Session session = (Session) em.getDelegate();
 //        Query query = session.createQuery("DELETE Categorization WHERE id = :categorizationId")

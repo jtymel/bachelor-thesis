@@ -15,8 +15,7 @@ import org.hibernate.tool.hbm2ddl.ImportSqlCommandExtractor;
  * @author jtymel
  */
 public class CustomMultipleLinesSqlCommandExtractor implements ImportSqlCommandExtractor {
-    
-    
+
     @Override
     public String[] extractCommands(Reader reader) {
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -26,31 +25,29 @@ public class CustomMultipleLinesSqlCommandExtractor implements ImportSqlCommandE
             String statement = "";
             for (String sql = bufferedReader.readLine(); sql != null; sql = bufferedReader.readLine()) {
                 String trimmedSql = sql.trim();
-                
-                if (StringHelper.isEmpty( trimmedSql ) || isComment(trimmedSql) ) {
+
+                if (StringHelper.isEmpty(trimmedSql) || isComment(trimmedSql)) {
                     continue;
                 }
 
-                if ( trimmedSql.endsWith( "^" ) ) {
-                    trimmedSql = trimmedSql.substring( 0, trimmedSql.length() - 1 );
+                if (trimmedSql.endsWith("^")) {
+                    trimmedSql = trimmedSql.substring(0, trimmedSql.length() - 1);
                     statement += " " + trimmedSql;
                     statementList.add(statement);
                     statement = "";
                 } else {
                     statement += " " + trimmedSql;
-                }                
+                }
             }
-                        
+
             return statementList.toArray(new String[statementList.size()]);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new ImportScriptException("Error during import script parsing.", e);
-        }        
+        }
     }
-    
+
     private boolean isComment(final String line) {
         return line.startsWith("--");
     }
-    
-    
+
 }

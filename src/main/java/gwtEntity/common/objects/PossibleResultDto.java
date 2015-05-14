@@ -28,6 +28,7 @@ import java.io.Serializable;
  * @author jtymel
  */
 public class PossibleResultDto implements Serializable {
+
     private Long id;
     private String name;
 
@@ -46,5 +47,5 @@ public class PossibleResultDto implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
+
 }

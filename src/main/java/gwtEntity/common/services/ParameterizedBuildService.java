@@ -32,6 +32,7 @@ import java.util.List;
  * @author jtymel
  */
 @RemoteServiceRelativePath("parambuildservice")
-public interface ParameterizedBuildService extends RemoteService {    
+public interface ParameterizedBuildService extends RemoteService {
+
     public List<ParameterizedBuildDto> getParamBuilds(BuildDto build);
 }

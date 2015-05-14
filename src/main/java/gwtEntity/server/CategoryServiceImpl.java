@@ -12,6 +12,7 @@ import javax.ejb.EJB;
  * @author jtymel
  */
 public class CategoryServiceImpl extends RemoteServiceServlet implements CategoryService {
+
     @EJB
     private CategoryServiceBean categoryServiceBean;
 

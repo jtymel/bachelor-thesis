@@ -7,6 +7,7 @@ import java.io.Serializable;
  * @author jtymel
  */
 public class LabelDto implements Serializable {
+
     private Long id;
     private String name;
 
@@ -16,7 +17,7 @@ public class LabelDto implements Serializable {
     public LabelDto(Long id, String name) {
         this.id = id;
         this.name = name;
-    } 
+    }
 
     public Long getId() {
         return id;

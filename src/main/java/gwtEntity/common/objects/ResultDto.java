@@ -10,6 +10,7 @@ import java.util.Objects;
  * @author jtymel
  */
 public class ResultDto extends PossibleResultDto {
+
     private String test;
     private String testCase;
     private Map<Long, Integer> results = new HashMap<Long, Integer>();

@@ -13,12 +13,13 @@ import java.util.List;
  * @author jtymel
  */
 public class ParameterizedBuildDto implements Serializable {
-    private Long id;    
+
+    private Long id;
     private BuildDto build;
     private java.util.Date datetime;
     private String name;
     private String url;
-    private String machine;    
+    private String machine;
 
     public String getMachine() {
         return machine;
@@ -60,7 +61,6 @@ public class ParameterizedBuildDto implements Serializable {
         this.id = id;
     }
 
-
     public Date getDatetime() {
         return datetime;
     }
@@ -68,7 +68,5 @@ public class ParameterizedBuildDto implements Serializable {
     public void setDatetime(Date datetime) {
         this.datetime = datetime;
     }
-    
-    
-    
+
 }

@@ -35,7 +35,7 @@ public class CategorizationServiceImpl extends RemoteServiceServlet implements C
 
     @EJB
     private CategorizationServiceBean categorizationServiceBean;
-    
+
     @Override
     public List<CategorizationDto> getCategorizations() {
         return categorizationServiceBean.getCategorizations();
@@ -50,5 +50,5 @@ public class CategorizationServiceImpl extends RemoteServiceServlet implements C
     public void deleteCategorization(CategorizationDto categorization) {
         categorizationServiceBean.deleteCategorization(categorization);
     }
-    
+
 }

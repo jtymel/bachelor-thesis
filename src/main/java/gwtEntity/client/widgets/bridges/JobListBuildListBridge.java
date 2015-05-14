@@ -28,6 +28,8 @@ import gwtEntity.common.objects.JobDto;
  * @author jtymel
  */
 public interface JobListBuildListBridge {
+
     public void setJobAndDisplayBuilds(JobDto job);
+
     public void cancelBuildListAndDisplayJobList();
 }

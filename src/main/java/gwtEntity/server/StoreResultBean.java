@@ -14,23 +14,22 @@ import org.hibernate.Session;
  *
  * @author jtymel
  */
-
 @Stateless
 @Transactional(Transactional.TxType.REQUIRED)
 public class StoreResultBean {
+
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
-    
+
     public void saveTestResult(TestResult testResult, ParameterizedBuild paramBuild) {
         Session session = (Session) em.getDelegate();
         Query query = session.getNamedQuery("storeTestResultProcedure")
-            .setParameter("id_paramBuild", paramBuild)
-            .setParameter("result", testResult.getResult())
-            .setParameter("test", testResult.getTest())
-            .setParameter("testCase", testResult.getTestCase())
-            .setParameter("duration", testResult.getDuration());
+                .setParameter("id_paramBuild", paramBuild)
+                .setParameter("result", testResult.getResult())
+                .setParameter("test", testResult.getTest())
+                .setParameter("testCase", testResult.getTestCase())
+                .setParameter("duration", testResult.getDuration());
 
         List result = query.list();
     }
 }
-

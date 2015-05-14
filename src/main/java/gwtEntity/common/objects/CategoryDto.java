@@ -7,6 +7,7 @@ import java.io.Serializable;
  * @author jtymel
  */
 public class CategoryDto implements Serializable {
+
     private Long id;
     private String name;
     private String categorization;

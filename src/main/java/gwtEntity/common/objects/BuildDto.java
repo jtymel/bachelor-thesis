@@ -11,9 +11,10 @@ import javax.persistence.OneToMany;
  *
  * @author jtymel
  */
-public class BuildDto implements Serializable{
-    private Long id;        
-    private List<ParameterizedBuildDto> parameterizedBuilds;            
+public class BuildDto implements Serializable {
+
+    private Long id;
+    private List<ParameterizedBuildDto> parameterizedBuilds;
     private JobDto job;
     private String name;
     private String url;
@@ -57,6 +58,5 @@ public class BuildDto implements Serializable{
     public void setUrl(String url) {
         this.url = url;
     }
-    
-    
+
 }

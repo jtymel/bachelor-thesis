@@ -33,7 +33,8 @@ import javax.ejb.EJB;
  *
  * @author jtymel
  */
-public class JenkinsServiceImpl  extends RemoteServiceServlet implements JenkinsService {
+public class JenkinsServiceImpl extends RemoteServiceServlet implements JenkinsService {
+
     @EJB
     JenkinsDownloader jenkinsDownloader;
 
@@ -42,12 +43,12 @@ public class JenkinsServiceImpl  extends RemoteServiceServlet implements Jenkins
 //        return jenkinsDownloader.downloadBuilds(jobDto);
         return null;
     }
-    
+
     @Override
     public List<ParameterizedBuildDto> downloadParameterizedBuilds(BuildDto buildDto) {
 //        return jenkinsDownloader.downloadParameterizedBuilds(buildDto);
         return null;
-    }   
+    }
 
     @Override
     public void downloadBuilds(List<JobDto> jobs) {

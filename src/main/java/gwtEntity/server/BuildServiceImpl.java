@@ -33,7 +33,7 @@ import javax.ejb.EJB;
  * @author jtymel
  */
 public class BuildServiceImpl extends RemoteServiceServlet implements BuildService {
-    
+
     @EJB
     BuildServiceBean buildServiceBean;
 
@@ -46,5 +46,5 @@ public class BuildServiceImpl extends RemoteServiceServlet implements BuildServi
     public List<BuildDto> getBuilds(JobDto jobDto) {
         return buildServiceBean.getBuilds(jobDto);
     }
-    
+
 }

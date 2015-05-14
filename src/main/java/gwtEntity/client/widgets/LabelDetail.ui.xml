@@ -16,14 +16,14 @@
         <g:north size="3.0">
             <g:HTMLPanel>
                 <table style="width:50%" align="center">
-                  <tr>
-                    <td>
-                      <g:Label>Name of label</g:Label>
-                    </td>
-                    <td>
-                      <g:TextBox ui:field="labelNameField" />
-                    </td>
-                  </tr>
+                    <tr>
+                        <td>
+                            <g:Label>Name of label</g:Label>
+                        </td>
+                        <td>
+                            <g:TextBox ui:field="labelNameField" />
+                        </td>
+                    </tr>
                 </table>
             </g:HTMLPanel>
         </g:north>
@@ -35,13 +35,13 @@
         <g:south size="3.0">
             <g:HTMLPanel>
                 <table style="width:100%">
-                  <tr>
-                    <td align="center">
-                      <c:SimplePager ui:field="pager" />
-                    </td>
-                  </tr>
+                    <tr>
+                        <td align="center">
+                            <c:SimplePager ui:field="pager" />
+                        </td>
+                    </tr>
                 </table>
-          </g:HTMLPanel>
+            </g:HTMLPanel>
         </g:south>
 
     </g:DockLayoutPanel>

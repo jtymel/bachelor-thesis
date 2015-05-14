@@ -39,15 +39,13 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-
-
 /**
  *
  * @author jtymel
  */
 @Entity
 public class Job implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
@@ -63,15 +61,14 @@ public class Job implements Serializable {
 
 //    org.hibernate.exception.SQLGrammarException: could not extract ResultSet
 //    causing 'org.postgresql.util.PSQLException: ERROR: relation "testdb.job_category" does not exist', hence temporarily commented 
-    
     @ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "job_category", joinColumns = { 
-			@JoinColumn(name = "JOB_ID", nullable = false, updatable = false) }, 
-			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
-					nullable = false, updatable = false) })
+    @JoinTable(name = "job_category", joinColumns = {
+        @JoinColumn(name = "JOB_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                @JoinColumn(name = "CATEGORY_ID",
+                        nullable = false, updatable = false)})
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Category> categories;
-    
 
     private String name;
     private String url;
@@ -99,7 +96,6 @@ public class Job implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
 
     public Job(JobDto jobDTO) {
         id = jobDTO.getId();
@@ -115,7 +111,7 @@ public class Job implements Serializable {
 
     public Job() {
     }
-    
+
     public Job(Long id) {
         this.id = id;
     }

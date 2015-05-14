@@ -29,32 +29,34 @@ import org.hibernate.annotations.Cascade;
  * Created by jtymel on 12/15/14.
  */
 @NamedNativeQueries({
-	@NamedNativeQuery(
-	name = "addCategoriesToParamBuild",
-	query = "SELECT count (*) FROM addCategoriesToParamBuild(:id_paramBuild)"
-	)
+    @NamedNativeQuery(
+            name = "addCategoriesToParamBuild",
+            query = "SELECT count (*) FROM addCategoriesToParamBuild(:id_paramBuild)"
+    )
 })
 @Entity
 public class ParameterizedBuild implements Serializable {
+
     @OneToMany(mappedBy = "parameterizedBuild")
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     private List<Result> results;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "paramBuild_category", joinColumns = { 
-			@JoinColumn(name = "PARAMBUILD_ID", nullable = false, updatable = false) },
-			inverseJoinColumns = { @JoinColumn(name = "CATEGORY_ID", 
-					nullable = false, updatable = false) })
+    @JoinTable(name = "paramBuild_category", joinColumns = {
+        @JoinColumn(name = "PARAMBUILD_ID", nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                @JoinColumn(name = "CATEGORY_ID",
+                        nullable = false, updatable = false)})
     private Set<Category> categories;
 
     @ManyToOne
     private Build build;
 
     private String machine;
-    
+
     @Column()
     @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date datetime;
@@ -118,7 +120,6 @@ public class ParameterizedBuild implements Serializable {
         this.categories = categories;
     }
 
-
     public String getMachine() {
         return machine;
     }
@@ -147,15 +148,15 @@ public class ParameterizedBuild implements Serializable {
         this.datetime = datetime;
         this.name = name;
     }
-    
-    public ParameterizedBuild(ParameterizedBuildDto build) {        
+
+    public ParameterizedBuild(ParameterizedBuildDto build) {
         this.id = build.getId();
         this.datetime = build.getDatetime();
         this.name = build.getName();
         this.url = build.getUrl();
-                
+
         Build aux = new Build(build.getBuild());
         this.build = aux;
     }
-       
+
 }

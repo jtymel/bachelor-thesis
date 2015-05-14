@@ -33,6 +33,8 @@ import java.util.List;
  */
 @RemoteServiceRelativePath("buildservice")
 public interface BuildService extends RemoteService {
+
     public List<BuildDto> getBuilds(JobDto jobDto);
+
     public Long saveBuild(BuildDto BuildDto);
 }

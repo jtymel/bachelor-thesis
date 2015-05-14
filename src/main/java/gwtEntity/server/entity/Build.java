@@ -16,17 +16,17 @@ import org.hibernate.annotations.CascadeType;
 /**
  * Created by jtymel on 12/15/14.
  */
-
 @Entity
-public class Build implements Serializable {    
+public class Build implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @OneToMany(mappedBy = "build")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
-    private List<ParameterizedBuild> parameterizedBuilds;    
-    
+    private List<ParameterizedBuild> parameterizedBuilds;
+
     @ManyToOne
     private Job job;
 
@@ -83,7 +83,7 @@ public class Build implements Serializable {
         this.name = name;
         this.url = url;
     }
-    
+
     public Build(BuildDto build) {
         this.id = build.getId();
 //        this.parameterizedBuilds = build.getParameterizedBuilds();        
@@ -115,5 +115,5 @@ public class Build implements Serializable {
         }
         return true;
     }
-   
+
 }

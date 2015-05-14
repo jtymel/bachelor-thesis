@@ -15,11 +15,12 @@ import org.hibernate.annotations.CascadeType;
  * Created by jtymel on 12/15/14.
  */
 @Entity
-public class Categorization implements Serializable {    
+public class Categorization implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @OneToMany(mappedBy = "categorization")//, cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<Category> categories;

@@ -34,8 +34,7 @@ import javax.ejb.EJB;
  * @author jtymel
  */
 public class ParameterizedBuildServiceImpl extends RemoteServiceServlet implements ParameterizedBuildService {
-    
-    
+
     @EJB
     ParameterizedBuildServiceBean paramBuildServiceBean;
 
@@ -44,4 +43,3 @@ public class ParameterizedBuildServiceImpl extends RemoteServiceServlet implemen
         return paramBuildServiceBean.getParamBuilds(build);
     }
 }
-

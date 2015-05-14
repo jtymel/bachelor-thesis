@@ -21,27 +21,28 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Category implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     private String name;
 
     @ManyToOne
     private Categorization categorization;
-      
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private List<Job> jobs;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private Set<ParameterizedBuild> parameterizedBuilds = new HashSet<ParameterizedBuild>();
-    
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private List<Label> labels = new ArrayList<Label>();
 
     public Category() {
     }
-    
+
     public Category(CategoryDto categoryDto) {
         this.id = categoryDto.getId();
         this.name = categoryDto.getName();
@@ -102,7 +103,7 @@ public class Category implements Serializable {
     public void addJob(Job job) {
         jobs.add(job);
     }
-    
+
     public void addParamBuild(ParameterizedBuild pb) {
         parameterizedBuilds.add(pb);
     }
