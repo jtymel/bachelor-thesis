@@ -16,6 +16,7 @@
  */
 package gwtEntity.client.widgets;
 
+import com.google.gwt.cell.client.SafeHtmlCell;
 import gwtEntity.client.widgets.bridges.JobListResultListBridge;
 import gwtEntity.client.widgets.bridges.JobListDetailBridge;
 import gwtEntity.client.widgets.bridges.JobListBuildListBridge;
@@ -25,7 +26,10 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -115,6 +119,14 @@ public class JobList extends Composite {
     public void setJobListResultListBridge(JobListResultListBridge bridge) {
         jobListResultListBridge = bridge;
     }
+
+    public interface SimpleCellTemplates extends SafeHtmlTemplates {
+
+        @SafeHtmlTemplates.Template("<a href=\"{0}\" target=\"_blank\">{1}</a>")
+        SafeHtml anchor(SafeUri href, String name);
+    }
+
+    static final SimpleCellTemplates cell = GWT.create(SimpleCellTemplates.class);
 
     @UiHandler("deleteButton")
     void onDeleteButtonClick(ClickEvent event) {
@@ -220,11 +232,12 @@ public class JobList extends Composite {
     }
 
     private void initDatagrid() {
-        Column<JobDto, String> urlColumn = new Column<JobDto, String>(new TextCell()) {
+        Column urlColumn = new Column<JobDto, SafeHtml>(new SafeHtmlCell()) {
 
             @Override
-            public String getValue(JobDto object) {
-                return object.getUrl();
+            public SafeHtml getValue(JobDto object) {
+                SafeUri href = UriUtils.fromSafeConstant(object.getUrl());
+                return cell.anchor(href, object.getUrl());
             }
         };
 
@@ -251,9 +264,9 @@ public class JobList extends Composite {
             }
         }));
 
-        dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PX);
+        dataGrid.setColumnWidth(nameColumn, 40, Style.Unit.PCT);
         dataGrid.addColumn(urlColumn, "URL");
-        dataGrid.setColumnWidth(urlColumn, 40, Style.Unit.PX);
+        dataGrid.setColumnWidth(urlColumn, 60, Style.Unit.PCT);
 
         selectionModel = new SingleSelectionModel<JobDto>(keyProvider);
 

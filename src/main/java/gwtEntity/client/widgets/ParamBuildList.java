@@ -16,6 +16,7 @@
  */
 package gwtEntity.client.widgets;
 
+import com.google.gwt.cell.client.SafeHtmlCell;
 import gwtEntity.client.widgets.bridges.ParamBuildResultListBridge;
 import gwtEntity.client.widgets.bridges.BuildListParamBuildListBridge;
 import com.google.gwt.core.client.GWT;
@@ -23,9 +24,14 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -89,6 +95,14 @@ public class ParamBuildList extends Composite {
         paramBuildResultListBridge = bridge;
     }
 
+    public interface SimpleCellTemplates extends SafeHtmlTemplates {
+
+        @SafeHtmlTemplates.Template("<a href=\"{0}\" target=\"_blank\">{1}</a>")
+        SafeHtml anchor(SafeUri href, String name);
+    }
+
+    static final SimpleCellTemplates cell = GWT.create(SimpleCellTemplates.class);
+
     @UiHandler("cancelButton")
     void onCancelButtonClick(ClickEvent event) {
         buildListParamBuildListBridge.cancelParamBuildListAndDisplazBuildList();
@@ -122,10 +136,12 @@ public class ParamBuildList extends Composite {
             }
         };
 
-        TextColumn<ParameterizedBuildDto> urlColumn = new TextColumn<ParameterizedBuildDto>() {
+        Column urlColumn = new Column<ParameterizedBuildDto, SafeHtml>(new SafeHtmlCell()) {
+
             @Override
-            public String getValue(ParameterizedBuildDto object) {
-                return object.getUrl();
+            public SafeHtml getValue(ParameterizedBuildDto object) {
+                SafeUri href = UriUtils.fromSafeConstant(object.getUrl());
+                return cell.anchor(href, object.getUrl());
             }
         };
 

@@ -9,7 +9,7 @@
         <g:north size="2.0">
             <g:FlowPanel>
                 <g:Button ui:field="saveButton" styleName='{style.button}'>Save changes</g:Button>
-                <g:Button ui:field="setCategories" styleName='{style.button}'>Set parameterizations</g:Button>
+                <g:Button ui:field="setCategories" styleName='{style.button}'>Set default job categories</g:Button>
                 <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Cancel</g:Button>
             </g:FlowPanel>
         </g:north>
