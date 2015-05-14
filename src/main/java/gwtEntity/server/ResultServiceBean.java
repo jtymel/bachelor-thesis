@@ -376,66 +376,137 @@ public class ResultServiceBean {
         return resultDto;
     }
 
-    private String getTestHistoryQuery() {
-        return "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
-                + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
-                + " WHERE"
-                + "	r.possibleresult_id = pr.id"
-                + "	AND r.test_id = t.id"
-                + "	AND t.testcase_id = tc.id"
-                + "	AND r.parameterizedbuild_id = pb.id"
-                + "     AND pb.build_id = b.id"
-                + "     AND b.job_id = :jobId"
-                + "     AND t.id = :testId"
-                + " ORDER BY pb.dateTime DESC";
-    }
+    private final String TEST_HISTORY_QUERY_ALL = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
+            + " WHERE"
+            + "     r.possibleresult_id = pr.id"
+            + "     AND r.test_id = t.id"
+            + "     AND t.testcase_id = tc.id"
+            + "     AND r.parameterizedbuild_id = pb.id"
+            + "     AND pb.build_id = b.id"
+            + "     AND b.job_id = :jobId"
+            + "     AND t.id = :testId"
+            + " ORDER BY pb.dateTime DESC";
 
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto) {
+    private final String TEST_HISTORY_QUERY_FILTER_RESULTS
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
+            + " WHERE"
+            + "     r.possibleresult_id = pr.id"
+            + "     AND r.test_id = t.id"
+            + "     AND t.testcase_id = tc.id"
+            + "     AND r.parameterizedbuild_id = pb.id"
+            + "     AND pb.build_id = b.id"
+            + "     AND r.possibleresult_id = :possibleResultId"
+            + "     AND b.job_id = :jobId"
+            + "     AND t.id = :testId"
+            + " ORDER BY pb.dateTime DESC";
+
+    private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
+            + " WHERE"
+            + "     r.possibleresult_id = pr.id"
+            + "     AND r.test_id = t.id"
+            + "     AND t.testcase_id = tc.id"
+            + "     AND r.parameterizedbuild_id = pb.id"
+            + "     AND pb.build_id = b.id"
+            + "     AND pbc.parambuild_id = pb.id"
+            + "     AND pbc.category_id = :categoryId"
+            + "     AND b.job_id = :jobId"
+            + "     AND t.id = :testId"
+            + " ORDER BY pb.dateTime DESC";
+
+    private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES_RESULTS
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
+            + " WHERE"
+            + "     r.possibleresult_id = pr.id"
+            + "     AND r.possibleresult_id = :possibleResultId"
+            + "     AND r.test_id = t.id"
+            + "     AND t.testcase_id = tc.id"
+            + "     AND r.parameterizedbuild_id = pb.id"
+            + "     AND pb.build_id = b.id"
+            + "     AND pbc.parambuild_id = pb.id"
+            + "     AND pbc.category_id = :categoryId"
+            + "     AND b.job_id = :jobId"
+            + "     AND t.id = :testId"
+            + " ORDER BY pb.dateTime DESC";
+
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = session.createQuery("FROM ParameterizedBuild WHERE id = :paramBuildId")
                 .setParameter("paramBuildId", paramBuildDto.getId());
         ParameterizedBuild paramBuild = (ParameterizedBuild) query.uniqueResult();
 
-        query = session.createSQLQuery(getTestHistoryQuery())
-                .setParameter("jobId", paramBuild.getBuild().getJob().getId())
-                .setParameter("testId", resultDto.getTestId());
+        query = getTestHistoryQuery(resultDto.getTestId(), paramBuild.getBuild().getJob().getId(), resultId, categoryId);
 
         List<Object[]> testResults = query.list();
 
         return getTestHistory(testResults);
     }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto) {
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Long resultId, Long categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = session.createQuery("FROM Build WHERE id = :buildId")
                 .setParameter("buildId", buildDto.getId());
         Build build = (Build) query.uniqueResult();
 
-        query = session.createSQLQuery(getTestHistoryQuery())
-                .setParameter("jobId", build.getJob().getId())
-                .setParameter("testId", resultDto.getTestId());
+        query = getTestHistoryQuery(resultDto.getTestId(), build.getJob().getId(), resultId, categoryId);
 
         List<Object[]> testResults = query.list();
 
         return getTestHistory(testResults);
     }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto) {
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Long resultId, Long categoryId) {
         Session session = (Session) em.getDelegate();
 
-        Query query = session.createQuery("FROM Job WHERE id = :jobId")
-                .setParameter("jobId", jobDto.getId());
-        Job job = (Job) query.uniqueResult();
-
-        query = session.createSQLQuery(getTestHistoryQuery())
-                .setParameter("jobId", job.getId())
-                .setParameter("testId", resultDto.getTestId());
+        Query query = getTestHistoryQuery(resultDto.getTestId(), jobDto.getId(), resultId, categoryId);
 
         List<Object[]> testResults = query.list();
 
         return getTestHistory(testResults);
+    }
+
+    private Query getTestHistoryQuery(Long testId, Long jobId, Long resultId, Long categoryId) {
+        Session session = (Session) em.getDelegate();
+
+        if (resultId == null && categoryId == null) {
+            return session.createSQLQuery(TEST_HISTORY_QUERY_ALL)
+                    .setParameter("jobId", jobId)
+                    .setParameter("testId", testId);
+
+        } else if (resultId != null && categoryId != null) {
+            Query query = session.createQuery("FROM PossibleResult WHERE id = :result")
+                    .setParameter("result", resultId);
+            PossibleResult possibleResult = (PossibleResult) query.uniqueResult();
+
+            return session.createSQLQuery(TEST_HISTORY_QUERY_FILTER_CATEGORIES_RESULTS)
+                    .setParameter("jobId", jobId)
+                    .setParameter("testId", testId)
+                    .setParameter("categoryId", categoryId)
+                    .setParameter("possibleResultId", possibleResult.getId());
+
+        } else if (resultId == null && categoryId != null) {
+            return session.createSQLQuery(TEST_HISTORY_QUERY_FILTER_CATEGORIES)
+                    .setParameter("jobId", jobId)
+                    .setParameter("testId", testId)
+                    .setParameter("categoryId", categoryId);
+
+        } else {
+            Query query = session.createQuery("FROM PossibleResult WHERE id = :result")
+                    .setParameter("result", resultId);
+
+            PossibleResult possibleResult = (PossibleResult) query.uniqueResult();
+
+            return session.createSQLQuery(TEST_HISTORY_QUERY_FILTER_RESULTS)
+                    .setParameter("jobId", jobId)
+                    .setParameter("testId", testId)
+                    .setParameter("possibleResultId", possibleResult.getId());
+        }
     }
 
     private List<TestDto> getTestHistory(List<Object[]> testResults) {

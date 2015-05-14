@@ -41,9 +41,9 @@ public interface ResultService extends RemoteService {
 
     public List<ResultDto> getResults(JobDto jobDto, Long possibleResultId, Long categoryId);
 
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto);
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId);
 
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto);
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Long resultId, Long categoryId);
 
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto);
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Long resultId, Long categoryId);
 }

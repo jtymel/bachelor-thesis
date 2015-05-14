@@ -20,7 +20,6 @@ import gwtEntity.client.widgets.bridges.ResultListTestDetailBridge;
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -46,6 +45,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionModel;
 import gwtEntity.common.objects.BuildDto;
+import gwtEntity.common.objects.CategoryDto;
 import gwtEntity.common.objects.JobDto;
 import gwtEntity.common.objects.ParameterizedBuildDto;
 import gwtEntity.common.objects.PossibleResultDto;
@@ -53,7 +53,8 @@ import gwtEntity.common.objects.ResultDto;
 import gwtEntity.common.services.ResultService;
 import gwtEntity.common.services.ResultServiceAsync;
 import gwtEntity.common.objects.TestDto;
-import java.util.ArrayList;
+import gwtEntity.common.services.CategoryService;
+import gwtEntity.common.services.CategoryServiceAsync;
 import java.util.List;
 
 /**
@@ -65,6 +66,7 @@ public class TestDetail extends Composite {
     private static TestDetailUiBinder uiBinder = GWT.create(TestDetailUiBinder.class);
 
     private final ResultServiceAsync resultService = GWT.create(ResultService.class);
+    private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
 
     interface TestDetailUiBinder extends UiBinder<Widget, TestDetail> {
     }
@@ -83,15 +85,25 @@ public class TestDetail extends Composite {
     @UiField
     ListBox possibleResultListBox;
 
+    @UiField
+    ListBox categoryListBox;
+
     private SelectionModel<TestDto> selectionModel;
     private ListDataProvider<TestDto> dataProvider;
+    private List<CategoryDto> categoryList;
+    private ResultDto result;
+    private JobDto job;
+    private BuildDto build;
+    private ParameterizedBuildDto paramBuild;
+    private List<PossibleResultDto> possibleResultList;
 
     public TestDetail() {
         dataGrid = new DataGrid<TestDto>(500);
         initDatagrid();
         initPager();
         initWidget(uiBinder.createAndBindUi(this));
-        initListBox();
+        initPossibleResultListBox();
+        initCategoryListBox();
     }
 
     public interface SimpleCellTemplates extends SafeHtmlTemplates {
@@ -105,6 +117,9 @@ public class TestDetail extends Composite {
     @UiHandler("cancelButton")
     void onCancelButtonClick(ClickEvent event) {
         resultListTestDetailBridge.cancelTestDetailAndDisplayResultList();
+        refreshPossibleResultListBox(possibleResultList);
+        loadCategories();
+
     }
 
     public void setResultListTestDetailBridge(ResultListTestDetailBridge bridge) {
@@ -171,31 +186,63 @@ public class TestDetail extends Composite {
         pager.setDisplay(dataGrid);
     }
 
-    private void initListBox() {
-        possibleResultListBox.addItem("All");
+    private void initPossibleResultListBox() {
+        possibleResultListBox.addItem("Don't filter");
 
         possibleResultListBox.addChangeHandler(new ChangeHandler() {
 
             @Override
             public void onChange(ChangeEvent event) {
-                filterSelectedResults(possibleResultListBox.getSelectedItemText());
+                getTestHistory();
 
             }
         });
     }
 
+    private void initCategoryListBox() {
+        categoryListBox.addItem("Don't filter");
+
+        loadCategories();
+
+        categoryListBox.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                getTestHistory();
+            }
+        });
+    }
+
     public void showTestHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults) {
-        getTestHistory(result, paramBuild);
+        this.result = result;
+        this.possibleResultList = possibleResults;
+        this.paramBuild = paramBuild;
+        this.build = null;
+        this.job = null;
+
+        getTestHistory();
         prepareResultsFilter(possibleResults);
     }
 
     public void showTestHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults) {
-        getTestHistory(result, build);
+        this.result = result;
+        this.possibleResultList = possibleResults;
+        this.paramBuild = null;
+        this.build = build;
+        this.job = null;
+
+        getTestHistory();
         prepareResultsFilter(possibleResults);
     }
 
     public void showTestHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults) {
-        getTestHistory(result, job);
+        this.result = result;
+        this.possibleResultList = possibleResults;
+        this.paramBuild = null;
+        this.build = null;
+        this.job = job;
+
+        getTestHistory();
         prepareResultsFilter(possibleResults);
     }
 
@@ -206,8 +253,22 @@ public class TestDetail extends Composite {
         dataGrid.setRowCount(result.size());
     }
 
+    private void getTestHistory() {
+        if (paramBuild != null) {
+            getTestHistory(result, paramBuild);
+        }
+
+        if (build != null) {
+            getTestHistory(result, build);
+        }
+
+        if (job != null) {
+            getTestHistory(result, job);
+        }
+    }
+
     private void getTestHistory(ResultDto result, JobDto job) {
-        resultService.getTestResults(result, job, new AsyncCallback<List<TestDto>>() {
+        resultService.getTestResults(result, job, getPossibleResultId(), getCategoryId(), new AsyncCallback<List<TestDto>>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -222,7 +283,7 @@ public class TestDetail extends Composite {
     }
 
     private void getTestHistory(ResultDto result, BuildDto build) {
-        resultService.getTestResults(result, build, new AsyncCallback<List<TestDto>>() {
+        resultService.getTestResults(result, build, getPossibleResultId(), getCategoryId(), new AsyncCallback<List<TestDto>>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -237,7 +298,7 @@ public class TestDetail extends Composite {
     }
 
     private void getTestHistory(ResultDto result, ParameterizedBuildDto paramBuild) {
-        resultService.getTestResults(result, paramBuild, new AsyncCallback<List<TestDto>>() {
+        resultService.getTestResults(result, paramBuild, getPossibleResultId(), getCategoryId(), new AsyncCallback<List<TestDto>>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -254,34 +315,57 @@ public class TestDetail extends Composite {
     private void refreshPossibleResultListBox(List<PossibleResultDto> possibleResults) {
         possibleResultListBox.clear();
 
-        possibleResultListBox.addItem("All");
+        possibleResultListBox.addItem("Don't filter");
 
         for (PossibleResultDto possibleResult : possibleResults) {
             possibleResultListBox.addItem(possibleResult.getName());
         }
     }
 
-    private void filterSelectedResults(String selectedResults) {
-        if (selectedResults.equals("All")) {
-            fillDataGrid(dataProvider.getList());
-        } else {
-
-            List<TestDto> auxResultList = new ArrayList<TestDto>();
-
-            for (TestDto auxResult : dataProvider.getList()) {
-                if (auxResult.getResult().equals(selectedResults)) {
-                    auxResultList.add(auxResult);
-                }
-            }
-            ListDataProvider<TestDto> auxListProvider = new ListDataProvider<TestDto>();
-
-            auxListProvider.setList(auxResultList);
-            auxListProvider.addDataDisplay(dataGrid);
-            dataGrid.setRowCount(auxResultList.size());
-        }
-    }
-
     private void prepareResultsFilter(List<PossibleResultDto> possibleResults) {
         refreshPossibleResultListBox(possibleResults);
     }
+
+    private void loadCategories() {
+        categoryService.getCategories(new AsyncCallback<List<CategoryDto>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onSuccess(List<CategoryDto> categories) {
+                categoryList = categories;
+                categoryListBox.clear();
+
+                categoryListBox.addItem("Don't filter");
+
+                for (CategoryDto category : categories) {
+                    categoryListBox.addItem(category.getCategorization() + " : " + category.getName());
+                }
+            }
+        });
+    }
+
+    private Long getCategoryId() {
+        if (categoryListBox.getSelectedIndex() == 0) {
+            return null;
+        }
+
+        return categoryList.get(categoryListBox.getSelectedIndex() - 1).getId();
+    }
+
+    private Long getPossibleResultId() {
+        Long possibleResultId = null;
+
+        for (PossibleResultDto possibleResult : possibleResultList) {
+            if (possibleResult.getName().equals(possibleResultListBox.getSelectedItemText())) {
+                possibleResultId = possibleResult.getId();
+                break;
+            }
+        }
+        return possibleResultId;
+    }
+
 }
