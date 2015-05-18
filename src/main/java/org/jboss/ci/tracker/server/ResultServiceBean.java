@@ -392,6 +392,7 @@ public class ResultServiceBean {
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
             + " WHERE"
             + "     r.test_id = t.id"
+            + "     AND r.possibleresult_id = pr.id"
             + "     AND t.testcase_id = tc.id"
             + "     AND r.parameterizedbuild_id = pb.id"
             + "     AND pb.build_id = b.id"
