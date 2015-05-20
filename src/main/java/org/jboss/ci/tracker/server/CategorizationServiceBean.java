@@ -41,7 +41,7 @@ public class CategorizationServiceBean {
     public List<CategorizationDto> getCategorizations() {
         Session session = (Session) em.getDelegate();
 
-        List<Categorization> categorizations = new ArrayList<Categorization>(session.createQuery("from Categorization").list());
+        List<Categorization> categorizations = new ArrayList<Categorization>(session.createQuery("FROM Categorization ORDER BY name").list());
         List<CategorizationDto> categorizationDtos = new ArrayList<CategorizationDto>(categorizations != null ? categorizations.size() : 0);
 
         for (Categorization categorization : categorizations) {

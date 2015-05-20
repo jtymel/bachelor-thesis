@@ -43,7 +43,7 @@ public class CategoryServiceBean {
     public List<CategoryDto> getCategories() {
         Session session = (Session) em.getDelegate();
 
-        List<Category> categories = new ArrayList<Category>(session.createQuery("from Category").list());
+        List<Category> categories = new ArrayList<Category>(session.createQuery("FROM Category ORDER BY categorization.name, name").list());
         List<CategoryDto> categoryDtos = new ArrayList<CategoryDto>(categories != null ? categories.size() : 0);
 
         for (Category category : categories) {
