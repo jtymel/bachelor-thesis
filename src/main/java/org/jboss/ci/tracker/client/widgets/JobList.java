@@ -42,6 +42,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.ProvidesKey;
@@ -69,6 +70,7 @@ public class JobList extends Composite {
     private JobListDetailBridge jobListDetailBridge;
     private JobListBuildListBridge jobListBuildListBridge;
     private JobListResultListBridge jobListResultListBridge;
+    private DialogBox downloadStartedAlert;
 
     interface JobListUiBinder extends UiBinder<Widget, JobList> {
     }
@@ -170,19 +172,22 @@ public class JobList extends Composite {
 
             @Override
             public void onFailure(Throwable caught) {
+                downloadStartedAlert.hide();
                 CustomWidgets.alertWidget("Unexpected error",
                         "An error occured during downloading results. See server log for more details.").center();
             }
 
             @Override
             public void onSuccess(Void result) {
+                downloadStartedAlert.hide();
                 CustomWidgets.alertWidget("Results successfully downloaded",
                         "Results have been correctly downloaded.").center();
             }
         });
 
-        CustomWidgets.alertWidget("Results download",
-                "Results are being downloaded.").center();
+        downloadStartedAlert = CustomWidgets.alertWidget("Results download",
+                "Results are being downloaded.");
+        downloadStartedAlert.center();
 
     }
 
