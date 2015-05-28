@@ -26,6 +26,7 @@ import org.jboss.ci.tracker.common.services.ResultService;
 import org.jboss.ci.tracker.common.objects.TestDto;
 import java.util.List;
 import javax.ejb.EJB;
+import org.jboss.ci.tracker.common.objects.FilterDto;
 
 /**
  *
@@ -42,18 +43,18 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
     }
 
     @Override
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, Long possibleResultId, Long categoryId) {
-        return resultServiceBean.getResults(paramBuildDto, possibleResultId, categoryId);
+    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, FilterDto filter) {
+        return resultServiceBean.getResults(paramBuildDto, filter);
     }
 
     @Override
-    public List<ResultDto> getResults(BuildDto buildDto, Long possibleResultId, Long categoryId) {
-        return resultServiceBean.getResults(buildDto, possibleResultId, categoryId);
+    public List<ResultDto> getResults(BuildDto buildDto, FilterDto filter) {
+        return resultServiceBean.getResults(buildDto, filter);
     }
 
     @Override
-    public List<ResultDto> getResults(JobDto jobDto, Long possibleResultId, Long categoryId) {
-        return resultServiceBean.getResults(jobDto, possibleResultId, categoryId);
+    public List<ResultDto> getResults(JobDto jobDto, FilterDto filter) {
+        return resultServiceBean.getResults(jobDto, filter);
     }
 
     @Override

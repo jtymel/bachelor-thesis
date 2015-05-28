@@ -8,6 +8,7 @@
                
         <g:north size="2.0">
             <g:FlowPanel>
+                <g:Button ui:field="filterButton" addStyleNames='{style.button}'>Filter results...</g:Button>
                 <g:Button ui:field="cancelButton" addStyleNames='{style.closeButton}'>Close</g:Button>
             </g:FlowPanel>
         </g:north>
@@ -28,12 +29,5 @@
             </g:HTMLPanel>
         </g:south>
 
-        <g:south size="2.0">
-            <g:FlowPanel>
-                <g:InlineHTML>Filter by</g:InlineHTML>
-                <g:ListBox ui:field="possibleResultListBox" addStyleNames='{style.listBox}'></g:ListBox>
-                <g:ListBox ui:field="categoryListBox" addStyleNames='{style.listBox}'></g:ListBox>
-            </g:FlowPanel>
-        </g:south>
     </g:DockLayoutPanel>
 </ui:UiBinder>

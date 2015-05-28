@@ -28,14 +28,20 @@ import org.jboss.ci.tracker.common.objects.TestDto;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jboss.ci.tracker.common.objects.FilterDto;
+import org.jboss.ci.tracker.server.entity.Categorization;
+import org.jboss.ci.tracker.server.entity.Category;
 
 /**
  *
@@ -47,6 +53,9 @@ public class ResultServiceBean {
 
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
+
+    @EJB
+    private CategoryServiceBean categoryServiceBean;
 
     private static final int QUERY_TEST_DTO_POSITION_DATE = 0;
     private static final int QUERY_TEST_DTO_POSITION_RESULT = 1;
@@ -84,12 +93,26 @@ public class ResultServiceBean {
         return possibleResultDto;
     }
 
-    public List<ResultDto> getResults(JobDto jobDto, Long possibleResultId, Long categoryId) {
+    public List<ResultDto> getResults(JobDto jobDto, FilterDto filter) {
+        if (filter == null) {
+            return getAllResults(jobDto);
+        }
+
+        Query query = getBuildQueryAccordingToFilter(jobDto, filter);
+        List<Object[]> testResults = query.list();
+        List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
+
+        addOrEditResults(testResults, resultDtos);
+
+        return resultDtos;
+    }
+
+    public List<ResultDto> getAllResults(JobDto jobDto) {
         if (jobDto == null) {
             return null;
         }
 
-        Query query = getJobResultQuery(jobDto, possibleResultId, categoryId);
+        Query query = getJobResultQuery(jobDto);
 
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>();
@@ -99,12 +122,12 @@ public class ResultServiceBean {
         return resultDtos;
     }
 
-    public List<ResultDto> getResults(BuildDto buildDto, Long possibleResultId, Long categoryId) {
+    public List<ResultDto> getAllResults(BuildDto buildDto) {
         if (buildDto == null) {
             return null;
         }
 
-        Query query = getBuildResultQuery(buildDto, possibleResultId, categoryId);
+        Query query = getBuildResultQuery(buildDto);
 
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
@@ -114,12 +137,27 @@ public class ResultServiceBean {
         return resultDtos;
     }
 
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, Long possibleResultId, Long categoryId) {
+    public List<ResultDto> getResults(BuildDto buildDto, FilterDto filter) {
+        if (filter == null) {
+            return getAllResults(buildDto);
+        }
+
+        Query query = getBuildQueryAccordingToFilter(buildDto, filter);
+        List<Object[]> testResults = query.list();
+        List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
+
+        addOrEditResults(testResults, resultDtos);
+
+        return resultDtos;
+
+    }
+
+    public List<ResultDto> getAllResults(ParameterizedBuildDto paramBuildDto) {
         if (paramBuildDto == null) {
             return null;
         }
 
-        Query query = getParamBuildResultQuery(paramBuildDto, possibleResultId, categoryId);
+        Query query = getParamBuildAllResultsQuery(paramBuildDto);
 
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
@@ -129,218 +167,220 @@ public class ResultServiceBean {
         return resultDtos;
     }
 
-    private Query getParamBuildResultQuery(ParameterizedBuildDto paramBuildDto, Long possibleResultId, Long categoryId) {
+    private Query getParamBuildAllResultsQuery(ParameterizedBuildDto paramBuildDto) {
         Session session = (Session) em.getDelegate();
 
-        if (possibleResultId != null && categoryId != null) {
-            final String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, ParamBuild_Category pbc"
-                    + " WHERE"
-                    + "     r.possibleresult_id = :possibleResultId"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = :paramBuildId"
-                    + "     AND pbc.parambuild_id = r.parameterizedbuild_id"
-                    + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
+        String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, PossibleResult pr, Test t, TestCase tc"
+                + " WHERE"
+                + "     r.possibleresult_id = pr.id"
+                + "     AND r.test_id = t.id"
+                + "     AND t.testcase_id = tc.id"
+                + "     AND r.parameterizedbuild_id = :paramBuildId"
+                + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                + " ORDER BY tc.name, t.name";
 
-            return session.createSQLQuery(queryString)
-                    .setParameter("paramBuildId", paramBuildDto.getId())
-                    .setParameter("possibleResultId", possibleResultId)
-                    .setParameter("categoryId", categoryId);
-
-        } else if (possibleResultId == null && categoryId == null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, PossibleResult pr, Test t, TestCase tc"
-                    + " WHERE"
-                    + "     r.possibleresult_id = pr.id"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = :paramBuildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString).setParameter("paramBuildId", paramBuildDto.getId());
-
-        } else if (possibleResultId != null && categoryId == null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc"
-                    + " WHERE"
-                    + "     r.possibleresult_id = :possibleResultId"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = :paramBuildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("paramBuildId", paramBuildDto.getId())
-                    .setParameter("possibleResultId", possibleResultId);
-
-        } else {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParamBuild_Category pbc"
-                    + " WHERE"
-                    + "     r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = :paramBuildId"
-                    + "     AND pbc.parambuild_id = r.parameterizedbuild_id"
-                    + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("paramBuildId", paramBuildDto.getId())
-                    .setParameter("categoryId", categoryId);
-        }
+        return session.createSQLQuery(queryString).setParameter("paramBuildId", paramBuildDto.getId());
     }
 
-    private Query getBuildResultQuery(BuildDto buildDto, Long possibleResultId, Long categoryId) {
-        Session session = (Session) em.getDelegate();
-
-        if (possibleResultId != null && categoryId != null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, ParamBuild_Category pbc"
-                    + " WHERE"
-                    + "     r.possibleresult_id = :possibleResultId"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = :buildId"
-                    + "     AND pbc.category_id = :categoryId"
-                    + "     AND pbc.parambuild_id = pb.id"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("buildId", buildDto.getId())
-                    .setParameter("possibleResultId", possibleResultId)
-                    .setParameter("categoryId", categoryId);
-
-        } else if (possibleResultId == null && categoryId == null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, PossibleResult pr, Test t, TestCase tc, ParameterizedBuild pb"
-                    + " WHERE"
-                    + "     r.possibleresult_id = pr.id"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = :buildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString).setParameter("buildId", buildDto.getId());
-
-        } else if (possibleResultId != null && categoryId == null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
-                    + " WHERE"
-                    + "     r.possibleresult_id = :possibleResultId"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = :buildId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("buildId", buildDto.getId())
-                    .setParameter("possibleResultId", possibleResultId);
-
-        } else {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, ParamBuild_Category pbc"
-                    + " WHERE"
-                    + "     r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = :buildId"
-                    + "     AND pbc.category_id = :categoryId"
-                    + "     AND pbc.parambuild_id = pb.id"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("buildId", buildDto.getId())
-                    .setParameter("categoryId", categoryId);
+    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, FilterDto filter) {
+        if (filter == null) {
+            return ResultServiceBean.this.getAllResults(paramBuildDto);
         }
+
+        Query query = getParamBuildQueryAccordingToFilter(paramBuildDto, filter);
+        List<Object[]> testResults = query.list();
+        List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
+
+        addOrEditResults(testResults, resultDtos);
+
+        return resultDtos;
     }
 
-    private Query getJobResultQuery(JobDto jobDto, Long possibleResultId, Long categoryId) {
+    private Query getParamBuildQueryAccordingToFilter(final ParameterizedBuildDto paramBuildDto, final FilterDto filter) {
         Session session = (Session) em.getDelegate();
 
-        if (possibleResultId != null && categoryId != null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b, ParamBuild_Category pbc"
-                    + " WHERE"
-                    + "     r.possibleresult_id = :possibleResultId"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = b.id"
-                    + "     AND b.job_id = :jobId"
-                    + "     AND pbc.parambuild_id = pb.id"
-                    + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
+        Map<String, Object> queryParameters = new HashMap<String, Object>();
 
-            return session.createSQLQuery(queryString)
-                    .setParameter("jobId", jobDto.getId())
-                    .setParameter("possibleResultId", possibleResultId)
-                    .setParameter("categoryId", categoryId);
+        String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
+                + " WHERE"
+                + "     r.test_id = t.id"
+                + "     AND t.testcase_id = tc.id"
+                + "     AND pb.id = :paramBuildId"
+                + "     AND r.parameterizedbuild_id = pb.id";
 
-        } else if (possibleResultId == null && categoryId == null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b"
-                    + " WHERE"
-                    + "     r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = b.id"
-                    + "     AND b.job_id = :jobId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
+        queryString += getCommonPartOfQueryWithFilter(filter, queryParameters);
 
-            return session.createSQLQuery(queryString)
-                    .setParameter("jobId", jobDto.getId());
+        Query query = session.createSQLQuery(queryString)
+                .setParameter("paramBuildId", paramBuildDto.getId());
 
-        } else if (possibleResultId != null && categoryId == null) {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b"
-                    + " WHERE"
-                    + "     r.possibleresult_id = :possibleResultId"
-                    + "     AND r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = b.id"
-                    + "     AND b.job_id = :jobId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("jobId", jobDto.getId())
-                    .setParameter("possibleResultId", possibleResultId);
-
-        } else {
-            String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
-                    + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b, ParamBuild_Category pbc"
-                    + " WHERE"
-                    + "     r.test_id = t.id"
-                    + "     AND t.testcase_id = tc.id"
-                    + "     AND r.parameterizedbuild_id = pb.id"
-                    + "     AND pb.build_id = b.id"
-                    + "     AND b.job_id = :jobId"
-                    + "     AND pbc.parambuild_id = pb.id"
-                    + "     AND pbc.category_id = :categoryId"
-                    + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
-                    + " ORDER BY tc.name, t.name";
-
-            return session.createSQLQuery(queryString)
-                    .setParameter("jobId", jobDto.getId())
-                    .setParameter("categoryId", categoryId);
+        for (Map.Entry<String, Object> entry : queryParameters.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
         }
 
+        return query;
+    }
+
+    /**
+     * Creates subqueries of categories according to categorizations
+     *
+     * @param filter contains IDs (among others) of categories that should be filtered
+     * @param queryParameters pointer to the map that stores parameters of the whole query
+     * @return subquery string
+     */
+    private String putCategoriesToQuery(FilterDto filter, Map<String, Object> queryParameters) {
+        List<Category> categories = new ArrayList<Category>();
+        Set<Categorization> usedCategorizations = new HashSet<Categorization>();
+
+        for (Long categoryId : filter.getCategoryIds()) {
+            Category category = categoryServiceBean.getCategoryById(categoryId);
+            categories.add(category);
+            usedCategorizations.add(category.getCategorization());
+        }
+
+        String queryString = "";
+        int i = 0;
+
+        for (Categorization categorization : usedCategorizations) {
+
+            queryString += " AND EXISTS ("
+                    + "         SELECT 1 FROM ParamBuild_Category pbc"
+                    + "         WHERE"
+                    + "             pbc.parambuild_id = r.parameterizedbuild_id"
+                    + "             AND (false"; // because of OR operator
+
+            for (Category category : categories) {
+                if (category.getCategorization().getId().equals(categorization.getId())) {
+                    queryString += " OR pbc.category_id  = :categoryId" + i;
+                    queryParameters.put("categoryId" + i, filter.getCategoryIds().get(i));
+                    i++;
+                }
+            }
+
+            queryString += "))";
+        }
+
+        return queryString;
+    }
+
+    private String getCommonPartOfQueryWithFilter(FilterDto filter, Map<String, Object> queryParameters) {
+        String queryString = "";
+        if (filter.getCategoryIds() != null && !filter.getCategoryIds().isEmpty()) {
+            queryString += putCategoriesToQuery(filter, queryParameters);
+
+        }
+
+        if (filter.getPossibleResultIds() != null && !filter.getPossibleResultIds().isEmpty()) {
+            queryString += " AND (false "; // because of OR operator
+
+            for (int i = 0; i < filter.getPossibleResultIds().size(); i++) {
+                queryString += " OR r.possibleresult_id  = :possibleResultId" + i;
+                queryParameters.put("possibleResultId" + i, filter.getPossibleResultIds().get(i));
+            }
+
+            queryString += "    )";
+        }
+
+        if (filter.getDateFrom() != null) {
+            queryString += " AND pb.datetime > :dateFrom";
+            queryParameters.put("dateFrom", filter.getDateFrom());
+        }
+
+        if (filter.getDateTo() != null) {
+            queryString += " AND pb.datetime < :dateTo";
+            queryParameters.put("dateTo", filter.getDateTo());
+        }
+
+        queryString += " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                + " ORDER BY tc.name, t.name";
+
+        return queryString;
+    }
+
+    private Query getBuildResultQuery(BuildDto buildDto) {
+        Session session = (Session) em.getDelegate();
+
+        String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
+                + " WHERE"
+                + "     r.test_id = t.id"
+                + "     AND t.testcase_id = tc.id"
+                + "     AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = :buildId"
+                + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                + " ORDER BY tc.name, t.name";
+
+        return session.createSQLQuery(queryString).setParameter("buildId", buildDto.getId());
+    }
+
+    private Query getBuildQueryAccordingToFilter(final BuildDto build, final FilterDto filter) {
+        Session session = (Session) em.getDelegate();
+
+        Map<String, Object> queryParameters = new HashMap<String, Object>();
+
+        String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
+                + " WHERE"
+                + "     r.test_id = t.id"
+                + "     AND t.testcase_id = tc.id"
+                + "     AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = :buildId";
+
+        queryString += getCommonPartOfQueryWithFilter(filter, queryParameters);
+
+        Query query = session.createSQLQuery(queryString)
+                .setParameter("buildId", build.getId());
+
+        for (Map.Entry<String, Object> entry : queryParameters.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return query;
+    }
+
+    private Query getBuildQueryAccordingToFilter(final JobDto job, final FilterDto filter) {
+        Session session = (Session) em.getDelegate();
+
+        Map<String, Object> queryParameters = new HashMap<String, Object>();
+
+        String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b"
+                + " WHERE"
+                + "     r.test_id = t.id"
+                + "     AND t.testcase_id = tc.id"
+                + "     AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = b.id"
+                + "     AND b.job_id = :jobId";
+
+        queryString += getCommonPartOfQueryWithFilter(filter, queryParameters);
+
+        Query query = session.createSQLQuery(queryString)
+                .setParameter("jobId", job.getId());
+
+        for (Map.Entry<String, Object> entry : queryParameters.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return query;
+    }
+
+    private Query getJobResultQuery(JobDto jobDto) {
+        Session session = (Session) em.getDelegate();
+
+        String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
+                + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb, Build b"
+                + " WHERE"
+                + "     r.test_id = t.id"
+                + "     AND t.testcase_id = tc.id"
+                + "     AND r.parameterizedbuild_id = pb.id"
+                + "     AND pb.build_id = b.id"
+                + "     AND b.job_id = :jobId"
+                + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                + " ORDER BY tc.name, t.name";
+
+        return session.createSQLQuery(queryString)
+                .setParameter("jobId", jobDto.getId());
     }
 
     private void addOrEditResults(List<Object[]> testResults, List<ResultDto> resultDtos) {

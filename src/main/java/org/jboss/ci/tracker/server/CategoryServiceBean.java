@@ -56,6 +56,7 @@ public class CategoryServiceBean {
     private CategoryDto createCategoryDto(Category category) {
         CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName());
         categoryDto.setCategorization(category.getCategorization().getName());
+        categoryDto.setCategorizationId(category.getCategorization().getId());
         return categoryDto;
     }
 
@@ -73,5 +74,12 @@ public class CategoryServiceBean {
     public void deleteCategory(CategoryDto categoryDto) {
         Category category = new Category(categoryDto);
         em.remove(em.contains(category) ? category : em.merge(category));
+    }
+
+    public Category getCategoryById(Long id) {
+        Session session = (Session) em.getDelegate();
+        Query query = session.createQuery("FROM Category WHERE id = :categoryId")
+                .setParameter("categoryId", id);
+        return (Category) query.uniqueResult();
     }
 }

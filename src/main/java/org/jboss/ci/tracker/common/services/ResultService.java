@@ -25,6 +25,7 @@ import org.jboss.ci.tracker.common.objects.PossibleResultDto;
 import org.jboss.ci.tracker.common.objects.ResultDto;
 import org.jboss.ci.tracker.common.objects.TestDto;
 import java.util.List;
+import org.jboss.ci.tracker.common.objects.FilterDto;
 
 /**
  *
@@ -35,11 +36,11 @@ public interface ResultService extends RemoteService {
 
     public List<PossibleResultDto> getPossibleResults();
 
-    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, Long possibleResultId, Long categoryId);
+    public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, FilterDto filter);
 
-    public List<ResultDto> getResults(BuildDto buildDto, Long possibleResultId, Long categoryId);
+    public List<ResultDto> getResults(BuildDto buildDto, FilterDto filter);
 
-    public List<ResultDto> getResults(JobDto jobDto, Long possibleResultId, Long categoryId);
+    public List<ResultDto> getResults(JobDto jobDto, FilterDto filter);
 
     public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId);
 
