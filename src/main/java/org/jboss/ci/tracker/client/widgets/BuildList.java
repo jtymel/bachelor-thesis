@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -201,6 +201,9 @@ public class BuildList extends Composite {
             @Override
             public void onSuccess(List<BuildDto> result) {
                 dataProvider = new ListDataProvider<BuildDto>();
+                if (result == null) {
+                    result = new ArrayList<BuildDto>();
+                }
                 dataProvider.setList(result);
                 dataProvider.addDataDisplay(dataGrid);
                 dataGrid.setRowCount(result.size());

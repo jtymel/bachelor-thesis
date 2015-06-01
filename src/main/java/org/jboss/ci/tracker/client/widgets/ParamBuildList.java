@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -192,6 +192,9 @@ public class ParamBuildList extends Composite {
             @Override
             public void onSuccess(List<ParameterizedBuildDto> result) {
                 dataProvider = new ListDataProvider<ParameterizedBuildDto>();
+                if (result == null) {
+                    result = new ArrayList<ParameterizedBuildDto>();
+                }
                 dataProvider.setList(result);
                 dataProvider.addDataDisplay(dataGrid);
                 dataGrid.setRowCount(result.size());

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -47,6 +47,7 @@ import org.jboss.ci.tracker.common.services.LabelService;
 import org.jboss.ci.tracker.common.services.LabelServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
+import org.jboss.ci.tracker.common.objects.BuildDto;
 
 /**
  *
@@ -174,6 +175,9 @@ public class LabelDetail extends Composite {
             @Override
             public void onSuccess(List<CategoryDto> result) {
                 dataProvider = new ListDataProvider<CategoryDto>();
+                if (result == null) {
+                    result = new ArrayList<CategoryDto>();
+                }
                 dataProvider.setList(result);
                 dataProvider.addDataDisplay(dataGrid);
                 dataGrid.setRowCount(result.size());
@@ -234,6 +238,9 @@ public class LabelDetail extends Composite {
 
             @Override
             public void onSuccess(List<CategoryDto> result) {
+                if (result == null) {
+                    return;
+                }
                 for (CategoryDto category : result) {
                     selectionModel.setSelected(category, true);
                 }

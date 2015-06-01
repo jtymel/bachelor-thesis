@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -112,22 +112,42 @@ public class JobServiceBean {
     }
 
     public void addCategoriesToParamBuild(JobDto jobDto) {
+        if (jobDto == null) {
+            return;
+        }
+
         Session session = (Session) em.getDelegate();
         Query query = session.createQuery("FROM Job WHERE id = :jobId")
                 .setParameter("jobId", jobDto.getId());
         Job job = (Job) query.uniqueResult();
 
         List<Build> builds = job.getBuilds();
+        addCategoriesToParamBuildOfBuilds(builds);
+    }
+
+    public void addCategoriesToParamBuildOfBuilds(List<Build> builds) {
+        if (builds == null) {
+            return;
+        }
+
         List<ParameterizedBuild> paramBuilds = new ArrayList<ParameterizedBuild>();
 
         for (Build build : builds) {
             paramBuilds.addAll(build.getParameterizedBuilds());
         }
 
+        addCategoriesToParamBuild(paramBuilds);
+
+    }
+
+    public void addCategoriesToParamBuild(List<ParameterizedBuild> paramBuilds) {
+        if (paramBuilds == null) {
+            return;
+        }
+
         for (ParameterizedBuild paramBuild : paramBuilds) {
             storeParamBuildCategoriesBean.addCategoriesToParamBuild(paramBuild);
         }
-
     }
 
     public List<Job> getPlainJobs() {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@ public class CategoryDto implements Serializable {
 
     private Long id;
     private String name;
+    private String regex;
     private String categorization;
     private Long categorizationId;
 
@@ -40,9 +41,10 @@ public class CategoryDto implements Serializable {
     public CategoryDto() {
     }
 
-    public CategoryDto(Long id, String name) {
+    public CategoryDto(Long id, String name, String regex) {
         this.id = id;
         this.name = name;
+        this.regex = regex;
     }
 
     public Long getId() {
@@ -67,6 +69,14 @@ public class CategoryDto implements Serializable {
 
     public void setCategorization(String categorization) {
         this.categorization = categorization;
+    }
+
+    public String getRegex() {
+        return regex;
+    }
+
+    public void setRegex(String regex) {
+        this.regex = regex;
     }
 
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,6 +41,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import org.hibernate.Session;
+import org.jboss.ci.tracker.server.entity.Category;
+import org.jboss.ci.tracker.server.entity.LabelCategory;
 
 /**
  *
@@ -72,22 +74,20 @@ public class JenkinsDownloader {
     public void downloadBuilds(final List<JobDto> jobs) {
         for (JobDto jobDto : jobs) {
             Job job = jobServiceBean.getPlainJob(jobDto);
-            List<Build> builds = downloadBuilds(job);
-            jobServiceBean.addCategoriesToParamBuild(jobDto);
+            jobServiceBean.addCategoriesToParamBuild(downloadBuilds(job));
         }
 
     }
 
-    public List<Build> downloadBuilds(final Job job) {
-        List<Build> builds = null;
+    public List<ParameterizedBuild> downloadBuilds(final Job job) {
         try {
-            builds = findBuilds(job);
+            List<Build> builds = findBuilds(job);
             List<ParameterizedBuild> paramBuilds = downloadParameterizedBuilds(builds);
+            return paramBuilds;
         } catch (IOException | XMLStreamException ex) {
             LOGGER.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-        return builds;
     }
 
     public List<Build> findBuilds(Job job) throws MalformedURLException, IOException, XMLStreamException {
@@ -128,21 +128,24 @@ public class JenkinsDownloader {
     }
 
     private static Build getBuild(XMLEvent event, XMLEventReader eventReader) throws XMLStreamException {
-        Build build = null;
+        Build build = new Build();
 
         while (eventReader.hasNext()) {
             event = eventReader.nextEvent();
 
             if (event.asStartElement().getName().getLocalPart().equals("number")) {
-                build = new Build();
                 build.setName(eventReader.getElementText());
             }
 
             if (event.asStartElement().getName().getLocalPart().equals("url")) {
                 build.setUrl(eventReader.getElementText());
-                return build;
+            }
+
+            if (build.getName() != null && build.getUrl() != null) {
+                break;
             }
         }
+
         return build;
     }
 
@@ -325,7 +328,9 @@ public class JenkinsDownloader {
         label.setName(labelName);
         label.setJob(paramBuild.getBuild().getJob());
 
-        labelServiceBean.saveLabel(label);
+        guessCategoriesOfLabel(label);
+
+        labelServiceBean.saveLabel(label, paramBuild.getBuild().getJob());
     }
 
     private String getLabelName(ParameterizedBuild paramBuild) {
@@ -333,5 +338,24 @@ public class JenkinsDownloader {
         labelName = labelName.substring(0, labelName.lastIndexOf("/"));
         labelName = labelName.substring(labelName.lastIndexOf("/") + 1, labelName.length());
         return labelName;
+    }
+
+    /**
+     * Attempts to guess the categories
+     * @param label
+     */
+    private void guessCategoriesOfLabel(Label label) {
+        Session session = (Session) em.getDelegate();
+        List<Category> allCategories = (List<Category>) session.createQuery("from Category").list();
+
+        String labelString = label.getName();
+        for (Category c : allCategories) {
+            if (c.isInLabel(labelString)) {
+                LabelCategory lc = new LabelCategory();
+                lc.setLabel(label);
+                lc.setCategory(c);
+                label.getLabelCategories().add(lc);
+            }
+        }
     }
 }
