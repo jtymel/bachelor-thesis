@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@ package org.jboss.ci.tracker.server.entity;
 
 import org.jboss.ci.tracker.common.objects.LabelDto;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,10 +26,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -45,13 +44,8 @@ public class Label implements Serializable {
     @ManyToOne
     private Job job;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "label_category", joinColumns = {
-        @JoinColumn(name = "LABEL_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                @JoinColumn(name = "CATEGORY_ID",
-                        nullable = false, updatable = false)})
-    private List<Category> categories;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "label")
+    private List<LabelCategory> labelCategories = new ArrayList<LabelCategory>();
 
     public Label() {
     }
@@ -77,12 +71,12 @@ public class Label implements Serializable {
         this.job = job;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public List<LabelCategory> getLabelCategories() {
+        return labelCategories;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setLabelCategories(List<LabelCategory> labelCategories) {
+        this.labelCategories = labelCategories;
     }
 
     public String getName() {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -54,7 +54,7 @@ public class CategoryServiceBean {
     }
 
     private CategoryDto createCategoryDto(Category category) {
-        CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName());
+        CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(), category.getRegex());
         categoryDto.setCategorization(category.getCategorization().getName());
         categoryDto.setCategorizationId(category.getCategorization().getId());
         return categoryDto;

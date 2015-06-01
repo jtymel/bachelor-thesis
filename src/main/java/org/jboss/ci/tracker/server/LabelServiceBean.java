@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jboss.ci.tracker.server.entity.LabelCategory;
 
 /**
  *
@@ -64,16 +65,18 @@ public class LabelServiceBean {
     }
 
     private CategoryDto createCategoryDto(Category category) {
-        CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName());
+        CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(), category.getRegex());
         categoryDto.setCategorization(category.getCategorization().getName());
         return categoryDto;
     }
 
-    public Long saveLabel(Label label) {
+    public Long saveLabel(Label label, Job job) {
         Session session = (Session) em.getDelegate();
 
-        Query query = session.createQuery("from Label WHERE name = :labelName")
-                .setParameter("labelName", label.getName());
+        Query query = session.createQuery("from Label WHERE name = :labelName AND job = :job")
+                .setParameter("labelName", label.getName())
+                .setParameter("job", job)
+          ;
 
         Label storedLabel = (Label) query.uniqueResult();
 
@@ -91,17 +94,20 @@ public class LabelServiceBean {
                 .setParameter("labelid", labelDto.getId());
         Label label = (Label) query.uniqueResult();
 
-        List<Category> categories = new ArrayList<Category>(categoriesDto.size());
+        List<LabelCategory> labelCategories = new ArrayList<LabelCategory>(categoriesDto.size());
 
         for (CategoryDto categoryDto : categoriesDto) {
             Query query2 = session.createQuery("from Category WHERE id = :categoryid")
                     .setParameter("categoryid", categoryDto.getId());
             Category category = (Category) query2.uniqueResult();
             addLabelToCategory(label, category);
-            categories.add(category);
+            final LabelCategory lc = new LabelCategory();
+            lc.setCategory(category);
+            lc.setLabel(label);
+            labelCategories.add(lc);
         }
 
-        label.setCategories(categories);
+        label.setLabelCategories(labelCategories);
 
         session.saveOrUpdate(label);
     }
@@ -124,11 +130,11 @@ public class LabelServiceBean {
                 .setParameter("labelid", labelDto.getId());
         Label label = (Label) query.uniqueResult();
 
-        List<Category> categories = label.getCategories();
+        List<LabelCategory> categories = label.getLabelCategories();
         List<CategoryDto> categoryDtos = new ArrayList<CategoryDto>(categories.size());
 
-        for (Category category : categories) {
-            categoryDtos.add(createCategoryDto(category));
+        for (LabelCategory lc : categories) {
+            categoryDtos.add(createCategoryDto(lc.getCategory()));
         }
 
         return categoryDtos;

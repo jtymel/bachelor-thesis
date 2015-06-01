@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -58,6 +58,9 @@ public class CategoryDetail extends Composite {
     TextBox categoryNameField;
 
     @UiField
+    TextBox categoryRegex;
+
+    @UiField
     ListBox categorizationListField;
 
     @UiField
@@ -69,14 +72,20 @@ public class CategoryDetail extends Composite {
     CategoryDto editedCategory = null;
     List<CategorizationDto> categorizations;
 
+    String categorizationToSelect = null;
+
     void setCategory(CategoryDto categoryDto) {
+        editedCategory = categoryDto;
+
         if (categoryDto != null) {
             categoryNameField.setText(categoryDto.getName());
+            categoryRegex.setText(categoryDto.getRegex());
         } else {
             categoryNameField.setText("");
+            categoryRegex.setText("");
         }
 
-        editedCategory = categoryDto;
+        selectCategorization();
     }
 
     public CategoryDetail() {
@@ -93,8 +102,8 @@ public class CategoryDetail extends Composite {
         categoryListDetailBridge.cancelCategoryDetailAndDisplayCategoryList();
     }
 
-    @UiHandler("categoryNameField")
-    void onKeyUp(KeyUpEvent event) {
+    @UiHandler({"categoryNameField", "categoryRegex"})
+    void onEnterKeyUp(KeyUpEvent event) {
         if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
             addCategory();
         }
@@ -115,6 +124,7 @@ public class CategoryDetail extends Composite {
         }
 
         categoryDto.setName(categoryNameField.getText());
+        categoryDto.setRegex(categoryRegex.getText());
 
         categoryService.saveCategory(categoryDto, categorizations.get(categorizationListField.getSelectedIndex()), new AsyncCallback<Long>() {
 
@@ -146,9 +156,37 @@ public class CategoryDetail extends Composite {
                 for (CategorizationDto categorization : categorizations) {
                     categorizationListField.addItem(categorization.getName());
                 }
+
+                selectCategorization();
             }
         });
 
+    }
+
+    private void selectCategorization() {
+        if (editedCategory == null) {
+            categorizationListField.setSelectedIndex(0);
+        } else if (categorizations != null) {
+            categorizationListField.setSelectedIndex(
+              findCategorizationIndexById(editedCategory.getCategorizationId())
+            );
+        }
+    }
+
+    private int findCategorizationIndexById(Long categorizationId) {
+        if (categorizationId == null || categorizations == null) {
+            return -1;
+        }
+
+        for (int i = 0; i < categorizations.size(); i++) {
+            final CategorizationDto ctz = categorizations.get(i);
+
+            if (ctz.getId().equals(categorizationId)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
 }

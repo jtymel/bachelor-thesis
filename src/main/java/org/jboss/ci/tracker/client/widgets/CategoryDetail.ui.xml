@@ -26,6 +26,14 @@
                     </tr>
                     <tr>
                         <td>
+                            <g:Label>Determining RegEx to in Jenkins URL</g:Label>
+                        </td>
+                        <td>
+                            <g:TextBox ui:field="categoryRegex" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <g:Label>Categorization</g:Label>
                         </td>
                         <td>
