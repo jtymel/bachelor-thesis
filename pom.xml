@@ -67,12 +67,14 @@
             <artifactId>hibernate-ehcache</artifactId>
             <version>4.3.9.Final</version>
             <type>jar</type>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <type>jar</type>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

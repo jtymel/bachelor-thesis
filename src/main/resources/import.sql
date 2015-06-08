@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION storeTestResult(id_paramBuild BIGINT, result TEXT, p_test TEXT, p_testCase TEXT, duration REAL)
+CREATE OR REPLACE FUNCTION storeTestResult(id_paramBuild BIGINT, p_result TEXT, p_test TEXT, p_testCase TEXT, p_duration REAL)
 RETURNS VOID AS
 
 $BODY$
@@ -8,9 +8,9 @@ DECLARE v_testId BIGINT;
 
 BEGIN
 
-    SELECT id INTO v_posRes FROM POSSIBLERESULT WHERE name = result LIMIT 1;
+    SELECT id INTO v_posRes FROM POSSIBLERESULT WHERE name = p_result LIMIT 1;
     IF v_posRes IS NULL THEN
-        INSERT INTO POSSIBLERESULT (id, name) VALUES (DEFAULT, result) returning id into v_posRes;
+        INSERT INTO POSSIBLERESULT (id, name) VALUES (DEFAULT, p_result) returning id into v_posRes;
     END IF;
 
     SELECT id INTO v_testCaseId FROM TESTCASE WHERE name = p_testCase LIMIT 1;
@@ -23,8 +23,8 @@ BEGIN
         INSERT INTO TEST (name, testcase_id) VALUES (p_test, v_testCaseId) returning id into v_testId;
     END IF;
 
-    INSERT INTO RESULT(possibleresult_id, parameterizedbuild_id, test_id, duration)
-    VALUES (v_posRes, id_paramBuild, v_testId, duration);
+    INSERT INTO "result"(possibleresult_id, parameterizedbuild_id, test_id, duration)
+    VALUES (v_posRes, id_paramBuild, v_testId, p_duration);
 
 END;
 $BODY$
