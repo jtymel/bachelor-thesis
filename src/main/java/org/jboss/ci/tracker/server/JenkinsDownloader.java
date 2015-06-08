@@ -46,12 +46,15 @@ import javax.xml.stream.events.XMLEvent;
 import org.hibernate.Session;
 import org.jboss.ci.tracker.server.entity.Category;
 import org.jboss.ci.tracker.server.entity.LabelCategory;
+import org.jboss.ejb3.annotation.TransactionTimeout;
 
 /**
  *
  * @author jtymel
  */
 @Stateless
+@TransactionTimeout(18000) // set transaction timout to 5 hours
+
 public class JenkinsDownloader {
 
     private static final Logger LOGGER = Logger.getLogger("org.jboss.ci.tracker");
