@@ -18,9 +18,7 @@ package org.jboss.ci.tracker.common.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
-import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
 import java.util.List;
 
 /**
@@ -30,5 +28,12 @@ import java.util.List;
 @RemoteServiceRelativePath("jenkinsservice")
 public interface JenkinsService extends RemoteService {
 
+    /**
+     * Downloads results and another pieces of information about specified jobs. This method saves all the information about
+     * test results, i.e. builds, parameterized builds (also with their labels), tests, test cases, possible results and
+     * results. It also sets categories of parameterized builds with known labels (= that have set categories).
+     *
+     * @param jobs Jobs which results are going to be downloaded
+     */
     public void downloadBuilds(List<JobDto> jobs);
 }

@@ -29,5 +29,11 @@ import java.util.List;
 @RemoteServiceRelativePath("parambuildservice")
 public interface ParameterizedBuildService extends RemoteService {
 
+    /**
+     * Returns all parameterized builds of specified build
+     *
+     * @param build Build that determines which parameterized builds will be gotten
+     * @return List of parameterized builds
+     */
     public List<ParameterizedBuildDto> getParamBuilds(BuildDto build);
 }

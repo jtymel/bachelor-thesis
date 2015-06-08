@@ -29,5 +29,11 @@ import java.util.List;
 @RemoteServiceRelativePath("buildservice")
 public interface BuildService extends RemoteService {
 
+    /**
+     * Returns list of builds of particular job
+     *
+     * @param jobDto Job that determines which builds will be gotten
+     * @return List of builds
+     */
     public List<BuildDto> getBuilds(JobDto jobDto);
 }

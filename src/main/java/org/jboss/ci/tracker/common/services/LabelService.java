@@ -30,9 +30,27 @@ import java.util.List;
 @RemoteServiceRelativePath("labelService")
 public interface LabelService extends RemoteService {
 
+    /**
+     * Returns all labels of specified job
+     *
+     * @param job Job
+     * @return List of labels
+     */
     public List<LabelDto> getLabels(JobDto job);
 
+    /**
+     * Sets categories to specified label
+     *
+     * @param label Label
+     * @param categories Categories (= attributes) of specified label
+     */
     public void addCategoriesToLabel(LabelDto label, List<CategoryDto> categories);
 
+    /**
+     * Returns categories of specified label
+     *
+     * @param labelDto Label
+     * @return List of categories of specified label
+     */
     public List<CategoryDto> getCategoriesOfLabel(LabelDto labelDto);
 }

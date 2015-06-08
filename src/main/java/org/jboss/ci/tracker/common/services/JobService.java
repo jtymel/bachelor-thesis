@@ -29,13 +29,40 @@ import java.util.List;
 @RemoteServiceRelativePath("jobservice")
 public interface JobService extends RemoteService {
 
+    /**
+     * Returns all Jobs
+     *
+     * @return List of jobs
+     */
     public List<JobDto> getJobs();
 
+    /**
+     * Saves (or updates) specified job
+     *
+     * @param jobDTO Job that is going to be saved
+     * @return Id of saved job
+     */
     public Long saveJob(JobDto jobDTO);
 
+    /**
+     * Deletes specified job
+     *
+     * @param jobDTO Job that is going to be deleted
+     */
     public void deleteJob(JobDto jobDTO);
 
+    /**
+     * Sets categories to specified job
+     *
+     * @param job Job
+     * @param categories Categories (= attributes) of specified job
+     */
     public void addCategoriesToLabel(JobDto job, List<CategoryDto> categories);
 
+    /**
+     * Sets the job's categories (= attributes) to all its parameterized builds
+     *
+     * @param job Job
+     */
     public void addCategoriesToParamBuild(JobDto job);
 }

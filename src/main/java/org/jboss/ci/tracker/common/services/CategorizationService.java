@@ -28,9 +28,25 @@ import java.util.List;
 @RemoteServiceRelativePath("categorizationservice")
 public interface CategorizationService extends RemoteService {
 
+    /**
+     * Returns all categorizations
+     *
+     * @return List of categorizations
+     */
     public List<CategorizationDto> getCategorizations();
 
+    /**
+     * Saves (or updates) specified categorization
+     *
+     * @param categorization Categorization
+     * @return Id of saved categorization
+     */
     public Long saveCategorization(CategorizationDto categorization);
 
+    /**
+     * Deletes specified categorization
+     *
+     * @param categorization Categorization that is going to be deleted
+     */
     public void deleteCategorization(CategorizationDto categorization);
 }
