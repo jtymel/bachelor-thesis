@@ -27,8 +27,11 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -160,7 +163,7 @@ public class JenkinsDownloader {
 
                 for (ParameterizedBuild paramBuild : paramBuilds) {
 
-                    List<TestResult> testResults = getTestResults(paramBuild);
+                    Collection<TestResult> testResults = getTestResults(paramBuild);
                     if (testResults != null) {
                         for (TestResult testResult : testResults) {
                             storeResultBean.saveTestResult(testResult, paramBuild);
@@ -233,8 +236,8 @@ public class JenkinsDownloader {
         return paramBuild;
     }
 
-    public List<TestResult> getTestResults(ParameterizedBuild paramBuild) {
-        List<TestResult> testResults = new ArrayList<TestResult>();
+    public Collection<TestResult> getTestResults(ParameterizedBuild paramBuild) {
+        Set<TestResult> testResults = new HashSet<TestResult>();
         try {
             XMLEventReader eventReader = getEventReader(paramBuild.getUrl() + "testReport/api/xml");
 
@@ -342,6 +345,7 @@ public class JenkinsDownloader {
 
     /**
      * Attempts to guess the categories
+     *
      * @param label
      */
     private void guessCategoriesOfLabel(Label label) {

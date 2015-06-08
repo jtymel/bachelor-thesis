@@ -16,6 +16,8 @@
  */
 package org.jboss.ci.tracker.server;
 
+import java.util.Objects;
+
 /**
  *
  * @author jtymel
@@ -67,6 +69,36 @@ public class TestResult {
 
     public void setDuration(float duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.result);
+        hash = 41 * hash + Objects.hashCode(this.test);
+        hash = 41 * hash + Objects.hashCode(this.testCase);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TestResult other = (TestResult) obj;
+        if (!Objects.equals(this.result, other.result)) {
+            return false;
+        }
+        if (!Objects.equals(this.test, other.test)) {
+            return false;
+        }
+        if (!Objects.equals(this.testCase, other.testCase)) {
+            return false;
+        }
+        return true;
     }
 
 }
