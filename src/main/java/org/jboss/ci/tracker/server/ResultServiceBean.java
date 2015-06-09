@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -63,6 +63,8 @@ public class ResultServiceBean {
     private static final int QUERY_TEST_DTO_POSITION_MACHINE = 2;
     private static final int QUERY_TEST_DTO_POSITION_DURATION = 3;
     private static final int QUERY_TEST_DTO_POSITION_URL = 4;
+    private static final int QUERY_TEST_DTO_POSITION_TEST_CASE_NAME = 5;
+    private static final int QUERY_TEST_DTO_POSITION_TEST_NAME = 6;
 
     private static final int QUERY_RESULT_DTO_POSITION_TEST_ID = 0;
     private static final int QUERY_RESULT_DTO_POSITION_TEST_NAME = 1;
@@ -438,7 +440,7 @@ public class ResultServiceBean {
         return resultDto;
     }
 
-    private final String TEST_HISTORY_QUERY_ALL = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+    private final String TEST_HISTORY_QUERY_ALL = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
@@ -451,7 +453,7 @@ public class ResultServiceBean {
             + " ORDER BY pb.dateTime DESC";
 
     private final String TEST_HISTORY_QUERY_FILTER_RESULTS
-            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
             + " WHERE"
             + "     r.test_id = t.id"
@@ -465,7 +467,7 @@ public class ResultServiceBean {
             + " ORDER BY pb.dateTime DESC";
 
     private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES
-            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
@@ -480,7 +482,7 @@ public class ResultServiceBean {
             + " ORDER BY pb.dateTime DESC";
 
     private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES_RESULTS
-            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
@@ -587,9 +589,34 @@ public class ResultServiceBean {
         testDto.setResult(test[QUERY_TEST_DTO_POSITION_RESULT].toString());
         testDto.setMachine(test[QUERY_TEST_DTO_POSITION_MACHINE].toString());
         testDto.setDuration(Float.parseFloat(test[QUERY_TEST_DTO_POSITION_DURATION].toString()));
-        testDto.setUrl(test[QUERY_TEST_DTO_POSITION_URL].toString());
+        testDto.setUrl(createJenkinsTestUrl(test[QUERY_TEST_DTO_POSITION_URL], test[QUERY_TEST_DTO_POSITION_TEST_CASE_NAME], test[QUERY_TEST_DTO_POSITION_TEST_NAME]));
 
         return testDto;
+    }
+
+    private String createJenkinsTestUrl(Object baseUrl, Object testCase, Object test) {
+        final String testCaseString = String.valueOf(testCase);
+        final int lastDot = testCaseString.lastIndexOf(".");
+        final String packageName;
+        final String testCaseName;
+        if (lastDot == -1) {
+            packageName = "";
+            testCaseName = testCaseString;
+        } else {
+            packageName = testCaseString.substring(0, lastDot);
+            testCaseName = testCaseString.substring(lastDot + 1);
+        }
+        return new StringBuilder()
+          .append(baseUrl)
+          .append("/testReport/")
+          .append(packageName)
+          .append("/")
+          .append(testCaseName)
+          .append("/")
+          .append(test)
+          .append("/")
+          .toString()
+          ;
     }
 
 }
