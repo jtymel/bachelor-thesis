@@ -16,6 +16,7 @@
  */
 package org.jboss.ci.tracker.client.widgets.bridges;
 
+import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 
 /**
@@ -24,7 +25,7 @@ import org.jboss.ci.tracker.common.objects.BuildDto;
  */
 public interface BuildListResultListBridge {
 
-    public void setBuildAndDisplayResults(BuildDto build);
+    public void setBuildAndDisplayResults(Collection<BuildDto> builds);
 
     public void cancelResultListAndDisplayBuildList();
 }

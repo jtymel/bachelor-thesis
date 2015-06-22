@@ -17,6 +17,7 @@
 package org.jboss.ci.tracker.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
@@ -48,8 +49,8 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
     }
 
     @Override
-    public List<ResultDto> getResults(BuildDto buildDto, FilterDto filter) {
-        return resultServiceBean.getResults(buildDto, filter);
+    public List<ResultDto> getResults(Collection<BuildDto> builds, FilterDto filter) {
+        return resultServiceBean.getResults(builds, filter);
     }
 
     @Override

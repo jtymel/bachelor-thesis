@@ -18,6 +18,7 @@ package org.jboss.ci.tracker.common.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
@@ -51,13 +52,13 @@ public interface ResultService extends RemoteService {
     public List<ResultDto> getResults(ParameterizedBuildDto paramBuildDto, FilterDto filter);
 
     /**
-     * Returns results of tests in specified build
+     * Returns results of tests in specified builds
      *
-     * @param buildDto Build
+     * @param builds Builds
      * @param filter Filter that determines which results will be gotten
      * @return List of results
      */
-    public List<ResultDto> getResults(BuildDto buildDto, FilterDto filter);
+    public List<ResultDto> getResults(Collection<BuildDto> builds, FilterDto filter);
 
     /**
      * Returns results of tests in specified job

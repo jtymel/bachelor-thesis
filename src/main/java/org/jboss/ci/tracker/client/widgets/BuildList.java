@@ -41,15 +41,13 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
-import com.google.gwt.view.client.SingleSelectionModel;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.services.BuildService;
 import org.jboss.ci.tracker.common.objects.JobDto;
-import org.jboss.ci.tracker.common.services.ResultService;
 import org.jboss.ci.tracker.common.services.BuildServiceAsync;
-import org.jboss.ci.tracker.common.services.ResultServiceAsync;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,12 +116,7 @@ public class BuildList extends Composite {
     public void onShowResultButtonClick(ClickEvent event) {
         List<BuildDto> buildList = getSelectedBuilds();
 
-        for (BuildDto buildDto : buildList) {
-            if (selectionModel.isSelected(buildDto)) {
-                buildListResultListBridge.setBuildAndDisplayResults(buildDto);
-            }
-        }
-
+        buildListResultListBridge.setBuildAndDisplayResults(getSelectedBuilds());
     }
 
     @UiHandler("cancelButton")
@@ -163,7 +156,7 @@ public class BuildList extends Composite {
         dataGrid.setColumnWidth(urlColumn, 40, Style.Unit.PX);
         dataGrid.addColumn(urlColumn, "URL");
 
-        selectionModel = new SingleSelectionModel<BuildDto>(keyProvider);
+        selectionModel = new MultiSelectionModel<BuildDto>(keyProvider);
 
         dataGrid.addDomHandler(new DoubleClickHandler() {
 

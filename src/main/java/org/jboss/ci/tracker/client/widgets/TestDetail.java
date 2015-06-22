@@ -44,6 +44,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionModel;
+import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.CategoryDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
@@ -93,7 +94,7 @@ public class TestDetail extends Composite {
     private List<CategoryDto> categoryList;
     private ResultDto result;
     private JobDto job;
-    private BuildDto build;
+    private Collection<BuildDto> builds;
     private ParameterizedBuildDto paramBuild;
     private List<PossibleResultDto> possibleResultList;
 
@@ -215,7 +216,7 @@ public class TestDetail extends Composite {
 
     public void showTestHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults) {
         this.paramBuild = paramBuild;
-        this.build = null;
+        this.builds = null;
         this.job = null;
 
         executeActionsForNewTestHistory(result, possibleResults);
@@ -224,9 +225,9 @@ public class TestDetail extends Composite {
         prepareResultsFilter(possibleResults);
     }
 
-    public void showTestHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults) {
+    public void showTestHistory(ResultDto result, Collection<BuildDto> builds, List<PossibleResultDto> possibleResults) {
         this.paramBuild = null;
-        this.build = build;
+        this.builds = builds;
         this.job = null;
 
         executeActionsForNewTestHistory(result, possibleResults);
@@ -237,7 +238,7 @@ public class TestDetail extends Composite {
 
     public void showTestHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults) {
         this.paramBuild = null;
-        this.build = null;
+        this.builds = null;
         this.job = job;
 
         executeActionsForNewTestHistory(result, possibleResults);
@@ -266,8 +267,8 @@ public class TestDetail extends Composite {
             getTestHistory(result, paramBuild);
         }
 
-        if (build != null) {
-            getTestHistory(result, build);
+        if (builds != null) {
+            getTestHistory(result, builds);
         }
 
         if (job != null) {
@@ -290,7 +291,9 @@ public class TestDetail extends Composite {
         });
     }
 
-    private void getTestHistory(ResultDto result, BuildDto build) {
+    private void getTestHistory(ResultDto result, Collection<BuildDto> builds) {
+        BuildDto build = builds.iterator().next(); // FIXME: Find better solution
+
         resultService.getTestResults(result, build, getPossibleResultId(), getCategoryId(), new AsyncCallback<List<TestDto>>() {
 
             @Override

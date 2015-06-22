@@ -27,6 +27,7 @@ import org.jboss.ci.tracker.common.objects.ResultDto;
 import org.jboss.ci.tracker.common.objects.TestDto;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -122,12 +123,12 @@ public class ResultServiceBean {
         return resultDtos;
     }
 
-    public List<ResultDto> getAllResults(BuildDto buildDto) {
-        if (buildDto == null) {
+    public List<ResultDto> getAllResults(Collection<BuildDto> builds) {
+        if (builds == null) {
             return null;
         }
 
-        Query query = getBuildResultQuery(buildDto);
+        Query query = getBuildResultQuery(builds);
 
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
@@ -137,12 +138,12 @@ public class ResultServiceBean {
         return resultDtos;
     }
 
-    public List<ResultDto> getResults(BuildDto buildDto, FilterDto filter) {
+    public List<ResultDto> getResults(Collection<BuildDto> builds, FilterDto filter) {
         if (filter == null) {
-            return getAllResults(buildDto);
+            return getAllResults(builds);
         }
 
-        Query query = getBuildQueryAccordingToFilter(buildDto, filter);
+        Query query = getBuildQueryAccordingToFilter(builds, filter);
         List<Object[]> testResults = query.list();
         List<ResultDto> resultDtos = new ArrayList<ResultDto>(testResults.size());
 
@@ -298,8 +299,10 @@ public class ResultServiceBean {
         return queryString;
     }
 
-    private Query getBuildResultQuery(BuildDto buildDto) {
+    private Query getBuildResultQuery(Collection<BuildDto> builds) {
         Session session = (Session) em.getDelegate();
+        Map<String, Long> queryParameters = new HashMap<String, Long>();
+        int i = 0;
 
         String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
@@ -307,17 +310,31 @@ public class ResultServiceBean {
                 + "     r.test_id = t.id"
                 + "     AND t.testcase_id = tc.id"
                 + "     AND r.parameterizedbuild_id = pb.id"
-                + "     AND pb.build_id = :buildId"
-                + " GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
+                + "     AND (false ";
+
+        for (BuildDto build : builds) {
+            queryString += " OR pb.build_id = :buildId" + i;
+            queryParameters.put("buildId" + i, build.getId());
+            i++;
+        }
+
+        queryString += ") GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
                 + " ORDER BY tc.name, t.name";
 
-        return session.createSQLQuery(queryString).setParameter("buildId", buildDto.getId());
+        Query query = session.createSQLQuery(queryString);
+
+        for (Map.Entry<String, Long> entry : queryParameters.entrySet()) {
+            query.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        return query;
     }
 
-    private Query getBuildQueryAccordingToFilter(final BuildDto build, final FilterDto filter) {
+    private Query getBuildQueryAccordingToFilter(final Collection<BuildDto> builds, final FilterDto filter) {
         Session session = (Session) em.getDelegate();
 
         Map<String, Object> queryParameters = new HashMap<String, Object>();
+        int i = 0;
 
         String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
@@ -325,12 +342,18 @@ public class ResultServiceBean {
                 + "     r.test_id = t.id"
                 + "     AND t.testcase_id = tc.id"
                 + "     AND r.parameterizedbuild_id = pb.id"
-                + "     AND pb.build_id = :buildId";
+                + "     AND (false ";
 
+        for (BuildDto build : builds) {
+            queryString += " OR pb.build_id = :buildId" + i;
+            queryParameters.put("buildId" + i, build.getId());
+            i++;
+        }
+
+        queryString += ") ";
         queryString += getCommonPartOfQueryWithFilter(filter, queryParameters);
 
-        Query query = session.createSQLQuery(queryString)
-                .setParameter("buildId", build.getId());
+        Query query = session.createSQLQuery(queryString);
 
         for (Map.Entry<String, Object> entry : queryParameters.entrySet()) {
             query.setParameter(entry.getKey(), entry.getValue());

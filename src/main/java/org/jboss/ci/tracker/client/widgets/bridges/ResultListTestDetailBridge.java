@@ -16,6 +16,7 @@
  */
 package org.jboss.ci.tracker.client.widgets.bridges;
 
+import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
@@ -31,7 +32,7 @@ public interface ResultListTestDetailBridge {
 
     public void setTestAndDisplayHistory(ResultDto result, JobDto job, List<PossibleResultDto> possibleResults);
 
-    public void setTestAndDisplayHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults);
+    public void setTestAndDisplayHistory(ResultDto result, Collection<BuildDto> build, List<PossibleResultDto> possibleResults);
 
     public void setTestAndDisplayHistory(ResultDto result, ParameterizedBuildDto paramBuild, List<PossibleResultDto> possibleResults);
 

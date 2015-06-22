@@ -35,6 +35,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
 import org.jboss.ci.tracker.common.objects.CategorizationDto;
 import org.jboss.ci.tracker.common.objects.CategoryDto;
@@ -155,8 +156,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     }
 
     @Override
-    public void setBuildAndDisplayResults(BuildDto build) {
-        resultList.showBuildResults(build);
+    public void setBuildAndDisplayResults(Collection<BuildDto> builds) {
+        resultList.showBuildResults(builds);
         tabPanel.add(resultList, "List of results");
         tabPanel.selectTab(resultList);
     }
@@ -176,8 +177,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     }
 
     @Override
-    public void setTestAndDisplayHistory(ResultDto result, BuildDto build, List<PossibleResultDto> possibleResults) {
-        testDetail.showTestHistory(result, build, possibleResults);
+    public void setTestAndDisplayHistory(ResultDto result, Collection<BuildDto> builds, List<PossibleResultDto> possibleResults) {
+        testDetail.showTestHistory(result, builds, possibleResults);
         tabPanel.add(testDetail, "History of test");
         tabPanel.selectTab(testDetail);
     }

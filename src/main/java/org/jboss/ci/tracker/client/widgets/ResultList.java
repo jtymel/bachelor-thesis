@@ -51,6 +51,7 @@ import org.jboss.ci.tracker.common.services.CategoryServiceAsync;
 import org.jboss.ci.tracker.common.services.ResultService;
 import org.jboss.ci.tracker.common.services.ResultServiceAsync;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.jboss.ci.tracker.common.objects.CategorizationDto;
 import org.jboss.ci.tracker.common.objects.FilterDto;
@@ -92,7 +93,7 @@ public class ResultList extends Composite {
     private SelectionModel<ResultDto> selectionModel;
     private ListDataProvider<ResultDto> dataProvider;
     private ParameterizedBuildDto paramBuild;
-    private BuildDto build;
+    private Collection<BuildDto> builds;
     private JobDto job;
     private List<PossibleResultDto> possibleResultList;
     private List<CategoryDto> categoryList;
@@ -112,7 +113,7 @@ public class ResultList extends Composite {
             jobListResultListBridge.cancelResultListAndDisplayJobList();
         }
 
-        if (build != null) {
+        if (builds != null) {
             buildListResultListBridge.cancelResultListAndDisplayBuildList();
         }
 
@@ -159,9 +160,9 @@ public class ResultList extends Composite {
                     }
                 }
 
-                if (build != null) {
+                if (builds != null) {
                     for (ResultDto result : resultList) {
-                        resultListTestDetailBridge.setTestAndDisplayHistory(result, build, possibleResultList);
+                        resultListTestDetailBridge.setTestAndDisplayHistory(result, builds, possibleResultList);
                     }
                 }
 
@@ -182,18 +183,30 @@ public class ResultList extends Composite {
     }
 
     public void showParamBuildResults(ParameterizedBuildDto paramBuildDto) {
-        addColumnsAndCallForResults(paramBuildDto);
+        paramBuild = paramBuildDto;
+        builds = null;
+        job = null;
+
+        addColumnsAndCallForResults();
     }
 
-    public void showBuildResults(BuildDto buildDto) {
-        addColumnsAndCallForResults(buildDto);
+    public void showBuildResults(Collection<BuildDto> builds) {
+        paramBuild = null;
+        this.builds = builds;
+        job = null;
+
+        addColumnsAndCallForResults();
     }
 
     public void showJobResults(JobDto jobDto) {
-        addColumnsAndCallForResults(jobDto);
+        paramBuild = null;
+        builds = null;
+        job = jobDto;
+
+        addColumnsAndCallForResults();
     }
 
-    private void addColumnsAndCallForResults(final Object entity) {
+    private void addColumnsAndCallForResults() {
         for (int i = dataGrid.getColumnCount() - 1; i >= 0; i--) {
             dataGrid.removeColumn(i);
         }
@@ -243,24 +256,6 @@ public class ResultList extends Composite {
                 storePossibleResults(possibleResults);
                 loadCategorizationsAndCategories();
 
-                if (entity instanceof ParameterizedBuildDto) {
-                    paramBuild = (ParameterizedBuildDto) entity;
-                    build = null;
-                    job = null;
-                }
-
-                if (entity instanceof BuildDto) {
-                    paramBuild = null;
-                    build = (BuildDto) entity;
-                    job = null;
-                }
-
-                if (entity instanceof JobDto) {
-                    paramBuild = null;
-                    build = null;
-                    job = (JobDto) entity;
-                }
-
                 filter = null;
                 getResults();
             }
@@ -284,8 +279,8 @@ public class ResultList extends Composite {
             getResults(paramBuild);
         }
 
-        if (build != null) {
-            getResults(build);
+        if (builds != null) {
+            getResults(builds);
         }
 
         if (job != null) {
@@ -306,13 +301,10 @@ public class ResultList extends Composite {
             }
         });
 
-        this.paramBuild = paramBuild;
-        this.build = null;
-        this.job = null;
     }
 
-    public void getResults(BuildDto build) {
-        resultService.getResults(build, filter, new AsyncCallback<List<ResultDto>>() {
+    public void getResults(Collection<BuildDto> builds) {
+        resultService.getResults(builds, filter, new AsyncCallback<List<ResultDto>>() {
             @Override
             public void onFailure(Throwable caught) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -324,9 +316,6 @@ public class ResultList extends Composite {
             }
         });
 
-        this.paramBuild = null;
-        this.build = build;
-        this.job = null;
     }
 
     public void getResults(JobDto job) {
@@ -342,9 +331,6 @@ public class ResultList extends Composite {
             }
         });
 
-        this.paramBuild = null;
-        this.build = null;
-        this.job = job;
     }
 
     private void loadCategorizationsAndCategories() {
