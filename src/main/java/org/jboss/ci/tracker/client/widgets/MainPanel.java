@@ -28,11 +28,15 @@ import org.jboss.ci.tracker.client.widgets.bridges.CategorizationListDetailBridg
 import org.jboss.ci.tracker.client.widgets.bridges.BuildListResultListBridge;
 import org.jboss.ci.tracker.client.widgets.bridges.BuildListParamBuildListBridge;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import java.util.Collection;
@@ -265,10 +269,13 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     @UiField
     TestDetail testDetail;
 
+    private int selectedTab;
+
     public MainPanel() {
         initWidget(uiBinder.createAndBindUi(this));
         setBridges();
         removeUnnecessaryTabs();
+        addKeyHandler();
     }
 
     public List<JobDto> getSelectedJobs() {
@@ -285,9 +292,14 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.selectTab(categoryList);
     }
 
+    /**
+     * Calls methods of tabs when the tab is selected (and when needed).
+     *
+     * @param event Selection event
+     */
     @UiHandler("tabPanel")
     void onTabSelection(SelectionEvent<Integer> event) {
-        int selectedTab = event.getSelectedItem();
+        selectedTab = event.getSelectedItem();
 
         if (tabPanel.getWidget(selectedTab).equals(labelDetail)) {
             labelDetail.onTabShow();
@@ -318,6 +330,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         }
     }
 
+    /**
+     * Sets bridges which permits collaboration between tabs.
+     */
     private void setBridges() {
         jobList.setJobListDetailBridge(MainPanel.this);
         jobDetail.setJobListDetailBridge(MainPanel.this);
@@ -343,6 +358,9 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         testDetail.setResultListTestDetailBridge(MainPanel.this);
     }
 
+    /**
+     * Removes unnecessary tabs when the application is starting.
+     */
     private void removeUnnecessaryTabs() {
         tabPanel.remove(testDetail);
         tabPanel.remove(jobCategories);
@@ -357,4 +375,22 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.remove(categoryDetail);
     }
 
+    /**
+     * Adds key handler for closing tabs once the escape key is pressed with exception of JobList tab
+     * {@link org.jboss.ci.tracker.client.widgets.JobList}.
+     */
+    private void addKeyHandler() {
+        RootPanel.get().addDomHandler(new KeyDownHandler() {
+
+            @Override
+            public void onKeyDown(KeyDownEvent event) {
+                if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE && !tabPanel.getWidget(selectedTab).equals(jobList)) {
+                    final int removedTabIndex = selectedTab;
+
+                    tabPanel.remove(removedTabIndex);
+                    tabPanel.selectTab(removedTabIndex - 1);
+                }
+            }
+        }, KeyDownEvent.getType());
+    }
 }
