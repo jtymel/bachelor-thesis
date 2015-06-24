@@ -8,27 +8,19 @@
 
         <g:north size="2.0">
             <g:FlowPanel>
-                <g:Button ui:field="addButton" styleName='{style.button}'>Add new categorization</g:Button>
-                <g:Button ui:field="deleteButton" styleName='{style.button}'>Delete categorization</g:Button>
+                <g:Button ui:field="deleteCategorizationButton" styleName='{style.button}'>Delete group of parameterizations</g:Button>
+                <g:Button ui:field="deleteCategoryButton" styleName='{style.button}'>Delete parameterization</g:Button>
                 <g:Button ui:field="cancelButton" styleName='{style.closeButton}'>Close</g:Button>
             </g:FlowPanel>
         </g:north>
-        
+
+        <g:north size="18.0">
+            <c:DataGrid ui:field='categorizationDataGrid' />
+        </g:north>
+
         <g:center>
-            <c:DataGrid ui:field='dataGrid' />
+            <c:DataGrid ui:field='categoryDataGrid' />
         </g:center>
-        
-        <g:south size="3.0">
-            <g:HTMLPanel>
-                <table style="width:100%">
-                    <tr>
-                        <td align="center">
-                            <c:SimplePager ui:field="pager" />
-                        </td>
-                    </tr>
-                </table>
-            </g:HTMLPanel>
-        </g:south>
 
     </g:DockLayoutPanel>
 </ui:UiBinder>

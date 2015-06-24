@@ -9,8 +9,7 @@
                 <g:north size="2.0">
                     <g:MenuBar>
                         <g:MenuItem>Tools<g:MenuBar vertical="true">
-                                <g:MenuItem ui:field="menuCategorizations">Show categorizations</g:MenuItem>
-                                <g:MenuItem ui:field="menuCategories">Show categories</g:MenuItem>
+                                <g:MenuItem ui:field="menuParameterizations">Set parameterizations</g:MenuItem>
                             </g:MenuBar>
                         </g:MenuItem>
                     </g:MenuBar>

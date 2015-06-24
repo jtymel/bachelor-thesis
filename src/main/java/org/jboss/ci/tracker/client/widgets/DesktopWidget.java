@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -36,10 +36,7 @@ public class DesktopWidget extends Composite {
     }
 
     @UiField
-    MenuItem menuCategorizations;
-
-    @UiField
-    MenuItem menuCategories;
+    MenuItem menuParameterizations;
 
     @UiField
     MainPanel mainPanel;
@@ -53,17 +50,8 @@ public class DesktopWidget extends Composite {
 
     }
 
-    private class showCategoriesCommand implements Scheduler.ScheduledCommand {
-
-        @Override
-        public void execute() {
-            mainPanel.showCategoryList();
-        }
-    }
-
     public DesktopWidget() {
         initWidget(uiBinder.createAndBindUi(this));
-        menuCategorizations.setScheduledCommand(new showCategorizationsCommand());
-        menuCategories.setScheduledCommand(new showCategoriesCommand());
+        menuParameterizations.setScheduledCommand(new showCategorizationsCommand());
     }
 }

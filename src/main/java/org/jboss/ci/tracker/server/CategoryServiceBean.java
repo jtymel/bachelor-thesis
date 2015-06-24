@@ -53,6 +53,26 @@ public class CategoryServiceBean {
         return categoryDtos;
     }
 
+    public List<CategoryDto> getCategories(CategorizationDto categorization) {
+        if (categorization == null) {
+            return null;
+        }
+
+        Session session = (Session) em.getDelegate();
+
+        Query query = session.createQuery("FROM Category WHERE categorization_id = :categorizationId ORDER BY categorization.name, name");
+        query.setParameter("categorizationId", categorization.getId());
+
+        List<Category> categories = new ArrayList<Category>(query.list());
+        List<CategoryDto> categoryDtos = new ArrayList<CategoryDto>(categories != null ? categories.size() : 0);
+
+        for (Category category : categories) {
+            categoryDtos.add(createCategoryDto(category));
+        }
+
+        return categoryDtos;
+    }
+
     private CategoryDto createCategoryDto(Category category) {
         CategoryDto categoryDto = new CategoryDto(category.getId(), category.getName(), category.getRegex());
         categoryDto.setCategorization(category.getCategorization().getName());
@@ -61,6 +81,14 @@ public class CategoryServiceBean {
     }
 
     public Long saveCategory(CategoryDto categoryDto, CategorizationDto categorizationDto) {
+        if (categoryDto == null) {
+            throw new RuntimeException("Trying to save null parameterization");
+        }
+
+        if (categorizationDto == null) {
+            throw new RuntimeException("The group of parameterization was not set");
+        }
+
         Session session = (Session) em.getDelegate();
         Category category = new Category(categoryDto);
         Categorization categorization = new Categorization(categorizationDto);

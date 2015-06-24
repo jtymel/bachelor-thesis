@@ -26,6 +26,7 @@ public class CategorizationDto implements Serializable {
 
     private Long id;
     private String name;
+    private boolean readOnly = false;
 
     public CategorizationDto() {
     }
@@ -49,6 +50,15 @@ public class CategorizationDto implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    // Keep here only in case it's used in {@link org.jboss.ci.tracker.client.widgets.CategorizationList}
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     @Override

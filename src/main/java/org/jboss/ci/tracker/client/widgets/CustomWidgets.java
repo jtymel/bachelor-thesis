@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,11 @@
  */
 package org.jboss.ci.tracker.client.widgets;
 
+import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -214,6 +216,25 @@ public class CustomWidgets {
         dateBoxFrom.setValue(filter.getDateFrom());
         dateBoxTo.setValue(filter.getDateTo());
 
+    }
+
+    // Keep here only in case it's used in {@link org.jboss.ci.tracker.client.widgets.CategorizationList}
+    // Otherwise use superclass (EditTextCell) instead
+    public static class CustomCell extends EditTextCell {
+
+        @Override
+        public void render(com.google.gwt.cell.client.Cell.Context context,
+                String value, SafeHtmlBuilder sb) {
+            CategorizationDto data = (CategorizationDto) context.getKey();
+
+            if (data.isReadOnly()) {
+                sb.appendHtmlConstant(
+                        "<div contentEditable=\'false\' unselectable ='false'>" + value + "</div >");
+            } else {
+                super.render(context, value, sb);
+            }
+
+        }
     }
 
 }

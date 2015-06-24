@@ -38,6 +38,11 @@ public class CategoryServiceImpl extends RemoteServiceServlet implements Categor
     }
 
     @Override
+    public List<CategoryDto> getCategories(CategorizationDto categorization) {
+        return categoryServiceBean.getCategories(categorization);
+    }
+
+    @Override
     public void deleteCategory(CategoryDto category) {
         categoryServiceBean.deleteCategory(category);
     }

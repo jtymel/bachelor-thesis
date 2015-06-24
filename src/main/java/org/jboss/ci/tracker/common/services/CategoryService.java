@@ -37,6 +37,14 @@ public interface CategoryService extends RemoteService {
     public List<CategoryDto> getCategories();
 
     /**
+     * Returns categories of specified categorization.
+     *
+     * @param categorization
+     * @return List of categories
+     */
+    public List<CategoryDto> getCategories(CategorizationDto categorization);
+
+    /**
      * Saves (or updates) category of specified categorization
      *
      * @param category Category

@@ -328,6 +328,10 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         if (tabPanel.getWidget(selectedTab).equals(jobList)) {
             jobList.onTabShow();
         }
+
+        if (tabPanel.getWidget(selectedTab).equals(categorizationList)) {
+            categorizationList.onTabShow();
+        }
     }
 
     /**
