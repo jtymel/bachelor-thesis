@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,17 +16,11 @@
  */
 package org.jboss.ci.tracker.client.widgets.bridges;
 
-import org.jboss.ci.tracker.common.objects.CategoryDto;
-
 /**
  *
  * @author jtymel
  */
-public interface CategoryListDetailBridge {
+public interface CategorizationListBridge {
 
-    public void setCategoryAndDisplayDetail(CategoryDto categoryDto);
-
-    public void cancelCategoryDetailAndDisplayCategoryList();
-
-    public void cancelCategoryList();
+    public void cancelCategorizationList();
 }

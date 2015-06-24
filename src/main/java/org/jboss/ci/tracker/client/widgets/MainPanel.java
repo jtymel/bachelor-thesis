@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,7 @@ import org.jboss.ci.tracker.client.widgets.bridges.JobListDetailBridge;
 import org.jboss.ci.tracker.client.widgets.bridges.JobListBuildListBridge;
 import org.jboss.ci.tracker.client.widgets.bridges.JobDetailLabelDetailBridge;
 import org.jboss.ci.tracker.client.widgets.bridges.JobDetailCategoriesBridge;
-import org.jboss.ci.tracker.client.widgets.bridges.CategoryListDetailBridge;
-import org.jboss.ci.tracker.client.widgets.bridges.CategorizationListDetailBridge;
+import org.jboss.ci.tracker.client.widgets.bridges.CategorizationListBridge;
 import org.jboss.ci.tracker.client.widgets.bridges.BuildListResultListBridge;
 import org.jboss.ci.tracker.client.widgets.bridges.BuildListParamBuildListBridge;
 import com.google.gwt.core.client.GWT;
@@ -41,8 +40,6 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import java.util.Collection;
 import org.jboss.ci.tracker.common.objects.BuildDto;
-import org.jboss.ci.tracker.common.objects.CategorizationDto;
-import org.jboss.ci.tracker.common.objects.CategoryDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
 import org.jboss.ci.tracker.common.objects.LabelDto;
 import org.jboss.ci.tracker.common.objects.ParameterizedBuildDto;
@@ -54,7 +51,7 @@ import java.util.List;
  *
  * @author jtymel
  */
-public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListDetailBridge, CategoryListDetailBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge, BuildListParamBuildListBridge, ParamBuildResultListBridge, BuildListResultListBridge, JobListResultListBridge, ResultListTestDetailBridge {
+public class MainPanel extends Composite implements JobListDetailBridge, CategorizationListBridge, JobDetailLabelDetailBridge, JobDetailCategoriesBridge, JobListBuildListBridge, BuildListParamBuildListBridge, ParamBuildResultListBridge, BuildListResultListBridge, JobListResultListBridge, ResultListTestDetailBridge {
 
     private static MainPanelUiBinder uiBinder = GWT.create(MainPanelUiBinder.class);
 
@@ -75,41 +72,8 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     }
 
     @Override
-    public void setCategorizationAndDisplayDetail(CategorizationDto categorizationDto) {
-        categorizationDetail.setCategorization(categorizationDto);
-        tabPanel.add(categorizationDetail, "Categorization detail");
-        tabPanel.selectTab(categorizationDetail);
-    }
-
-    @Override
-    public void cancelCategorizationDetailAndDisplayCategorizationList() {
-        categorizationList.onTabShow();
-        tabPanel.selectTab(categorizationList);
-        tabPanel.remove(categorizationDetail);
-    }
-
-    @Override
     public void cancelCategorizationList() {
         tabPanel.remove(categorizationList);
-    }
-
-    @Override
-    public void cancelCategoryList() {
-        tabPanel.remove(categoryList);
-    }
-
-    @Override
-    public void setCategoryAndDisplayDetail(CategoryDto categoryDto) {
-        categoryDetail.setCategory(categoryDto);
-        tabPanel.add(categoryDetail, "Category detail");
-        tabPanel.selectTab(categoryDetail);
-    }
-
-    @Override
-    public void cancelCategoryDetailAndDisplayCategoryList() {
-        categoryList.onTabShow();
-        tabPanel.selectTab(categoryList);
-        tabPanel.remove(categoryDetail);
     }
 
     @Override
@@ -240,15 +204,6 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     CategorizationList categorizationList;
 
     @UiField
-    CategorizationDetail categorizationDetail;
-
-    @UiField
-    CategoryList categoryList;
-
-    @UiField
-    CategoryDetail categoryDetail;
-
-    @UiField
     LabelDetail labelDetail;
 
     @UiField
@@ -287,11 +242,6 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.selectTab(categorizationList);
     }
 
-    public void showCategoryList() {
-        tabPanel.add(categoryList, "List of categories");
-        tabPanel.selectTab(categoryList);
-    }
-
     /**
      * Calls methods of tabs when the tab is selected (and when needed).
      *
@@ -303,10 +253,6 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
 
         if (tabPanel.getWidget(selectedTab).equals(labelDetail)) {
             labelDetail.onTabShow();
-        }
-
-        if (tabPanel.getWidget(selectedTab).equals(categoryDetail)) {
-            categoryDetail.getCategorizations();
         }
 
         if (tabPanel.getWidget(selectedTab).equals(jobCategories)) {
@@ -340,10 +286,7 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
     private void setBridges() {
         jobList.setJobListDetailBridge(MainPanel.this);
         jobDetail.setJobListDetailBridge(MainPanel.this);
-        categorizationList.setCategorizationListDetailBridge(MainPanel.this);
-        categorizationDetail.setCategorizationListDetailBridge(MainPanel.this);
-        categoryList.setCategoryListDetailBridge(MainPanel.this);
-        categoryDetail.setCategoryListDetailBridge(MainPanel.this);
+        categorizationList.setCategorizationListBridge(MainPanel.this);
         jobDetail.setJobDetailLabelDetailBridge(MainPanel.this);
         labelDetail.setJobDetailLabelDetailBridge(MainPanel.this);
         jobDetail.setJobDetailCategoriesBridge(MainPanel.this);
@@ -374,9 +317,6 @@ public class MainPanel extends Composite implements JobListDetailBridge, Categor
         tabPanel.remove(buildList);
         tabPanel.remove(jobDetail);
         tabPanel.remove(categorizationList);
-        tabPanel.remove(categorizationDetail);
-        tabPanel.remove(categoryList);
-        tabPanel.remove(categoryDetail);
     }
 
     /**

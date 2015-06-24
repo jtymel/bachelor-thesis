@@ -3,7 +3,7 @@
              xmlns:thesui="urn:import:org.jboss.ci.tracker.client.widgets"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <ui:style src="style.css" />
-    
+
     <g:TabLayoutPanel ui:field="tabPanel" barUnit="PX" barHeight="30">
         <g:tab>
             <g:header>
@@ -16,30 +16,12 @@
                 Job detail
             </g:header>
             <thesui:JobDetail ui:field="jobDetail" />
-        </g:tab>                
+        </g:tab>
         <g:tab>
             <g:header>
-                Categorization list
+                Parameterizations
             </g:header>
             <thesui:CategorizationList ui:field="categorizationList" />
-        </g:tab>
-        <g:tab>
-            <g:header>
-                Categorization detail
-            </g:header>
-            <thesui:CategorizationDetail ui:field="categorizationDetail" />
-        </g:tab>
-        <g:tab>
-            <g:header>
-                Category list
-            </g:header>
-            <thesui:CategoryList ui:field="categoryList" />
-        </g:tab>
-        <g:tab>
-            <g:header>
-                Category detail
-            </g:header>
-            <thesui:CategoryDetail ui:field="categoryDetail" />
         </g:tab>
         <g:tab>
             <g:header>

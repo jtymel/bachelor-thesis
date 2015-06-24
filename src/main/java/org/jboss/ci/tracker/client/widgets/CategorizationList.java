@@ -18,7 +18,7 @@ package org.jboss.ci.tracker.client.widgets;
 
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import org.jboss.ci.tracker.client.widgets.bridges.CategorizationListDetailBridge;
+import org.jboss.ci.tracker.client.widgets.bridges.CategorizationListBridge;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -48,7 +48,6 @@ import org.jboss.ci.tracker.common.services.CategoryServiceAsync;
  *
  * @author jtymel
  */
-
 public class CategorizationList extends Composite {
 
     private static final String LABEL_OF_NEW_ROW = "...";
@@ -59,7 +58,7 @@ public class CategorizationList extends Composite {
 
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
 
-    private CategorizationListDetailBridge categorizationListDetailBridge;
+    private CategorizationListBridge categorizationListBridge;
 
     interface CategorizationListUiBinder extends UiBinder<Widget, CategorizationList> {
     }
@@ -92,8 +91,8 @@ public class CategorizationList extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void setCategorizationListDetailBridge(CategorizationListDetailBridge bridge) {
-        categorizationListDetailBridge = bridge;
+    public void setCategorizationListBridge(CategorizationListBridge bridge) {
+        categorizationListBridge = bridge;
     }
 
     // TODO: Deletion when the Del key is pressed
@@ -116,7 +115,7 @@ public class CategorizationList extends Composite {
 
     @UiHandler("cancelButton")
     void onCancelButtonClick(ClickEvent event) {
-        categorizationListDetailBridge.cancelCategorizationList();
+        categorizationListBridge.cancelCategorizationList();
     }
 
     public void onTabShow() {
