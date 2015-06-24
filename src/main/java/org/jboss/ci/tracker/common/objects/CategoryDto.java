@@ -79,4 +79,9 @@ public class CategoryDto implements Serializable {
         this.regex = regex;
     }
 
+    @Override
+    public String toString() {
+        return "[" + id + "] " + name + "(regex = " + regex + ", group of parameterization = " + categorization + ")";
+    }
+
 }
