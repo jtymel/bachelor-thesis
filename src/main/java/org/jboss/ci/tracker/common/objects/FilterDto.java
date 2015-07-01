@@ -27,37 +27,37 @@ import java.util.List;
  */
 public class FilterDto implements Serializable {
 
-    private List<Long> categoryIds;
-    private List<Long> possibleResultIds;
+    private List<Integer> categoryIds;
+    private List<Integer> possibleResultIds;
     private Date dateFrom;
     private Date dateTo;
 
     public FilterDto() {
-        categoryIds = new ArrayList<Long>();
-        possibleResultIds = new ArrayList<Long>();
+        categoryIds = new ArrayList<Integer>();
+        possibleResultIds = new ArrayList<Integer>();
     }
 
-    public List<Long> getPossibleResultIds() {
+    public List<Integer> getPossibleResultIds() {
         return possibleResultIds;
     }
 
-    public void setPossibleResultIds(List<Long> possibleResultIds) {
+    public void setPossibleResultIds(List<Integer> possibleResultIds) {
         this.possibleResultIds = possibleResultIds;
     }
 
-    public void addPossibleResultId(Long id) {
+    public void addPossibleResultId(Integer id) {
         possibleResultIds.add(id);
     }
 
-    public List<Long> getCategoryIds() {
+    public List<Integer> getCategoryIds() {
         return categoryIds;
     }
 
-    public void setCategoryIds(List<Long> categoryIds) {
+    public void setCategoryIds(List<Integer> categoryIds) {
         this.categoryIds = categoryIds;
     }
 
-    public void addCategoryId(Long id) {
+    public void addCategoryId(Integer id) {
         categoryIds.add(id);
     }
 

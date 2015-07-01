@@ -142,9 +142,9 @@ public class CustomWidgets {
                         CheckBox checkBox = (CheckBox) widget;
                         if (checkBox.getValue()) {
                             if (checkBox.getName().startsWith(CATEGORY_SEPARATOR_PREFIX)) {
-                                filter.addCategoryId(Long.parseLong(checkBox.getName().substring(CATEGORY_SEPARATOR_PREFIX.length())));
+                                filter.addCategoryId(Integer.parseInt(checkBox.getName().substring(CATEGORY_SEPARATOR_PREFIX.length())));
                             } else if (checkBox.getName().startsWith(POSSIBLE_RESULT_SEPARATOR_PREFIX)) {
-                                filter.addPossibleResultId(Long.parseLong(checkBox.getName().substring(POSSIBLE_RESULT_SEPARATOR_PREFIX.length())));
+                                filter.addPossibleResultId(Integer.parseInt(checkBox.getName().substring(POSSIBLE_RESULT_SEPARATOR_PREFIX.length())));
                             }
                         }
                     }

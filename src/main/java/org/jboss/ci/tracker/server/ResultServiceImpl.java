@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -59,17 +59,17 @@ public class ResultServiceImpl extends RemoteServiceServlet implements ResultSer
     }
 
     @Override
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Integer resultId, Integer categoryId) {
         return resultServiceBean.getTestResults(resultDto, paramBuildDto, resultId, categoryId);
     }
 
     @Override
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Integer resultId, Integer categoryId) {
         return resultServiceBean.getTestResults(resultDto, buildDto, resultId, categoryId);
     }
 
     @Override
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Integer resultId, Integer categoryId) {
         return resultServiceBean.getTestResults(resultDto, jobDto, resultId, categoryId);
     }
 

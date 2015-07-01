@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ import java.util.Date;
  */
 public class ParameterizedBuildDto implements Serializable {
 
-    private Long id;
+    private Integer id;
     private java.util.Date datetime;
     private String name;
     private String url;
@@ -55,11 +55,11 @@ public class ParameterizedBuildDto implements Serializable {
         this.name = name;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

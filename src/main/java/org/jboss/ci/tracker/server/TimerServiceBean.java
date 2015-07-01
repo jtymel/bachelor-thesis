@@ -16,6 +16,7 @@
  */
 package org.jboss.ci.tracker.server;
 
+import org.jboss.ci.tracker.server.ci.jenkins.JenkinsDownloader;
 import org.jboss.ci.tracker.server.entity.Job;
 import java.util.List;
 import java.util.logging.Logger;

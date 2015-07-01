@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,14 +28,14 @@ public class ResultDto extends PossibleResultDto {
 
     private String test;
     private String testCase;
-    private Map<Long, Integer> results = new HashMap<Long, Integer>();
-    private Long testId;
+    private Map<Integer, Integer> results = new HashMap<Integer, Integer>();
+    private Integer testId;
 
-    public Long getTestId() {
+    public Integer getTestId() {
         return testId;
     }
 
-    public void setTestId(Long testId) {
+    public void setTestId(Integer testId) {
         this.testId = testId;
     }
 
@@ -55,11 +55,11 @@ public class ResultDto extends PossibleResultDto {
         this.testCase = testCase;
     }
 
-    public void setResults(Map<Long, Integer> results) {
+    public void setResults(Map<Integer, Integer> results) {
         this.results = results;
     }
 
-    public Map<Long, Integer> getResults() {
+    public Map<Integer, Integer> getResults() {
         return results;
     }
 

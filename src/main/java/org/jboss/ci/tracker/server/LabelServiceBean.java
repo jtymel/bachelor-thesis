@@ -17,7 +17,6 @@
 package org.jboss.ci.tracker.server;
 
 import org.jboss.ci.tracker.server.entity.Label;
-import org.jboss.ci.tracker.server.entity.Job;
 import org.jboss.ci.tracker.server.entity.Category;
 import org.jboss.ci.tracker.common.objects.CategoryDto;
 import org.jboss.ci.tracker.common.objects.JobDto;
@@ -28,7 +27,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.jboss.ci.tracker.server.entity.LabelCategory;
 
@@ -70,36 +68,13 @@ public class LabelServiceBean {
         return categoryDto;
     }
 
-    public Long saveLabel(Label label, Job job) {
-        Session session = (Session) em.getDelegate();
-
-        Query query = session.createQuery("from Label WHERE name = :labelName AND job = :job")
-                .setParameter("labelName", label.getName())
-                .setParameter("job", job)
-          ;
-
-        Label storedLabel = (Label) query.uniqueResult();
-
-        if (storedLabel == null) {
-            session.saveOrUpdate(label);
-            return label.getId();
-        }
-
-        return storedLabel.getId();
-    }
-
     public void addCategoriesToLabel(LabelDto labelDto, List<CategoryDto> categoriesDto) {
-        Session session = (Session) em.getDelegate();
-        Query query = session.createQuery("from Label WHERE id = :labelid")
-                .setParameter("labelid", labelDto.getId());
-        Label label = (Label) query.uniqueResult();
+        Label label = em.find(Label.class, labelDto.getId());
 
         List<LabelCategory> labelCategories = new ArrayList<LabelCategory>(categoriesDto.size());
 
         for (CategoryDto categoryDto : categoriesDto) {
-            Query query2 = session.createQuery("from Category WHERE id = :categoryid")
-                    .setParameter("categoryid", categoryDto.getId());
-            Category category = (Category) query2.uniqueResult();
+            Category category = em.find(Category.class, categoryDto.getId());
             addLabelToCategory(label, category);
             final LabelCategory lc = new LabelCategory();
             lc.setCategory(category);
@@ -109,7 +84,7 @@ public class LabelServiceBean {
 
         label.setLabelCategories(labelCategories);
 
-        session.saveOrUpdate(label);
+        em.persist(label);
     }
 
     private void addLabelToCategory(Label label, Category category) {
@@ -124,11 +99,7 @@ public class LabelServiceBean {
             return null;
         }
 
-        Session session = (Session) em.getDelegate();
-
-        Query query = session.createQuery("from Label WHERE id = :labelid")
-                .setParameter("labelid", labelDto.getId());
-        Label label = (Label) query.uniqueResult();
+        Label label = em.find(Label.class, labelDto.getId());
 
         List<LabelCategory> categories = label.getLabelCategories();
         List<CategoryDto> categoryDtos = new ArrayList<CategoryDto>(categories.size());

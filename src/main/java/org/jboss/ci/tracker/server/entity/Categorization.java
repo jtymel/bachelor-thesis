@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@ package org.jboss.ci.tracker.server.entity;
 import org.jboss.ci.tracker.common.objects.CategorizationDto;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +27,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -35,10 +38,12 @@ public class Categorization implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(columnDefinition = "serial")
+    private Integer id;
 
-    @OneToMany(mappedBy = "categorization")//, cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
-    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+    @OneToMany(cascade = { javax.persistence.CascadeType.REFRESH, javax.persistence.CascadeType.DETACH, javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.REFRESH, javax.persistence.CascadeType.PERSIST }, mappedBy = "categorization")
+    @Cascade({CascadeType.REFRESH})
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private List<Category> categories;
 
     private String name;
@@ -51,11 +56,11 @@ public class Categorization implements Serializable {
         this.name = categorizationDto.getName();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

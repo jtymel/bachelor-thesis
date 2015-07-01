@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +64,8 @@ public class ResultServiceBean {
     private static final int QUERY_TEST_DTO_POSITION_MACHINE = 2;
     private static final int QUERY_TEST_DTO_POSITION_DURATION = 3;
     private static final int QUERY_TEST_DTO_POSITION_URL = 4;
+    private static final int QUERY_TEST_DTO_POSITION_TEST_CASE_NAME = 5;
+    private static final int QUERY_TEST_DTO_POSITION_TEST_NAME = 6;
 
     private static final int QUERY_RESULT_DTO_POSITION_TEST_ID = 0;
     private static final int QUERY_RESULT_DTO_POSITION_TEST_NAME = 1;
@@ -234,7 +237,7 @@ public class ResultServiceBean {
         List<Category> categories = new ArrayList<Category>();
         Set<Categorization> usedCategorizations = new HashSet<Categorization>();
 
-        for (Long categoryId : filter.getCategoryIds()) {
+        for (Integer categoryId : filter.getCategoryIds()) {
             Category category = categoryServiceBean.getCategoryById(categoryId);
             categories.add(category);
             usedCategorizations.add(category.getCategorization());
@@ -246,7 +249,7 @@ public class ResultServiceBean {
         for (Categorization categorization : usedCategorizations) {
 
             queryString += " AND EXISTS ("
-                    + "         SELECT 1 FROM ParamBuild_Category pbc"
+                    + "         SELECT 1 FROM parameterizedbuild_category pbc"
                     + "         WHERE"
                     + "             pbc.parambuild_id = r.parameterizedbuild_id"
                     + "             AND (false"; // because of OR operator
@@ -301,8 +304,18 @@ public class ResultServiceBean {
 
     private Query getBuildResultQuery(Collection<BuildDto> builds) {
         Session session = (Session) em.getDelegate();
-        Map<String, Long> queryParameters = new HashMap<String, Long>();
-        int i = 0;
+        List<Integer> queryParameters = new LinkedList<Integer>();
+
+        StringBuilder pbClause = new StringBuilder();
+        if (builds != null && ! builds.isEmpty()) {
+            pbClause.append(" AND pb.build_id IN(");
+            boolean addComma = false;
+            for (BuildDto build : builds) {
+                pbClause.append(addComma ? "," : "").append("?");
+                queryParameters.add(build.getId());
+            }
+            pbClause.append(")");
+        }
 
         String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
@@ -310,21 +323,16 @@ public class ResultServiceBean {
                 + "     r.test_id = t.id"
                 + "     AND t.testcase_id = tc.id"
                 + "     AND r.parameterizedbuild_id = pb.id"
-                + "     AND (false ";
-
-        for (BuildDto build : builds) {
-            queryString += " OR pb.build_id = :buildId" + i;
-            queryParameters.put("buildId" + i, build.getId());
-            i++;
-        }
+                + pbClause.toString();
 
         queryString += ") GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
                 + " ORDER BY tc.name, t.name";
 
         Query query = session.createSQLQuery(queryString);
 
-        for (Map.Entry<String, Long> entry : queryParameters.entrySet()) {
-            query.setParameter(entry.getKey(), entry.getValue());
+        for (int i = 0; i < queryParameters.size(); i++) {
+            Integer value = queryParameters.get(i);
+            query.setParameter(i, value);
         }
 
         return query;
@@ -427,18 +435,18 @@ public class ResultServiceBean {
 
     private ResultDto createResultDto(Object[] result) {
         ResultDto resultDto = new ResultDto();
-        resultDto.setTestId(Long.parseLong(result[QUERY_RESULT_DTO_POSITION_TEST_ID].toString()));
+        resultDto.setTestId(Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_TEST_ID].toString()));
         resultDto.setTest(result[QUERY_RESULT_DTO_POSITION_TEST_NAME].toString());
         resultDto.setTestCase(result[QUERY_RESULT_DTO_POSITION_TEST_CASE_NAME].toString());
 
-        Map<Long, Integer> testResults = new HashMap<Long, Integer>();
-        testResults.put(Long.parseLong(result[QUERY_RESULT_DTO_POSITION_POSSIBLE_RESULT].toString()), Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_COUNT_OF_RESULTS].toString()));
+        Map<Integer, Integer> testResults = new HashMap<Integer, Integer>();
+        testResults.put(Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_POSSIBLE_RESULT].toString()), Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_COUNT_OF_RESULTS].toString()));
 
         resultDto.setResults(testResults);
         return resultDto;
     }
 
-    private final String TEST_HISTORY_QUERY_ALL = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+    private final String TEST_HISTORY_QUERY_ALL = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
@@ -451,7 +459,7 @@ public class ResultServiceBean {
             + " ORDER BY pb.dateTime DESC";
 
     private final String TEST_HISTORY_QUERY_FILTER_RESULTS
-            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
             + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc"
             + " WHERE"
             + "     r.test_id = t.id"
@@ -465,8 +473,8 @@ public class ResultServiceBean {
             + " ORDER BY pb.dateTime DESC";
 
     private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES
-            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
-            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, parameterizedbuild_category pbc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
             + "     AND r.test_id = t.id"
@@ -480,8 +488,8 @@ public class ResultServiceBean {
             + " ORDER BY pb.dateTime DESC";
 
     private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES_RESULTS
-            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url"
-            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
+            = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, parameterizedbuild_category pbc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
             + "     AND r.possibleresult_id = :possibleResultId"
@@ -495,7 +503,7 @@ public class ResultServiceBean {
             + "     AND t.id = :testId"
             + " ORDER BY pb.dateTime DESC";
 
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = session.createQuery("FROM ParameterizedBuild WHERE id = :paramBuildId")
@@ -509,7 +517,7 @@ public class ResultServiceBean {
         return getTestHistory(testResults);
     }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = session.createQuery("FROM Build WHERE id = :buildId")
@@ -523,7 +531,7 @@ public class ResultServiceBean {
         return getTestHistory(testResults);
     }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = getTestHistoryQuery(resultDto.getTestId(), jobDto.getId(), resultId, categoryId);
@@ -533,7 +541,7 @@ public class ResultServiceBean {
         return getTestHistory(testResults);
     }
 
-    private Query getTestHistoryQuery(Long testId, Long jobId, Long resultId, Long categoryId) {
+    private Query getTestHistoryQuery(Integer testId, Integer jobId, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         if (resultId == null && categoryId == null) {
@@ -587,9 +595,34 @@ public class ResultServiceBean {
         testDto.setResult(test[QUERY_TEST_DTO_POSITION_RESULT].toString());
         testDto.setMachine(test[QUERY_TEST_DTO_POSITION_MACHINE].toString());
         testDto.setDuration(Float.parseFloat(test[QUERY_TEST_DTO_POSITION_DURATION].toString()));
-        testDto.setUrl(test[QUERY_TEST_DTO_POSITION_URL].toString());
+        testDto.setUrl(createJenkinsTestUrl(test[QUERY_TEST_DTO_POSITION_URL], test[QUERY_TEST_DTO_POSITION_TEST_CASE_NAME], test[QUERY_TEST_DTO_POSITION_TEST_NAME]));
 
         return testDto;
+    }
+
+    private String createJenkinsTestUrl(Object baseUrl, Object testCase, Object test) {
+        final String testCaseString = String.valueOf(testCase);
+        final int lastDot = testCaseString.lastIndexOf(".");
+        final String packageName;
+        final String testCaseName;
+        if (lastDot == -1) {
+            packageName = "";
+            testCaseName = testCaseString;
+        } else {
+            packageName = testCaseString.substring(0, lastDot);
+            testCaseName = testCaseString.substring(lastDot + 1);
+        }
+        return new StringBuilder()
+          .append(baseUrl)
+          .append("/testReport/")
+          .append(packageName)
+          .append("/")
+          .append(testCaseName)
+          .append("/")
+          .append(test)
+          .append("/")
+          .toString()
+          ;
     }
 
 }

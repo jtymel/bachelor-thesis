@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -42,7 +42,7 @@ public interface JobService extends RemoteService {
      * @param jobDTO Job that is going to be saved
      * @return Id of saved job
      */
-    public Long saveJob(JobDto jobDTO);
+    public Integer saveJob(JobDto jobDTO);
 
     /**
      * Deletes specified job

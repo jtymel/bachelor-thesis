@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ import java.util.List;
  */
 public class TestDetail extends Composite {
 
-    private static TestDetailUiBinder uiBinder = GWT.create(TestDetailUiBinder.class);
+    private static final TestDetailUiBinder uiBinder = GWT.create(TestDetailUiBinder.class);
 
     private final ResultServiceAsync resultService = GWT.create(ResultService.class);
     private final CategoryServiceAsync categoryService = GWT.create(CategoryService.class);
@@ -163,7 +163,7 @@ public class TestDetail extends Composite {
         Column urlColumn = new Column<TestDto, SafeHtml>(new SafeHtmlCell()) {
             @Override
             public SafeHtml getValue(TestDto object) {
-                SafeUri href = UriUtils.fromSafeConstant(object.getUrl() + "testReport");
+                SafeUri href = UriUtils.fromSafeConstant(object.getUrl());
                 return cell.anchor(href, object.getUrl());
             }
         };
@@ -359,7 +359,7 @@ public class TestDetail extends Composite {
         });
     }
 
-    private Long getCategoryId() {
+    private Integer getCategoryId() {
         if (categoryListBox.getSelectedIndex() == 0) {
             return null;
         }
@@ -367,8 +367,8 @@ public class TestDetail extends Composite {
         return categoryList.get(categoryListBox.getSelectedIndex() - 1).getId();
     }
 
-    private Long getPossibleResultId() {
-        Long possibleResultId = null;
+    private Integer getPossibleResultId() {
+        Integer possibleResultId = null;
 
         for (PossibleResultDto possibleResult : possibleResultList) {
             if (possibleResult.getName().equals(possibleResultListBox.getSelectedItemText())) {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ public class CategorizationServiceBean {
         return new CategorizationDto(categorization.getId(), categorization.getName());
     }
 
-    public Long saveCategorization(CategorizationDto categorizationDto) {
+    public Integer saveCategorization(CategorizationDto categorizationDto) {
         Session session = (Session) em.getDelegate();
         Categorization categorization = new Categorization(categorizationDto);
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,22 +24,22 @@ import java.io.Serializable;
  */
 public class LabelDto implements Serializable {
 
-    private Long id;
+    private Integer id;
     private String name;
 
     public LabelDto() {
     }
 
-    public LabelDto(Long id, String name) {
+    public LabelDto(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

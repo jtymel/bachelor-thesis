@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,11 @@ package org.jboss.ci.tracker.server.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
@@ -32,23 +36,24 @@ import javax.persistence.NamedNativeQuery;
 @NamedNativeQueries({
     @NamedNativeQuery(
             name = "storeTestResultProcedure",
-            query = "SELECT count (*) FROM storeTestResult(:id_paramBuild, :result, :test, :testCase, :duration)"
+            query = "SELECT count (*) FROM storeTestResult(:p_id_paramBuild, :p_id_possible_result, :p_id_test, :duration)"
     )
 })
 @Entity
-@IdClass(Result.ResultId.class)
 public class Result implements Serializable {
 
     @Id
-    @ManyToOne
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    private Integer id;
+
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private PossibleResult possibleResult;
 
-    @Id
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private Test test;
 
-    @Id
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private ParameterizedBuild parameterizedBuild;
 
     private float duration;
@@ -72,6 +77,14 @@ public class Result implements Serializable {
         this.test = test;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public ParameterizedBuild getParameterizedBuild() {
         return parameterizedBuild;
     }
@@ -86,52 +99,5 @@ public class Result implements Serializable {
 
     public void setDuration(float duration) {
         this.duration = duration;
-    }
-
-    public static class ResultId implements Serializable {
-
-        private PossibleResult possibleResult;
-        private Test test;
-        private ParameterizedBuild parameterizedBuild;
-
-        public ResultId() {
-        }
-
-        public ResultId(PossibleResult possibleResult, Test test, ParameterizedBuild parameterizedBuild) {
-            this.possibleResult = possibleResult;
-            this.test = test;
-            this.parameterizedBuild = parameterizedBuild;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 53 * hash + Objects.hashCode(this.possibleResult);
-            hash = 53 * hash + Objects.hashCode(this.test);
-            hash = 53 * hash + Objects.hashCode(this.parameterizedBuild);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final ResultId other = (ResultId) obj;
-            if (!Objects.equals(this.possibleResult, other.possibleResult)) {
-                return false;
-            }
-            if (!Objects.equals(this.test, other.test)) {
-                return false;
-            }
-            if (!Objects.equals(this.parameterizedBuild, other.parameterizedBuild)) {
-                return false;
-            }
-            return true;
-        }
-
     }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ public interface CategorizationService extends RemoteService {
      * @param categorization Categorization
      * @return Id of saved categorization
      */
-    public Long saveCategorization(CategorizationDto categorization);
+    public Integer saveCategorization(CategorizationDto categorization);
 
     /**
      * Deletes specified categorization

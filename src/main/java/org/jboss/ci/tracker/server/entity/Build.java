@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@ import org.jboss.ci.tracker.common.objects.BuildDto;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -37,23 +40,25 @@ public class Build implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(columnDefinition = "serial")
+    private Integer id;
 
-    @OneToMany(mappedBy = "build")
+    @OneToMany(cascade = { javax.persistence.CascadeType.REFRESH, javax.persistence.CascadeType.DETACH, javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.REFRESH, javax.persistence.CascadeType.PERSIST }, mappedBy = "build")
     @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private List<ParameterizedBuild> parameterizedBuilds;
 
-    @ManyToOne
+    @ManyToOne(cascade = { javax.persistence.CascadeType.REFRESH, javax.persistence.CascadeType.DETACH, javax.persistence.CascadeType.MERGE, javax.persistence.CascadeType.REFRESH, javax.persistence.CascadeType.PERSIST })
     private Job job;
 
     private String name;
     private String url;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -92,7 +97,7 @@ public class Build implements Serializable {
     public Build() {
     }
 
-    public Build(Long id, List<ParameterizedBuild> parameterizedBuilds, Job job, String name, String url) {
+    public Build(Integer id, List<ParameterizedBuild> parameterizedBuilds, Job job, String name, String url) {
         this.id = id;
         this.parameterizedBuilds = parameterizedBuilds;
         this.job = job;

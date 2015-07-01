@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,18 +24,18 @@ import java.io.Serializable;
 
 public class JobDto implements Serializable {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String url;
 
     public JobDto() {
     }
 
-    public JobDto(Long id) {
+    public JobDto(Integer id) {
         this.id = id;
     }
 
-    public JobDto(Long id, String name, String url) {
+    public JobDto(Integer id, String name, String url) {
         this(name, url);
         this.id = id;
     }
@@ -45,11 +45,11 @@ public class JobDto implements Serializable {
         this.url = url;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

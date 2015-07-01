@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ public class StoreParamBuildCategoriesBean {
     public void addCategoriesToParamBuild(ParameterizedBuild paramBuild) {
         Session session = (Session) em.getDelegate();
         Query query = session.getNamedQuery("addCategoriesToParamBuild")
-                .setParameter("id_paramBuild", paramBuild);
+                .setParameter("id_paramBuild", paramBuild.getId().intValue());
         List result = query.list();
     }
 }
