@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@ import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -52,7 +53,9 @@ import org.jboss.ci.tracker.common.services.ResultService;
 import org.jboss.ci.tracker.common.services.ResultServiceAsync;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import org.jboss.ci.tracker.client.utils.ResultsColumnProperties;
 import org.jboss.ci.tracker.common.objects.CategorizationDto;
 import org.jboss.ci.tracker.common.objects.FilterDto;
 import org.jboss.ci.tracker.common.services.CategorizationService;
@@ -100,6 +103,10 @@ public class ResultList extends Composite {
     private List<CategorizationDto> categorizationList;
     private FilterDto filter = null;
 
+    private TextColumn<ResultDto> testNameColumn;
+    private TextColumn<ResultDto> testCaseNameColumn;
+    private List<ResultsColumnProperties> resultColumns = new ArrayList<ResultsColumnProperties>();
+
     public ResultList() {
         dataGrid = new DataGrid<ResultDto>(500);
         initDatagrid();
@@ -146,9 +153,16 @@ public class ResultList extends Composite {
     }
 
     private void initDatagrid() {
+        addSelectionModel();
+        addDoubleClickHandler();
+    }
+
+    private void addSelectionModel() {
         selectionModel = new SingleSelectionModel<ResultDto>(keyProvider);
         dataGrid.setSelectionModel(selectionModel);
+    }
 
+    private void addDoubleClickHandler() {
         dataGrid.addDomHandler(new DoubleClickHandler() {
 
             @Override
@@ -183,51 +197,77 @@ public class ResultList extends Composite {
     }
 
     public void showParamBuildResults(ParameterizedBuildDto paramBuildDto) {
+        setEnvironmentForParamBuildResults(paramBuildDto);
+        addColumnsAndCallForResults();
+    }
+
+    private void setEnvironmentForParamBuildResults(ParameterizedBuildDto paramBuildDto) {
         paramBuild = paramBuildDto;
         builds = null;
         job = null;
-
-        addColumnsAndCallForResults();
     }
 
     public void showBuildResults(Collection<BuildDto> builds) {
+        setEnvironmentForBuildResults(builds);
+        addColumnsAndCallForResults();
+    }
+
+    private void setEnvironmentForBuildResults(Collection<BuildDto> builds) {
         paramBuild = null;
         this.builds = builds;
         job = null;
-
-        addColumnsAndCallForResults();
     }
 
     public void showJobResults(JobDto jobDto) {
-        paramBuild = null;
-        builds = null;
-        job = jobDto;
-
+        setEnvironmentForJobResults(jobDto);
         addColumnsAndCallForResults();
     }
 
+    private void setEnvironmentForJobResults(JobDto jobDto) {
+        paramBuild = null;
+        builds = null;
+        job = jobDto;
+    }
+
     private void addColumnsAndCallForResults() {
+        removeDataGridColumns();
+        addTestNameColumn();
+        addTestCaseNameColumn();
+        addResultColumns();
+    }
+
+    private void removeDataGridColumns() {
         for (int i = dataGrid.getColumnCount() - 1; i >= 0; i--) {
             dataGrid.removeColumn(i);
         }
+        resultColumns.clear();
+    }
 
-        TextColumn<ResultDto> nameColumn = new TextColumn<ResultDto>() {
+    private void addTestNameColumn() {
+        testNameColumn = new TextColumn<ResultDto>() {
             @Override
             public String getValue(ResultDto object) {
                 return object.getTest();
             }
         };
 
-        TextColumn<ResultDto> testCaseColumn = new TextColumn<ResultDto>() {
+        testNameColumn.setSortable(true);
+        dataGrid.addColumn(testNameColumn, "Test name");
+    }
+
+    private void addTestCaseNameColumn() {
+        testCaseNameColumn = new TextColumn<ResultDto>() {
             @Override
             public String getValue(ResultDto object) {
                 return object.getTestCase();
             }
         };
 
-        dataGrid.addColumn(nameColumn, "Test name");
-        dataGrid.addColumn(testCaseColumn, "TestCase name");
+        testCaseNameColumn.setSortable(true);
+        dataGrid.addColumn(testCaseNameColumn, "TestCase name");
+    }
 
+    private void addResultColumns() {
         resultService.getPossibleResults(new AsyncCallback<List<PossibleResultDto>>() {
 
             @Override
@@ -239,18 +279,10 @@ public class ResultList extends Composite {
             public void onSuccess(List<PossibleResultDto> possibleResults) {
                 for (final PossibleResultDto possibleResult : possibleResults) {
 
-                    TextColumn<ResultDto> resultColumn = new TextColumn<ResultDto>() {
-                        @Override
-                        public String getValue(ResultDto object) {
-                            if (object.getResults().containsKey(possibleResult.getId())) {
-                                return object.getResults().get(possibleResult.getId()).toString();
-                            } else {
-                                return "";
-                            }
-                        }
-                    };
-                    dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.EM);
-                    dataGrid.addColumn(resultColumn, possibleResult.getName());
+                    TextColumn<ResultDto> resultColumn = createAndAddResultColumn(possibleResult);
+
+                    storeResultColumnProperties(resultColumn, possibleResult);
+
                 }
 
                 storePossibleResults(possibleResults);
@@ -263,11 +295,99 @@ public class ResultList extends Composite {
         });
     }
 
+    private TextColumn<ResultDto> createAndAddResultColumn(final PossibleResultDto possibleResult) {
+        TextColumn<ResultDto> resultColumn = new TextColumn<ResultDto>() {
+            @Override
+            public String getValue(ResultDto object) {
+                if (object.getResults().containsKey(possibleResult.getId())) {
+                    return object.getResults().get(possibleResult.getId()).toString();
+                } else {
+                    return "";
+                }
+            }
+        };
+
+        resultColumn.setSortable(true);
+        dataGrid.setColumnWidth(resultColumn, 8, Style.Unit.EM);
+        dataGrid.addColumn(resultColumn, possibleResult.getName());
+
+        return resultColumn;
+    }
+
+    private void storeResultColumnProperties(TextColumn<ResultDto> resultColumn, final PossibleResultDto possibleResult) {
+        ResultsColumnProperties columnProperties = new ResultsColumnProperties();
+        columnProperties.setColumn(resultColumn);
+        columnProperties.setPossibleResultId(possibleResult.getId());
+
+        resultColumns.add(columnProperties);
+    }
+
     private void fillDataGrid(List<ResultDto> result) {
-        dataProvider = new ListDataProvider<ResultDto>();
-        dataProvider.setList(result);
-        dataProvider.addDataDisplay(dataGrid);
+        prepareDataProvider(result);
+        ListHandler<ResultDto> sortHandler = createSortHandler();
+
+        dataGrid.addColumnSortHandler(sortHandler);
         dataGrid.setRowCount(result.size());
+    }
+
+    private ListHandler<ResultDto> createSortHandler() {
+        ListHandler<ResultDto> sortHandler = new ListHandler<ResultDto>(dataProvider.getList());
+
+        setTestColumnComparator(sortHandler);
+        setTestCaseColumnComparator(sortHandler);
+        setResultColumnComparators(sortHandler);
+
+        return sortHandler;
+    }
+
+    private void prepareDataProvider(List<ResultDto> result) {
+        dataProvider = new ListDataProvider<ResultDto>();
+        dataProvider.addDataDisplay(dataGrid);
+
+        dataProvider.getList().clear();
+        dataProvider.getList().addAll(result);
+    }
+
+    private void setTestColumnComparator(ListHandler<ResultDto> sortHandler) {
+        sortHandler.setComparator(testNameColumn, new Comparator<ResultDto>() {
+
+            @Override
+            public int compare(ResultDto o1, ResultDto o2) {
+                return o1.getTest().compareTo(o2.getTest());
+            }
+        });
+    }
+
+    private void setTestCaseColumnComparator(ListHandler<ResultDto> sortHandler) {
+        sortHandler.setComparator(testCaseNameColumn, new Comparator<ResultDto>() {
+
+            @Override
+            public int compare(ResultDto o1, ResultDto o2) {
+                return o1.getTestCase().compareTo(o2.getTestCase());
+            }
+        });
+    }
+
+    private void setResultColumnComparators(ListHandler<ResultDto> sortHandler) {
+        for (final ResultsColumnProperties resultColumn : resultColumns) {
+            sortHandler.setComparator(resultColumn.getColumn(), new Comparator<ResultDto>() {
+
+                @Override
+                public int compare(ResultDto o1, ResultDto o2) {
+                    if (o1 == o2) {
+                        return 0;
+                    }
+                    if (o1 == null || o1.getResults().get(resultColumn.getPossibleResultId()) == null) {
+                        return -1;
+                    }
+                    if (o2 == null || o2.getResults().get(resultColumn.getPossibleResultId()) == null) {
+                        return 1;
+                    }
+
+                    return o1.getResults().get(resultColumn.getPossibleResultId()) - o2.getResults().get(resultColumn.getPossibleResultId());
+                }
+            });
+        }
     }
 
     private void storePossibleResults(List<PossibleResultDto> possibleResults) {
@@ -334,19 +454,11 @@ public class ResultList extends Composite {
     }
 
     private void loadCategorizationsAndCategories() {
-        categoryService.getCategories(new AsyncCallback<List<CategoryDto>>() {
+        loadCategories();
+        loadCategorizations();
+    }
 
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new RuntimeException("Could not get the list of categories", caught);
-            }
-
-            @Override
-            public void onSuccess(List<CategoryDto> categories) {
-                categoryList = categories;
-            }
-        });
-
+    private void loadCategorizations() {
         categorizationService.getCategorizations(new AsyncCallback<List<CategorizationDto>>() {
 
             @Override
@@ -357,6 +469,21 @@ public class ResultList extends Composite {
             @Override
             public void onSuccess(List<CategorizationDto> categorizations) {
                 categorizationList = categorizations;
+            }
+        });
+    }
+
+    private void loadCategories() {
+        categoryService.getCategories(new AsyncCallback<List<CategoryDto>>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new RuntimeException("Could not get the list of categories", caught);
+            }
+
+            @Override
+            public void onSuccess(List<CategoryDto> categories) {
+                categoryList = categories;
             }
         });
     }
