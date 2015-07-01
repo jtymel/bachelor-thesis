@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ public class ParameterizedBuildServiceBean {
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
 
-    public Long saveParamBuild(ParameterizedBuild paramBuild) {
+    public Integer saveParamBuild(ParameterizedBuild paramBuild) {
         Session session = (Session) em.getDelegate();
 
         session.saveOrUpdate(paramBuild);

@@ -359,7 +359,7 @@ public class TestDetail extends Composite {
         });
     }
 
-    private Long getCategoryId() {
+    private Integer getCategoryId() {
         if (categoryListBox.getSelectedIndex() == 0) {
             return null;
         }
@@ -367,8 +367,8 @@ public class TestDetail extends Composite {
         return categoryList.get(categoryListBox.getSelectedIndex() - 1).getId();
     }
 
-    private Long getPossibleResultId() {
-        Long possibleResultId = null;
+    private Integer getPossibleResultId() {
+        Integer possibleResultId = null;
 
         for (PossibleResultDto possibleResult : possibleResultList) {
             if (possibleResult.getName().equals(possibleResultListBox.getSelectedItemText())) {

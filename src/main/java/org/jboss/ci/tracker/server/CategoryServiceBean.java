@@ -80,7 +80,7 @@ public class CategoryServiceBean {
         return categoryDto;
     }
 
-    public Long saveCategory(CategoryDto categoryDto, CategorizationDto categorizationDto) {
+    public Integer saveCategory(CategoryDto categoryDto, CategorizationDto categorizationDto) {
         if (categoryDto == null) {
             throw new RuntimeException("Trying to save null parameterization");
         }
@@ -104,10 +104,7 @@ public class CategoryServiceBean {
         em.remove(em.contains(category) ? category : em.merge(category));
     }
 
-    public Category getCategoryById(Long id) {
-        Session session = (Session) em.getDelegate();
-        Query query = session.createQuery("FROM Category WHERE id = :categoryId")
-                .setParameter("categoryId", id);
-        return (Category) query.uniqueResult();
+    public Category getCategoryById(Integer id) {
+        return em.find(Category.class, id);
     }
 }

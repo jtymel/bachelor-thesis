@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -38,14 +38,6 @@ public class BuildServiceBean {
 
     @PersistenceContext(name = "MainPU")
     private EntityManager em;
-
-    public Long saveBuild(Build build) {
-        Session session = (Session) em.getDelegate();
-
-        session.saveOrUpdate(build);
-
-        return build.getId();
-    }
 
     public List<BuildDto> getBuilds(JobDto jobDto) {
         if (jobDto == null) {

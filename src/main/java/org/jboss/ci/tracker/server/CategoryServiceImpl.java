@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,7 +48,7 @@ public class CategoryServiceImpl extends RemoteServiceServlet implements Categor
     }
 
     @Override
-    public Long saveCategory(CategoryDto category, CategorizationDto categorizationDto) {
+    public Integer saveCategory(CategoryDto category, CategorizationDto categorizationDto) {
         return categoryServiceBean.saveCategory(category, categorizationDto);
     }
 

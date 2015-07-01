@@ -16,6 +16,7 @@
  */
 package org.jboss.ci.tracker.server;
 
+import org.jboss.ci.tracker.server.ci.jenkins.JenkinsDownloader;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.jboss.ci.tracker.common.services.JenkinsService;
 import org.jboss.ci.tracker.common.objects.JobDto;

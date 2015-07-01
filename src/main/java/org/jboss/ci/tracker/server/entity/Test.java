@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,38 +17,50 @@
 package org.jboss.ci.tracker.server.entity;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "testcase_id", "name" } ) )
+@NamedQueries({
+    @NamedQuery(name = "Test.byName", query = "SELECT t FROM Test t, TestCase tc WHERE t.name = :name AND tc.name = :testCase AND tc.id = t.testCase")
+})
 public class Test {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
-    private Long id;
+    private Integer id;
 
-    @OneToMany(mappedBy = "test")
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, mappedBy = "test")
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private List<Result> results;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private TestCase testCase;
 
     private String name;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

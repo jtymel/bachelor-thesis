@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -180,8 +180,8 @@ public class JobList extends Composite {
             @Override
             public void onSuccess(Void result) {
                 downloadStartedAlert.hide();
-                CustomWidgets.alertWidget("Results successfully downloaded",
-                        "Results have been correctly downloaded.").center();
+                CustomWidgets.alertWidget("Results downloading started",
+                        "Downloading results has started.").center();
             }
         });
 

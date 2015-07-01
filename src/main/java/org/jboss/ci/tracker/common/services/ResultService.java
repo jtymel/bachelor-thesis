@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -79,7 +79,7 @@ public interface ResultService extends RemoteService {
      * @param categoryId Id of category
      * @return List of results of particular test
      */
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId); //TODO: Use instance of FilterDto instead of resultId and categoryId
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Integer resultId, Integer categoryId); //TODO: Use instance of FilterDto instead of resultId and categoryId
 
     /**
      * Returns history of results of specified test in the whole job. This method is called when the results of specified build
@@ -91,7 +91,7 @@ public interface ResultService extends RemoteService {
      * @param categoryId Id of category
      * @return List of results of particular test
      */
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Long resultId, Long categoryId); //TODO: Use instance of FilterDto instead of resultId and categoryId
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Integer resultId, Integer categoryId); //TODO: Use instance of FilterDto instead of resultId and categoryId
 
     /**
      * Returns history of results of specified test in the whole job. This method is called when the results of specified job
@@ -103,5 +103,5 @@ public interface ResultService extends RemoteService {
      * @param categoryId Id of category
      * @return List of results of particular test
      */
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Long resultId, Long categoryId); //TODO: Use instance of FilterDto instead of resultId and categoryId
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Integer resultId, Integer categoryId); //TODO: Use instance of FilterDto instead of resultId and categoryId
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ public class JobServiceImpl extends RemoteServiceServlet implements JobService {
     }
 
     @Override
-    public Long saveJob(JobDto jobDTO) {
+    public Integer saveJob(JobDto jobDTO) {
         return jobServiceBean.saveJob(jobDTO);
     }
 

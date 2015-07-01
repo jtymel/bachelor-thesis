@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,25 @@ package org.jboss.ci.tracker.server.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "TestCase.byName", query = "FROM TestCase WHERE name = :name")
+})
 public class TestCase implements Serializable {
 
     @Id
@@ -36,7 +44,8 @@ public class TestCase implements Serializable {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @OneToMany(mappedBy = "testCase")
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, mappedBy = "testCase")
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private List<Test> tests;
 
     private String name;

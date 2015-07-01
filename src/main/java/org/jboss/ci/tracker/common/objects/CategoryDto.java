@@ -24,34 +24,34 @@ import java.io.Serializable;
  */
 public class CategoryDto implements Serializable {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String regex;
     private String categorization;
-    private Long categorizationId;
+    private Integer categorizationId;
 
-    public Long getCategorizationId() {
+    public Integer getCategorizationId() {
         return categorizationId;
     }
 
-    public void setCategorizationId(Long categorizationId) {
+    public void setCategorizationId(Integer categorizationId) {
         this.categorizationId = categorizationId;
     }
 
     public CategoryDto() {
     }
 
-    public CategoryDto(Long id, String name, String regex) {
+    public CategoryDto(Integer id, String name, String regex) {
         this.id = id;
         this.name = name;
         this.regex = regex;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

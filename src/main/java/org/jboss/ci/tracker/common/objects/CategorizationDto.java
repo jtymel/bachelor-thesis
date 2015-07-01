@@ -24,23 +24,23 @@ import java.io.Serializable;
  */
 public class CategorizationDto implements Serializable {
 
-    private Long id;
+    private Integer id;
     private String name;
     private boolean readOnly = false;
 
     public CategorizationDto() {
     }
 
-    public CategorizationDto(Long id, String name) {
+    public CategorizationDto(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

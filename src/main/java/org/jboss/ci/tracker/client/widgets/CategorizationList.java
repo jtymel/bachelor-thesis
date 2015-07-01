@@ -198,7 +198,7 @@ public class CategorizationList extends Composite {
 
                     categorization.setName(value);
 
-                    categorizationService.saveCategorization(categorization, new AsyncCallback<Long>() {
+                    categorizationService.saveCategorization(categorization, new AsyncCallback<Integer>() {
 
                         @Override
                         public void onFailure(Throwable caught) {
@@ -206,7 +206,7 @@ public class CategorizationList extends Composite {
                         }
 
                         @Override
-                        public void onSuccess(Long result) {
+                        public void onSuccess(Integer result) {
                             categorization.setId(result);
                             updateCategorizationDataGrid();
                             updateCategoryDataGrid();
@@ -345,7 +345,7 @@ public class CategorizationList extends Composite {
 
                     category.setName(value);
 
-                    categoryService.saveCategory(category, getSelectedCategorization(), new AsyncCallback<Long>() {
+                    categoryService.saveCategory(category, getSelectedCategorization(), new AsyncCallback<Integer>() {
 
                         @Override
                         public void onFailure(Throwable caught) {
@@ -353,7 +353,7 @@ public class CategorizationList extends Composite {
                         }
 
                         @Override
-                        public void onSuccess(Long result) {
+                        public void onSuccess(Integer result) {
                             category.setId(result);
                             updateCategoryDataGrid();
                         }
@@ -382,7 +382,7 @@ public class CategorizationList extends Composite {
                 if (!value.equals(category.getRegex())) {
                     category.setRegex(value);
 
-                    categoryService.saveCategory(category, getSelectedCategorization(), new AsyncCallback<Long>() {
+                    categoryService.saveCategory(category, getSelectedCategorization(), new AsyncCallback<Integer>() {
 
                         @Override
                         public void onFailure(Throwable caught) {
@@ -390,7 +390,7 @@ public class CategorizationList extends Composite {
                         }
 
                         @Override
-                        public void onSuccess(Long result) {
+                        public void onSuccess(Integer result) {
                             category.setId(result);
                             updateCategoryDataGrid();
                         }

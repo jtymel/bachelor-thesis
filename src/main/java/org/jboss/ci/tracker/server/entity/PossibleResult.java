@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,37 +18,47 @@ package org.jboss.ci.tracker.server.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "PossibleResult.byName", query = "FROM PossibleResult WHERE name = :name")
+})
 public class PossibleResult implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "serial")
-    private Long id;
+    private Integer id;
 
-    @OneToMany(mappedBy = "possibleResult")
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, mappedBy = "possibleResult")
+    @OnDelete(action=OnDeleteAction.NO_ACTION)
     private List<Result> results;
 
+    @Column(unique = true)
     private String name;
 
     public PossibleResult() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

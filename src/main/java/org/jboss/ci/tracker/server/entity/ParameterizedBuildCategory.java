@@ -21,8 +21,8 @@ import javax.persistence.Table;
  * @author Hynek Mlnarik <hmlnarik@redhat.com>
  */
 @Entity
-@Table(name = "label_category")
-public class LabelCategory implements Serializable {
+@Table(name = "parameterizedbuild_category")
+public class ParameterizedBuildCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,8 +32,8 @@ public class LabelCategory implements Serializable {
     private Long id;
 
     @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
-    @JoinColumn(name = "LABEL_ID", nullable = false, updatable = false)
-    private Label label;
+    @JoinColumn(name = "PARAMBUILD_ID", nullable = false, updatable = false)
+    private ParameterizedBuild parameterizedBuild;
 
     @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     @JoinColumn(name = "CATEGORY_ID", nullable = false, updatable = false)
@@ -47,12 +47,12 @@ public class LabelCategory implements Serializable {
         this.id = id;
     }
 
-    public Label getLabel() {
-        return label;
+    public ParameterizedBuild getParameterizedBuild() {
+        return parameterizedBuild;
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
+    public void setParameterizedBuild(ParameterizedBuild parameterizedBuild) {
+        this.parameterizedBuild = parameterizedBuild;
     }
 
     public Category getCategory() {
@@ -73,10 +73,10 @@ public class LabelCategory implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof LabelCategory)) {
+        if (!(object instanceof ParameterizedBuildCategory)) {
             return false;
         }
-        LabelCategory other = (LabelCategory) object;
+        ParameterizedBuildCategory other = (ParameterizedBuildCategory) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

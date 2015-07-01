@@ -27,14 +27,16 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -46,7 +48,8 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(columnDefinition = "serial")
+    private Integer id;
 
     private String name;
 
@@ -55,16 +58,19 @@ public class Category implements Serializable {
      */
     private String regex;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private Categorization categorization;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    private List<Job> jobs;
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "category")
+    @OnDelete(action=OnDeleteAction.CASCADE)
+    private List<JobCategory> jobCategories;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    private Set<ParameterizedBuild> parameterizedBuilds = new HashSet<ParameterizedBuild>();
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "category")
+    @OnDelete(action=OnDeleteAction.CASCADE)
+    private Set<ParameterizedBuildCategory> parameterizedBuildCategories = new HashSet<ParameterizedBuildCategory>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, fetch = FetchType.LAZY, mappedBy = "category")
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private List<LabelCategory> labelCategories = new ArrayList<LabelCategory>();
 
     public Category() {
@@ -76,11 +82,11 @@ public class Category implements Serializable {
         this.regex = categoryDto.getRegex();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -108,20 +114,20 @@ public class Category implements Serializable {
         this.categorization = categorization;
     }
 
-    public List<Job> getJobs() {
-        return jobs;
+    public List<JobCategory> getJobCategories() {
+        return jobCategories;
     }
 
-    public void setJobs(List<Job> jobs) {
-        this.jobs = jobs;
+    public void setJobCategories(List<JobCategory> jobCategories) {
+        this.jobCategories = jobCategories;
     }
 
-    public Set<ParameterizedBuild> getParameterizedBuilds() {
-        return parameterizedBuilds;
+    public Set<ParameterizedBuildCategory> getParameterizedBuildCategories() {
+        return parameterizedBuildCategories;
     }
 
-    public void setParameterizedBuilds(Set<ParameterizedBuild> parameterizedBuilds) {
-        this.parameterizedBuilds = parameterizedBuilds;
+    public void setParameterizedBuildCategories(Set<ParameterizedBuildCategory> parameterizedBuildCategories) {
+        this.parameterizedBuildCategories = parameterizedBuildCategories;
     }
 
     public List<LabelCategory> getLabelCategories() {
@@ -140,11 +146,17 @@ public class Category implements Serializable {
     }
 
     public void addJob(Job job) {
-        jobs.add(job);
+        JobCategory jc = new JobCategory();
+        jc.setCategory(this);
+        jc.setJob(job);
+        jobCategories.add(jc);
     }
 
     public void addParamBuild(ParameterizedBuild pb) {
-        parameterizedBuilds.add(pb);
+        ParameterizedBuildCategory pbc = new ParameterizedBuildCategory();
+        pbc.setCategory(this);
+        pbc.setParameterizedBuild(pb);
+        parameterizedBuildCategories.add(pbc);
     }
 
     /**
@@ -158,6 +170,7 @@ public class Category implements Serializable {
 
         try {
             final Pattern regexPattern = Pattern.compile(regex);
+            LOG.log(Level.INFO, "Checking category '{0}' regex: {1}, res: {2}", new Object[] { getName(), regex, regexPattern.matcher(label).find() });
             return regexPattern.matcher(label).find();
         } catch (PatternSyntaxException ex) {
             LOG.log(Level.WARNING, "Invalid category '{0}' regex: {1}", new Object[] { getName(), regex });

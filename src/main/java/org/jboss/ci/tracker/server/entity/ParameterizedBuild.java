@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,20 +24,20 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * Created by jtymel on 12/15/14.
@@ -49,24 +49,25 @@ import org.hibernate.annotations.Cascade;
     )
 })
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "build_id", "cachedLabel" } ) )
 public class ParameterizedBuild implements Serializable {
 
-    @OneToMany(mappedBy = "parameterizedBuild")
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, mappedBy = "parameterizedBuild")
+    @Cascade({org.hibernate.annotations.CascadeType.REFRESH})
+    @OnDelete(action=OnDeleteAction.CASCADE)
     private List<Result> results;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(columnDefinition = "serial")
+    private Integer id;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "paramBuild_category", joinColumns = {
-        @JoinColumn(name = "PARAMBUILD_ID", nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                @JoinColumn(name = "CATEGORY_ID",
-                        nullable = false, updatable = false)})
-    private Set<Category> categories;
+    @OneToMany(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, mappedBy = "parameterizedBuild")
+    @Cascade({org.hibernate.annotations.CascadeType.REFRESH})
+    @OnDelete(action=OnDeleteAction.CASCADE)
+    private Set<ParameterizedBuildCategory> parameterizedBuildCategories;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private Build build;
 
     private String machine;
@@ -118,20 +119,20 @@ public class ParameterizedBuild implements Serializable {
         this.results = results;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Set<Category> getCategories() {
-        return categories;
+    public Set<ParameterizedBuildCategory> getParameterizedBuildCategories() {
+        return parameterizedBuildCategories;
     }
 
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
+    public void setParameterizedBuildCategories(Set<ParameterizedBuildCategory> parameterizedBuildCategories) {
+        this.parameterizedBuildCategories = parameterizedBuildCategories;
     }
 
     public String getMachine() {
@@ -153,21 +154,16 @@ public class ParameterizedBuild implements Serializable {
     public ParameterizedBuild() {
     }
 
-    public ParameterizedBuild(List<Result> results, Long id, Set<Category> categories, Build build, String machine, Date datetime, String name) {
-        this.results = results;
-        this.id = id;
-        this.categories = categories;
-        this.build = build;
-        this.machine = machine;
-        this.datetime = datetime;
-        this.name = name;
-    }
-
     public ParameterizedBuild(ParameterizedBuildDto build) {
         this.id = build.getId();
         this.datetime = build.getDatetime();
         this.name = build.getName();
         this.url = build.getUrl();
+    }
+
+    @Override
+    public String toString() {
+        return "ParameterizedBuild{" + "name=" + name + ", url=" + url + ", cachedLabel=" + cachedLabel + '}';
     }
 
 }

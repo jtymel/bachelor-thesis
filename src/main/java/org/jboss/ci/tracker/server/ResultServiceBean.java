@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -236,7 +237,7 @@ public class ResultServiceBean {
         List<Category> categories = new ArrayList<Category>();
         Set<Categorization> usedCategorizations = new HashSet<Categorization>();
 
-        for (Long categoryId : filter.getCategoryIds()) {
+        for (Integer categoryId : filter.getCategoryIds()) {
             Category category = categoryServiceBean.getCategoryById(categoryId);
             categories.add(category);
             usedCategorizations.add(category.getCategorization());
@@ -248,7 +249,7 @@ public class ResultServiceBean {
         for (Categorization categorization : usedCategorizations) {
 
             queryString += " AND EXISTS ("
-                    + "         SELECT 1 FROM ParamBuild_Category pbc"
+                    + "         SELECT 1 FROM parameterizedbuild_category pbc"
                     + "         WHERE"
                     + "             pbc.parambuild_id = r.parameterizedbuild_id"
                     + "             AND (false"; // because of OR operator
@@ -303,8 +304,18 @@ public class ResultServiceBean {
 
     private Query getBuildResultQuery(Collection<BuildDto> builds) {
         Session session = (Session) em.getDelegate();
-        Map<String, Long> queryParameters = new HashMap<String, Long>();
-        int i = 0;
+        List<Integer> queryParameters = new LinkedList<Integer>();
+
+        StringBuilder pbClause = new StringBuilder();
+        if (builds != null && ! builds.isEmpty()) {
+            pbClause.append(" AND pb.build_id IN(");
+            boolean addComma = false;
+            for (BuildDto build : builds) {
+                pbClause.append(addComma ? "," : "").append("?");
+                queryParameters.add(build.getId());
+            }
+            pbClause.append(")");
+        }
 
         String queryString = "SELECT t.id, t.name AS testName, tc.name AS testCaseName, r.possibleresult_id, COUNT(*) AS res"
                 + " FROM Result r, Test t, TestCase tc, ParameterizedBuild pb"
@@ -312,21 +323,16 @@ public class ResultServiceBean {
                 + "     r.test_id = t.id"
                 + "     AND t.testcase_id = tc.id"
                 + "     AND r.parameterizedbuild_id = pb.id"
-                + "     AND (false ";
-
-        for (BuildDto build : builds) {
-            queryString += " OR pb.build_id = :buildId" + i;
-            queryParameters.put("buildId" + i, build.getId());
-            i++;
-        }
+                + pbClause.toString();
 
         queryString += ") GROUP BY t.id, t.name, tc.name, r.possibleresult_id"
                 + " ORDER BY tc.name, t.name";
 
         Query query = session.createSQLQuery(queryString);
 
-        for (Map.Entry<String, Long> entry : queryParameters.entrySet()) {
-            query.setParameter(entry.getKey(), entry.getValue());
+        for (int i = 0; i < queryParameters.size(); i++) {
+            Integer value = queryParameters.get(i);
+            query.setParameter(i, value);
         }
 
         return query;
@@ -429,12 +435,12 @@ public class ResultServiceBean {
 
     private ResultDto createResultDto(Object[] result) {
         ResultDto resultDto = new ResultDto();
-        resultDto.setTestId(Long.parseLong(result[QUERY_RESULT_DTO_POSITION_TEST_ID].toString()));
+        resultDto.setTestId(Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_TEST_ID].toString()));
         resultDto.setTest(result[QUERY_RESULT_DTO_POSITION_TEST_NAME].toString());
         resultDto.setTestCase(result[QUERY_RESULT_DTO_POSITION_TEST_CASE_NAME].toString());
 
-        Map<Long, Integer> testResults = new HashMap<Long, Integer>();
-        testResults.put(Long.parseLong(result[QUERY_RESULT_DTO_POSITION_POSSIBLE_RESULT].toString()), Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_COUNT_OF_RESULTS].toString()));
+        Map<Integer, Integer> testResults = new HashMap<Integer, Integer>();
+        testResults.put(Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_POSSIBLE_RESULT].toString()), Integer.parseInt(result[QUERY_RESULT_DTO_POSITION_COUNT_OF_RESULTS].toString()));
 
         resultDto.setResults(testResults);
         return resultDto;
@@ -468,7 +474,7 @@ public class ResultServiceBean {
 
     private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES
             = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
-            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, parameterizedbuild_category pbc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
             + "     AND r.test_id = t.id"
@@ -483,7 +489,7 @@ public class ResultServiceBean {
 
     private final String TEST_HISTORY_QUERY_FILTER_CATEGORIES_RESULTS
             = "SELECT pb.dateTime, pr.name AS posResName, pb.machine, r.duration, pb.url, tc.name AS tc_name, t.name AS t_name"
-            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, ParamBuild_category pbc"
+            + " FROM Result r, PossibleResult pr, ParameterizedBuild pb, Build b, Test t, TestCase tc, parameterizedbuild_category pbc"
             + " WHERE"
             + "     r.possibleresult_id = pr.id"
             + "     AND r.possibleresult_id = :possibleResultId"
@@ -497,7 +503,7 @@ public class ResultServiceBean {
             + "     AND t.id = :testId"
             + " ORDER BY pb.dateTime DESC";
 
-    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, ParameterizedBuildDto paramBuildDto, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = session.createQuery("FROM ParameterizedBuild WHERE id = :paramBuildId")
@@ -511,7 +517,7 @@ public class ResultServiceBean {
         return getTestHistory(testResults);
     }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, BuildDto buildDto, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = session.createQuery("FROM Build WHERE id = :buildId")
@@ -525,7 +531,7 @@ public class ResultServiceBean {
         return getTestHistory(testResults);
     }
 
-    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Long resultId, Long categoryId) {
+    public List<TestDto> getTestResults(ResultDto resultDto, JobDto jobDto, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         Query query = getTestHistoryQuery(resultDto.getTestId(), jobDto.getId(), resultId, categoryId);
@@ -535,7 +541,7 @@ public class ResultServiceBean {
         return getTestHistory(testResults);
     }
 
-    private Query getTestHistoryQuery(Long testId, Long jobId, Long resultId, Long categoryId) {
+    private Query getTestHistoryQuery(Integer testId, Integer jobId, Integer resultId, Integer categoryId) {
         Session session = (Session) em.getDelegate();
 
         if (resultId == null && categoryId == null) {

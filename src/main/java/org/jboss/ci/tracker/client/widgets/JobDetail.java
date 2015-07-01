@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2015 Jan Tymel
  *
  * This program is free software: you can redistribute it and/or modify
@@ -154,14 +154,14 @@ public class JobDetail extends Composite {
             editedJob = null;
         }
 
-        jobService.saveJob(jobDTO, new AsyncCallback<Long>() {
+        jobService.saveJob(jobDTO, new AsyncCallback<Integer>() {
 
             @Override
             public void onFailure(Throwable caught) {
             }
 
             @Override
-            public void onSuccess(Long result) {
+            public void onSuccess(Integer result) {
                 jobListDetailBridge.cancelJobDetailAndDisplayJobList();
             }
         });
