@@ -127,7 +127,7 @@ public class JobServiceBean {
 
     public List<Job> getPlainJobs() {
         Session session = (Session) em.getDelegate();
-        return new ArrayList<Job>(session.createQuery("from Job").list());
+        return new ArrayList<Job>(session.createQuery("FROM Job ORDER BY name").list());
     }
 
 }

@@ -45,7 +45,7 @@ public class BuildServiceBean {
         }
 
         Session session = (Session) em.getDelegate();
-        Query query = session.createQuery("FROM Build WHERE job_id = :jobId")
+        Query query = session.createQuery("FROM Build WHERE job_id = :jobId ORDER BY name DESC")
                 .setParameter("jobId", jobDto.getId());
 
         List<Build> builds = new ArrayList<Build>(query.list());
